@@ -8,12 +8,14 @@ twitter_username: vipul_sharma
 github_username: vipul-sharma20
 
 # Build settings
-theme: minimal-mistakes-jekyll
 minimal_mistakes_skin: "air"
 
+remote_theme: "mmistakes/minimal-mistakes@4.19.2"
+
 # theme: minima
-# plugins:
-#   - jekyll-feed
+plugins:
+  - jekyll-feed
+  - jekyll-include-cache
 
 locale                   : "en-US"
 title                    : "Vipul Sharma"

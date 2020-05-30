@@ -20,53 +20,55 @@ locale                   : "en-US"
 title                    : "Vipul Sharma"
 email                    : vipul.sharma20@gmail.com
 title_separator          : "-"
-subtitle                 : "Version 2.0"
+# subtitle                 : ""
 name                     : "Vipul Sharma"
 description              : "An amazing website."
 url                      : # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : "vipul-sharma20/blog"
-logo                     : "/assets/images/vim.jpg"
-teaser                   : "/assets/images/vim.jpg"
+# logo                     : "/assets/images/vim.jpg"
+# teaser                   : "/assets/images/vim.jpg"
 masthead_title           : "Vipul"
 breadcrumbs              : false
 search                   : true
 
+paginate: 5
+paginate_path: /page:num/
 include                  : ["_pages", "_portfolio"]
 
 author:
   name: "Vipul Sharma"
-  avatar: "/assets/images/vim.jpg"
-  bio: "I am an **amazing** person." # Note: Markdown is allowed
+  avatar: "/assets/images/me.jpg"
+  bio: "Engineer at Vernacular.ai" # Note: Markdown is allowed
   location: "India"
   links:
-    - label: "Twitter"
-      icon: "fab fa-fw fa-twitter-square"
-      url: "https://twitter.com/vipul_sharma"
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
       url: "https://github.com/vipul-sharma20"
+    - label: "Linkedin"
+      icon: "fab fa-fw fa-linkedin"
+      url: "https://www.linkedin.com/in/vipul20/"
     - label: "Instagram"
       icon: "fab fa-fw fa-instagram"
       url: "https://instagram.com/vipul.py"
-    - label: "Linkedin"
-      icon: "fab fa-fw fa-linkedin"
-      url: "https://instagram.com/vipul.py"
+    - label: "Twitter"
+      icon: "fab fa-fw fa-twitter-square"
+      url: "https://twitter.com/vipul_sharma"
 
 footer:
   links:
-    - label: "Twitter"
-      icon: "fab fa-fw fa-twitter-square"
-      url: "https://twitter.com/vipul_sharma"
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
       url: "https://github.com/vipul-sharma20"
+    - label: "Linkedin"
+      icon: "fab fa-fw fa-linkedin"
+      url: "https://www.linkedin.com/in/vipul20/"
     - label: "Instagram"
       icon: "fab fa-fw fa-instagram"
       url: "https://instagram.com/vipul.py"
-    - label: "Linkedin"
-      icon: "fab fa-fw fa-linkedin"
-      url: "https://instagram.com/vipul.py"
+    - label: "Twitter"
+      icon: "fab fa-fw fa-twitter-square"
+      url: "https://twitter.com/vipul_sharma"
 
 collections:
   portfolio:

@@ -1,7 +1,7 @@
 ---
 layout: single
 title:  "Performance Analysis: Goroutine & Python’s Coroutine"
-date:   2020-05-30 14:30:12 +0530
+date:   2017-09-03 14:30:12 +0530
 permalink: "/2017/09/performance-analysis-goroutine-pythons-coroutine.html"
 categories: jekyll update
 ---
@@ -9,10 +9,11 @@ categories: jekyll update
 
 I made 1000 HTTP requests using Goroutines and Python’s Coroutines
 
-Used Go 1.6.2 and Python 3.6
-Implemented in Go using net/http package
-Implemented in Python using aiohttp, requests and urllib3 libraries
-Ran it over $10 DigitalOcean droplet
+* Used Go 1.6.2 and Python 3.6
+* Implemented in Go using net/http package
+* Implemented in Python using aiohttp, requests and urllib3 libraries
+* Ran it over $10 DigitalOcean droplet
+
 Scroll to bottom of this post to see results.
 
 # Go

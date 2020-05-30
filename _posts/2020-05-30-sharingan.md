@@ -1,6 +1,6 @@
 ---
 layout: single
-title:  "Performance Analysis: Goroutine & Python’s Coroutine"
+title:  "Sharingan: Newspaper text and context extractor"
 date:   2020-05-30 14:30:12 +0530
 permalink: "/2017/03/sharingan-newspaper-text-and-context-extractor.html"
 categories: jekyll update
@@ -8,7 +8,7 @@ categories: jekyll update
 
 To all TL;DR folks, here is my elevator pitch:
 * It’s a tool to extract news articles from newspaper and give the context about the news
-* link to code: https://github.com/vipul-sharma20/sharingan
+* link to code: [https://github.com/vipul-sharma20/sharingan][github]
 
 Sharingan is a tool built on Python 3.6 using OpenCV 3.2 to extract news content as text from newspaper’s photo and perform news context extraction.
 
@@ -77,4 +77,4 @@ I implemented adaptive binary thresholding to clean and highlight the text area
 [approximation]: /assets/images/approximation.jpeg "No Image"
 [extracted]: /assets/images/extracted.png "No Image"
 [thresholded]: /assets/images/thresholded.png "No Image"
-
+[github]: https://github.com/vipul-sharma20/sharingan

@@ -17,7 +17,7 @@ var store = [{
         "url": "http://localhost:4000/2017/09/performance-analysis-goroutine-pythons-coroutine.html",
         "teaser": "http://localhost:4000/assets/images/vim.jpg"
       },{
-        "title": "Performance Analysis: Goroutine & Python’s Coroutine",
+        "title": "Sharingan: Newspaper text and context extractor",
         "excerpt":"To all TL;DR folks, here is my elevator pitch: It’s a tool to extract news articles from newspaper and give the context about the news link to code: https://github.com/vipul-sharma20/sharingan Sharingan is a tool built on Python 3.6 using OpenCV 3.2 to extract news content as text from newspaper’s photo and perform news...","categories": ["jekyll","update"],
         "tags": [],
         "url": "http://localhost:4000/2017/03/sharingan-newspaper-text-and-context-extractor.html",

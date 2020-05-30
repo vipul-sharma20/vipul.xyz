@@ -1,0 +1,91 @@
+description: >- # this means to ignore newlines until "baseurl:"
+  Write an awesome description for your new site here. You can edit this
+  line in _config.yml. It will appear in your document head meta (for
+  Google search results) and in your feed.xml site description.
+baseurl: "/about" # the subpath of your site, e.g. /blog
+url: "" # the base hostname & protocol for your site, e.g. http://example.com
+twitter_username: vipul_sharma
+github_username: vipul-sharma20
+
+# Build settings
+theme: minimal-mistakes-jekyll
+minimal_mistakes_skin: "air"
+
+# theme: minima
+# plugins:
+#   - jekyll-feed
+
+locale                   : "en-US"
+title                    : "Vipul Sharma"
+email                    : vipul.sharma20@gmail.com
+title_separator          : "-"
+subtitle                 : "Version 2.0"
+name                     : "Vipul Sharma"
+description              : "An amazing website."
+url                      : # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
+baseurl                  : # the subpath of your site, e.g. "/blog"
+repository               : "vipul-sharma20/blog"
+logo                     : "/assets/images/vim.jpg"
+teaser                   : "/assets/images/vim.jpg"
+masthead_title           : "Vipul"
+breadcrumbs              : false
+search                   : true
+
+include                  : ["_pages", "_portfolio"]
+
+author:
+  name: "Vipul Sharma"
+  avatar: "/assets/images/vim.jpg"
+  bio: "I am an **amazing** person." # Note: Markdown is allowed
+  location: "India"
+  links:
+    - label: "Twitter"
+      icon: "fab fa-fw fa-twitter-square"
+      url: "https://twitter.com/vipul_sharma"
+    - label: "GitHub"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/vipul-sharma20"
+    - label: "Instagram"
+      icon: "fab fa-fw fa-instagram"
+      url: "https://instagram.com/vipul.py"
+    - label: "Linkedin"
+      icon: "fab fa-fw fa-linkedin"
+      url: "https://instagram.com/vipul.py"
+
+footer:
+  links:
+    - label: "Twitter"
+      icon: "fab fa-fw fa-twitter-square"
+      url: "https://twitter.com/vipul_sharma"
+    - label: "GitHub"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/vipul-sharma20"
+    - label: "Instagram"
+      icon: "fab fa-fw fa-instagram"
+      url: "https://instagram.com/vipul.py"
+    - label: "Linkedin"
+      icon: "fab fa-fw fa-linkedin"
+      url: "https://instagram.com/vipul.py"
+
+collections:
+  portfolio:
+    output: true
+    permalink: /:collection/:path/
+
+defaults:
+  # _posts
+  - scope:
+      path: ""
+      type: posts
+    values:
+      author_profile: true
+
+  # _portfolio
+  - scope:
+      path: ""
+      type: portfolio
+    values:
+      layout: single
+      author_profile: true
+      share: true
+

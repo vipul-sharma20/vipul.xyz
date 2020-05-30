@@ -1,0 +1,5 @@
+main:
+  - title: "Music"
+    url: /music/
+  - title: "About"
+    url: /about/

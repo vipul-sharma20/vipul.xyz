@@ -1,9 +1,9 @@
 var store = [{
-        "title": "Foo Bar Identity",
-        "excerpt":"Pictures of Goats section West Seattle Blog dingbat newspaper rubber cement Google+ newsroom cafe news.me rubber cement, Ushahidi Kindle Single syndicated Instagram HuffPo community mthomps, Mozilla iPhone app should isn’t a business model curmudgeon Snarkmarket Tim Carmody production of innocence. Fuego tweets community DocumentCloud metered model Gardening &amp; War section...","categories": [],
+        "title": "Under construction",
+        "excerpt":" ","categories": [],
         "tags": [],
         "url": "http://localhost:4000/music/test",
-        "teaser": "http://localhost:4000/assets/images/foo-bar-identity-th.jpg"
+        "teaser": null
       },{
         "title": "Gesture Recognition using OpenCV + Python",
         "excerpt":"This python script can be used to analyse hand gestures by contour detection and convex hull of palm region using OpenCV, a library used for computer vision processes. code: https://github.com/vipul-sharma20/gesture-opencv The video below shows the working of the code: How? 1. Capture frames and convert to grayscale Our ROI is...","categories": ["Uncategorized"],

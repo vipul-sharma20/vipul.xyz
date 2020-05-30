@@ -1,4 +1,152 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-05-30T18:06:53+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Vipul Sharma</title><subtitle>An amazing website.</subtitle><author><name>Vipul Sharma</name></author><entry><title type="html">Performance Analysis: Goroutine &amp;amp; Python’s Coroutine</title><link href="http://localhost:4000/2017/09/performance-analysis-goroutine-pythons-coroutine.html" rel="alternate" type="text/html" title="Performance Analysis: Goroutine &amp; Python’s Coroutine" /><published>2020-05-30T14:30:12+05:30</published><updated>2020-05-30T14:30:12+05:30</updated><id>http://localhost:4000/2017/09/async</id><content type="html" xml:base="http://localhost:4000/2017/09/performance-analysis-goroutine-pythons-coroutine.html">&lt;p&gt;I made 1000 HTTP requests using Goroutines and Python’s Coroutines&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-05-30T18:27:08+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Vipul Sharma</title><subtitle>An amazing website.</subtitle><author><name>Vipul Sharma</name></author><entry><title type="html">Introduction to decorators in Python</title><link href="http://localhost:4000/2016/03/introduction-to-decorators-in-python.html" rel="alternate" type="text/html" title="Introduction to decorators in Python" /><published>2020-05-30T14:30:12+05:30</published><updated>2020-05-30T14:30:12+05:30</updated><id>http://localhost:4000/2016/03/decorators</id><content type="html" xml:base="http://localhost:4000/2016/03/introduction-to-decorators-in-python.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;Understanding decorators in Python is one of the most trickiest thing and creating one is one of the most craftiest thing in Python. It requires understanding of few functional programming concepts, how functions work, namespace/scope/lifetime of data items and most importantly closure.&lt;/p&gt;
+
+&lt;h2 id=&quot;what-is-a-decorator-&quot;&gt;What is a decorator ?&lt;/h2&gt;
+&lt;p&gt;A decorator is a design pattern which allows us to modify the functionality of a method or class without changing the implementation of the existing function to be decorated.&lt;/p&gt;
+
+&lt;p&gt;For beginners, hold on questions like:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;How is it different from calling a separately created function containing added functionality?&lt;/li&gt;
+  &lt;li&gt;What’s so cool about decorators?&lt;/li&gt;
+  &lt;li&gt;Is Bruce Wayne the Batman?
+I hope these questions will get answered by the end of this post.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;know-your-functions-better&quot;&gt;Know your functions better&lt;/h2&gt;
+&lt;p&gt;Functions are like any other variables in python i.e. we can pass functions as arguments and can return functions from a function as a return value. Why is it so ? Because functions are also objects in Python like everything else.&lt;/p&gt;
+
+&lt;p&gt;Consider this:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__class__&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'int'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'10'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__class__&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'str'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__class__&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'bool'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;batman&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;...&lt;/span&gt;     &lt;span class=&quot;k&quot;&gt;pass&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;batman&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__class__&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'function'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now we know that functions are also objects.&lt;/p&gt;
+
+&lt;h2 id=&quot;namespace-scope-and-lifetime&quot;&gt;Namespace, scope and lifetime&lt;/h2&gt;
+&lt;p&gt;A namespace, in simple terms, is the collection of names which we define in our code which are essentially the collection of objects (named). Therefore, there can be a number of namespaces existing independently. This independence is in terms of their scope and lifetime.&lt;/p&gt;
+
+&lt;p&gt;Functions create their own namespace and it is accessible directly only in the function definition. This is the scope of the namespace in a function. Similar is the case with any other code segment.&lt;/p&gt;
+
+&lt;p&gt;Variables in their local namespace in a function are destroyed when the function ends. This is the lifetime of the variables.&lt;/p&gt;
+
+&lt;p&gt;Rule: While accessing variables, Python looks for the variables in the local scope first and then in the enclosing scope.&lt;/p&gt;
+
+&lt;h2 id=&quot;nested-functions&quot;&gt;Nested functions&lt;/h2&gt;
+&lt;p&gt;Python allows nesting of functions.&lt;/p&gt;
+
+&lt;p&gt;Example:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;wrapper&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;wrapper_a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;inner&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;wrapper_a&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;inner&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;wrapper&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+&lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot; 
+Output:
+10
+&quot;&quot;&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Here, the namespace scope rule is still valid. At line 4, the inner function looks for the variable in its local scope and then to the enclosing scope which is another function which has its own namespace/scope. Hence, the scope rule works here.&lt;/p&gt;
+
+&lt;h2 id=&quot;closures&quot;&gt;Closures&lt;/h2&gt;
+&lt;p&gt;Considering the above example code for nested functions again, it follows Python’s scoping rules. But it is weird in terms of lifetime of the namespace.&lt;/p&gt;
+
+&lt;p&gt;Code:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;wrapper&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;wrapper_a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;inner&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;wrapper_a&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;inner&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;wrapper&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+&lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;
+Output:
+10
+&quot;&quot;&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;In the above code, the inner function tries to access a variable of its enclosing scope after it has returned a value. Hence, according to Python’s namespace-lifetime rule, the code should not work as the inner function is trying to access namespace in the enclosing function which has ended by returning another function.
+Here, the concept of function closure comes into play. A closure in Python is when an inner function (in non global scope) has the information of the namespace of the enclosing function at its definition.&lt;/p&gt;
+
+&lt;h2 id=&quot;what-is-a-decorator--finally&quot;&gt;What is a decorator ? (finally)&lt;/h2&gt;
+&lt;p&gt;As defined earlier, a decorator is a design pattern which allows us to modify the functionality of a method without changing the implementation of the existing function to be decorated.&lt;/p&gt;
+
+&lt;p&gt;A decorator provides a way for function + something more. It accepts a function as an argument and returns another function after decorating (modifying).&lt;/p&gt;
+
+&lt;p&gt;Example:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# borrowed this example from http://thecodeship.com/patterns/guide-to-python-function-decorators/
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;get_text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;lorem ipsum, {0} dolor sit amet&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;p_decorate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;func_wrapper&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+       &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;&amp;lt;p&amp;gt;{0}&amp;lt;/p&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;func_wrapper&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;my_get_text&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p_decorate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get_text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;my_get_text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Vipul&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Output:
+# &amp;lt;p&amp;gt;lorem ipsum, Vipul dolor sit amet&amp;lt;/p&amp;gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Here, the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p_decorate&lt;/code&gt; decorates the function &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;get_text&lt;/code&gt; to enclose it in a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;p&amp;gt;&lt;/code&gt; tag. The decorator function (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p_decorate&lt;/code&gt;) accepts a function as an argument which can be any function (think deeper and you will understand how/why it is different from using a normal function call) and the inner function (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;func_wrap&lt;/code&gt;) calls the function in the parameter and modify the value returned.&lt;/p&gt;
+
+&lt;p&gt;Python gives us a cool syntactic sugar for using decorators which ensures better understanding and cleaner code. We can create a decorator as discussed above and plug it to any function using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@decorator_name&lt;/code&gt;. For example for all the function to be decorated by the decorator &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p_decorate&lt;/code&gt;, we just need to put &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@p_decorate&lt;/code&gt; above the appropriate function definition.&lt;/p&gt;
+
+&lt;p&gt;Example:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;p_decorate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;func_wrapper&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+       &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;&amp;lt;p&amp;gt;{0}&amp;lt;/p&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;func_wrapper&lt;/span&gt;
+
+&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p_decorate&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;get_text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;lorem ipsum, {0} dolor sit amet&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get_text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Vipul&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# Output:
+# &amp;lt;p&amp;gt;lorem ipsum, Vipul dolor sit amet&amp;lt;/p&amp;gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;I would love to hear your feedback, any corrections or if you want more elaborate details please let me know.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Batman: A hero can be anyone. Even a man doing something as simple and reassuring as putting a coat around a young boy’s shoulders to let him know that the world hadn’t ended.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;em&gt;[takes off in the Bat]&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Jim Gordon: Bruce Wayne?&lt;/p&gt;
+&lt;/blockquote&gt;</content><author><name>Vipul Sharma</name></author><summary type="html">Introduction Understanding decorators in Python is one of the most trickiest thing and creating one is one of the most craftiest thing in Python. It requires understanding of few functional programming concepts, how functions work, namespace/scope/lifetime of data items and most importantly closure.</summary></entry><entry><title type="html">Performance Analysis: Goroutine &amp;amp; Python’s Coroutine</title><link href="http://localhost:4000/2017/09/performance-analysis-goroutine-pythons-coroutine.html" rel="alternate" type="text/html" title="Performance Analysis: Goroutine &amp; Python’s Coroutine" /><published>2020-05-30T14:30:12+05:30</published><updated>2020-05-30T14:30:12+05:30</updated><id>http://localhost:4000/2017/09/async</id><content type="html" xml:base="http://localhost:4000/2017/09/performance-analysis-goroutine-pythons-coroutine.html">&lt;p&gt;I made 1000 HTTP requests using Goroutines and Python’s Coroutines&lt;/p&gt;
 
 &lt;p&gt;Used Go 1.6.2 and Python 3.6
 Implemented in Go using net/http package
@@ -137,7 +285,23 @@ Scroll to bottom of this post to see results.&lt;/p&gt;
 
 &lt;iframe src=&quot;//plot.ly/~vipul/40.embed&quot; width=&quot;1000&quot; height=&quot;600&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot;&gt;&lt;/iframe&gt;
 
-&lt;p&gt;Code for both synchronous and asynchronous implementations are at: &lt;a href=&quot;https://github.com/vipul-sharma20/async-go-py&quot;&gt;https://github.com/vipul-sharma20/async-go-py&lt;/a&gt;&lt;/p&gt;</content><author><name>Vipul Sharma</name></author><summary type="html">I made 1000 HTTP requests using Goroutines and Python’s Coroutines</summary></entry><entry><title type="html">Sharingan: Newspaper text and context extractor</title><link href="http://localhost:4000/2017/03/sharingan-newspaper-text-and-context-extractor.html" rel="alternate" type="text/html" title="Sharingan: Newspaper text and context extractor" /><published>2020-05-30T14:30:12+05:30</published><updated>2020-05-30T14:30:12+05:30</updated><id>http://localhost:4000/2017/03/sharingan</id><content type="html" xml:base="http://localhost:4000/2017/03/sharingan-newspaper-text-and-context-extractor.html">&lt;p&gt;To all TL;DR folks, here is my elevator pitch:&lt;/p&gt;
+&lt;p&gt;Code for both synchronous and asynchronous implementations are at: &lt;a href=&quot;https://github.com/vipul-sharma20/async-go-py&quot;&gt;https://github.com/vipul-sharma20/async-go-py&lt;/a&gt;&lt;/p&gt;</content><author><name>Vipul Sharma</name></author><summary type="html">I made 1000 HTTP requests using Goroutines and Python’s Coroutines</summary></entry><entry><title type="html">Welcome to Jekyll!</title><link href="http://localhost:4000/jekyll/update/2020/05/30/welcome-to-jekyll.html" rel="alternate" type="text/html" title="Welcome to Jekyll!" /><published>2020-05-30T13:30:12+05:30</published><updated>2020-05-30T13:30:12+05:30</updated><id>http://localhost:4000/jekyll/update/2020/05/30/welcome-to-jekyll</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/05/30/welcome-to-jekyll.html">&lt;p&gt;You’ll find this post in your &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
+
+&lt;p&gt;Jekyll requires blog post files to be named according to the following format:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;YEAR-MONTH-DAY-title.MARKUP&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;YEAR&lt;/code&gt; is a four-digit number, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MONTH&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DAY&lt;/code&gt; are both two-digit numbers, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MARKUP&lt;/code&gt; is the file extension representing the format used in the file. After that, include the necessary front matter. Take a look at the source for this post to get an idea about how it works.&lt;/p&gt;
+
+&lt;p&gt;Jekyll also offers powerful support for code snippets:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Hi, &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Tom'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; prints 'Hi, Tom' to STDOUT.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Check out the &lt;a href=&quot;https://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;</content><author><name>Vipul Sharma</name></author><summary type="html">You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-regenerates your site when a file is updated.</summary></entry><entry><title type="html">Sharingan: Newspaper text and context extractor</title><link href="http://localhost:4000/2017/03/sharingan-newspaper-text-and-context-extractor.html" rel="alternate" type="text/html" title="Sharingan: Newspaper text and context extractor" /><published>2019-05-30T14:30:12+05:30</published><updated>2019-05-30T14:30:12+05:30</updated><id>http://localhost:4000/2017/03/sharingan</id><content type="html" xml:base="http://localhost:4000/2017/03/sharingan-newspaper-text-and-context-extractor.html">&lt;p&gt;To all TL;DR folks, here is my elevator pitch:&lt;/p&gt;
 &lt;ul&gt;
   &lt;li&gt;It’s a tool to extract news articles from newspaper and give the context about the news&lt;/li&gt;
   &lt;li&gt;link to code: &lt;a href=&quot;https://github.com/vipul-sharma20/sharingan&quot;&gt;https://github.com/vipul-sharma20/sharingan&lt;/a&gt;&lt;/li&gt;
@@ -205,20 +369,70 @@ The working can be divided into two tasks:&lt;/p&gt;
 
 &lt;p&gt;I implemented adaptive binary thresholding to clean and highlight the text area&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/images/thresholded.png&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;</content><author><name>Vipul Sharma</name></author><summary type="html">To all TL;DR folks, here is my elevator pitch: It’s a tool to extract news articles from newspaper and give the context about the news link to code: https://github.com/vipul-sharma20/sharingan</summary></entry><entry><title type="html">Welcome to Jekyll!</title><link href="http://localhost:4000/jekyll/update/2020/05/30/welcome-to-jekyll.html" rel="alternate" type="text/html" title="Welcome to Jekyll!" /><published>2020-05-30T13:30:12+05:30</published><updated>2020-05-30T13:30:12+05:30</updated><id>http://localhost:4000/jekyll/update/2020/05/30/welcome-to-jekyll</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/05/30/welcome-to-jekyll.html">&lt;p&gt;You’ll find this post in your &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/thresholded.png&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Jekyll requires blog post files to be named according to the following format:&lt;/p&gt;
+&lt;h2 id=&quot;text-extraction&quot;&gt;Text Extraction&lt;/h2&gt;
 
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;YEAR-MONTH-DAY-title.MARKUP&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;I’ve used tesseract to extract the text from the segmented images.&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;Tesseract was originally developed at Hewlett-Packard Laboratories Bristol and at Hewlett-Packard Co, Greeley Colorado between 1985 and 1994, with some more changes made in 1996 to port to Windows, and some C++izing in 1998.
+In 2005 Tesseract was open sourced by HP. Since 2006 it is developed by Google.&lt;/p&gt;
+&lt;/blockquote&gt;
 
-&lt;p&gt;Where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;YEAR&lt;/code&gt; is a four-digit number, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MONTH&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DAY&lt;/code&gt; are both two-digit numbers, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MARKUP&lt;/code&gt; is the file extension representing the format used in the file. After that, include the necessary front matter. Take a look at the source for this post to get an idea about how it works.&lt;/p&gt;
+&lt;h2 id=&quot;manual-mode&quot;&gt;Manual Mode&lt;/h2&gt;
 
-&lt;p&gt;Jekyll also offers powerful support for code snippets:&lt;/p&gt;
+&lt;p&gt;Sharingan provides both automatic and manual segmentation mode. Below is the demo of manual segmentation.&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Hi, &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Tom'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; prints 'Hi, Tom' to STDOUT.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/manual_mode.gif&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;
+&lt;img src=&quot;/assets/images/manual_mode1.gif&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Check out the &lt;a href=&quot;https://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;</content><author><name>Vipul Sharma</name></author><summary type="html">You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-regenerates your site when a file is updated.</summary></entry></feed>
+&lt;h2 id=&quot;context-extraction&quot;&gt;Context extraction&lt;/h2&gt;
+
+&lt;p&gt;The phrase structure of a sentence in English is of the form:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/phrase.png&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The above rule means that a sentence (S) consists of a Noun Phrase (NP) and a Verb Phrase(VP). We can further define grammar for a Noun Phrase but let’s not get into that 🙂&lt;/p&gt;
+
+&lt;p&gt;A Verb Phrase defines the action performed on or by the object whereas a Noun Phrase function as verb subject or object in a sentence. Therefore, NP can be used to extract the important topics from the sentences.
+I’ve used Brown Corpus in Natural Language Toolkit (NLTK) for Part Of Speech (POS) tagging of the sentences and defined custom Context Free Grammar (CFG) for extracting NP.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;“The Brown Corpus was the first million-word electronic corpus of English, created in 1961 at Brown University. This corpus contains text from 500 sources, and the sources have been categorized by genre, such as news, editorial, and so on.”&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;A part-of-speech tagger, or POS-tagger, processes a sequence of words, and attaches a part of speech tag to each word.&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;word_tokenize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;And now for something completely different&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nltk&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pos_tag&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;[(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'And'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'CC'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'now'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'RB'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'for'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'IN'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'something'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'NN'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'completely'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'RB'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'different'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'JJ'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;In my context extractor script, I’ve used unigram as well as bigram POS tagging. A unigram tagger is based on a simple statistical algorithm: For every token/word assign a tag that is more likely for that token/word which is decided as per the lookup match found in the trained data. The drawback of unigram tagging is, we can just tag a token with a “most likely” tag in isolation with the larger context of the text.&lt;/p&gt;
+
+&lt;p&gt;Therefore, for better results we use an n-gram tagger, whose context is current token along with the POS tags of preceding n-1 tokens. The problem with n-gram taggers is sparse data problem which is quite immanent in NLP.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;“As n gets larger, the specificity of the contexts increases, as does the chance that the data we wish to tag contains contexts that were not present in the training data.”&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;I’ve also defined a custom CFG to extract Noun Phrases from the POS tagged list of tokens.&lt;/p&gt;
+
+&lt;p&gt;Applying all this logic to get the keypoints from the text content extracted above gives:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[‘residential terraces’, ‘busy markets’, ‘Puppies’, ‘inhumane conditions’,
+‘popular e-commerce sites’, ‘Sriramapuram’, ‘Russell Market’,
+‘issue licences’, ‘meeting conditions’, ‘positive impact’, ‘pet owners’,
+‘R. Shantha Kumar’, ‘welfare ofﬁcer’, ‘Animal Welfare Board’, ‘India’]
+[‘Kittie’]
+[‘Compassion Unlimited’]
+[‘public spaces’, ‘Animal’, ‘rights activists’, ‘civic body’, ‘Bengaluru’],
+[‘BENGALURU’, ‘Bruhat Bengaluru Mahanagar Palike’, ‘Dane’, ‘English Mastiff’,
+‘Bulldog’, ‘Boxer’, ‘Rottweiler’, ‘Bernard’, ‘Shepherd’, ‘Retriever’,
+‘draft guidelines’, ‘sterilisation’, ‘pet dogs ’, ‘Owners’]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;As said earlier, this project is still under development and requires more tuning to perform better and produce accurate results.&lt;/p&gt;
+
+&lt;p&gt;If anyone is kind enough to help me or suggestions for this project; I am typically online as vipul20 at freenode 🙂&lt;/p&gt;</content><author><name>Vipul Sharma</name></author><summary type="html">To all TL;DR folks, here is my elevator pitch: It’s a tool to extract news articles from newspaper and give the context about the news link to code: https://github.com/vipul-sharma20/sharingan</summary></entry></feed>

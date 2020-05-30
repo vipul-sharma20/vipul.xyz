@@ -1,0 +1,501 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.19.2 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Playing Pacman with gestures - Vipul Sharma</title>
+<meta name="description" content="  ">
+
+
+  <meta name="author" content="Vipul Sharma">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Vipul Sharma">
+<meta property="og:title" content="Playing Pacman with gestures">
+<meta property="og:url" content="http://localhost:4000/2015/11/playing-pacman-with-gestures.html">
+
+
+  <meta property="og:description" content="  ">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2015-11-09T14:30:12+05:30">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/2015/11/playing-pacman-with-gestures.html">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Vipul Sharma",
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Vipul Sharma Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/images/vim.jpg" alt=""></a>
+        
+        <a class="site-title" href="/">
+          Vipul
+          <span class="site-subtitle">Version 2.0</span>
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/music/">Music</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/vim.jpg" alt="Vipul Sharma" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Vipul Sharma</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>I am an <strong>amazing</strong> person.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">India</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="https://twitter.com/vipul_sharma" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/vipul-sharma20" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://instagram.com/vipul.py" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://instagram.com/vipul.py" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">Linkedin</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Playing Pacman with gestures">
+    <meta itemprop="description" content="">
+    <meta itemprop="datePublished" content="2015-11-09T14:30:12+05:30">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Playing Pacman with gestures
+</h1>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p><img src="/assets/images/hi.jpg" alt="alt text" title="No Image" /></p>
+
+<p>Hello! Lately, I’ve been striking off some tasks from my long pending TODO list. First, I finished off with <a href="https://github.com/vipul-sharma20/summrizer">summrizer</a> and now this, which has been in my list since quite a long time!</p>
+
+<p>After implementing a simple <a href="http://github.com/vipul-sharma20/gesture-opencv">hand gesture recognizer</a> using Python + OpenCV, I always wanted to do something more exciting and fascinating, like simulating different keyboard events based on the gesture to achieve small tasks like opening files, folders, applications etc. But what’s the fun in doing such boring tasks.</p>
+
+<p>Therefore, I thought of playing the old school game of Pacman using gestures! No keyboard; only gestures in front of a webcam 😀</p>
+
+<p>For all the impatient folks, TL;DR here is the link to the code : <a href="https://github.com/vipul-sharma20/gesture-pacman">https://github.com/vipul-sharma20/gesture-pacman</a></p>
+
+<h2 id="implementation-of-gesture-mechanism">Implementation of gesture mechanism</h2>
+<p>In layman’s terms:</p>
+<ul>
+  <li>Capture image frame containing any recognizable object</li>
+  <li>Detect the object</li>
+  <li>Check if/where the object moves</li>
+  <li>Assign tasks (keyboard key press) as per different types of movement</li>
+</ul>
+
+<p>The above algorithm seems to be quite easy to implement and yes, its very easy 😀 Please read further for more detailed explanation of each step.</p>
+
+<h2 id="1-capture-frame">1. Capture Frame</h2>
+
+<p>Capturing an image frame is the easiest task. We want to sense the gestures therefore, we’ll have to continue taking frames forever to record the change in the location of the object or hand or anything recognizable which we can track and use as a mode to input the gestures.
+Here is a test frame which I will be using to demonstrate all the processes involved:</p>
+
+<p><img src="/assets/images/orig1.jpg" alt="alt text" title="No Image" /></p>
+
+<p>You may notice that here I am holding a #9b465d colored (some people call it “pink”) square paper. We can use this to input gestures by moving it in different directions in front of the webcam and then execute appropriate tasks based on its motion.</p>
+
+<h2 id="2-detecting-object">2. Detecting Object</h2>
+
+<h3 id="thresholding">Thresholding</h3>
+
+<p>In very basic terms, thresholding is like a Low Pass Filter by allowing only particular color ranges to be highlighted as white while the other colors are suppressed by showing them as black.</p>
+
+<p>Before thresholding, the captured image is flipped (I’ve already flipped the above image) and converted from BGR to HSV.</p>
+
+<p><img src="/assets/images/hsv.jpg" alt="alt text" title="No Image" /></p>
+
+<p>Initially, I thought of thresholding using Otsu’s Binarization method. In this method, OpenCV automatically calculates/approximates the threshold value of a bimodal image from its image histogram.</p>
+
+<p>But for optimal results, we may need a clear background in front of the webcam which is not possible in general. Also, what’s the fun in that 😉 So, I went with the traditional method of global thresholding by providing a range of min and max HSV values as a threshold range for the color pink. In this way, we will not be affected by the background unless it has something of the same color as the object in our hand.</p>
+
+<p>Notice the difference in thresholding using Otsu’s method and global method:</p>
+
+<p><img src="/assets/images/otsu.jpg" alt="alt text" title="No Image" /></p>
+
+<p>You can notice here that there is a lot of white whereas we want only our object to be highlighted. We can obviously decide an ROI before thresholding, but that would be more of a restriction in the available region for moving the object.</p>
+
+<p>Therefore, a global thresholding is more desirable.</p>
+
+<p><img src="/assets/images/threshed1.jpg" alt="alt text" title="No Image" /></p>
+
+<p>For better results, we can also try thresholding after performing Gaussian Blurring on the original image. We blur the image for smoothing and to reduce noise and details from the image. We are not interested in the details of the image but in the shape/size of the object to track. In my implementation, I’ve NOT used this step as it is a little slow in terms of realtime processing but you might like to see the effect of blurring in thresholding</p>
+
+<p><img src="/assets/images/gauss_blur.jpg" alt="alt text" title="No Image" /></p>
+
+<p><img src="/assets/images/gauss_thresh.jpg" alt="alt text" title="No Image" /></p>
+
+<p>Here, we can see that thresholding after blurring has lesser noise and more discrete white regions than the one thresholded without blurring. Unfortunately, we’ll have to compromise this optimal performance as it is a little slow. But, we can get the desired results after some tweaks even without implementing this step. Just read further 😀</p>
+
+<h2 id="contour-detection-and-bounding-rectangle">Contour Detection and Bounding Rectangle</h2>
+
+<p>Once the image is thresholded, we need to create a bounding rectangle so that we always have the exact coordinates of the object in our hand in real-time. To achieve this, we will first need to extract all the contours from the thresholded image and then selecting the contour which has the max area. This max area contour will be the object around which, we will create a bounding rectangle. More precisely, we can track the coordinates of the moving object in real-time by tracking the centroid of the bounding rectangle.</p>
+
+<p>Creating bounding rectangles around all the contours detected from the thresholded image</p>
+
+<p><img src="/assets/images/rect_all.jpg" alt="alt text" title="No Image" /></p>
+
+<p>The good thing is, we have a bounding rectangle around the object we want to track and the bad thing is clearly visible. We can correct this by creating the bounding rectangle only around the contour which has the maximum area. If we notice the thresholded image again, we can see that the largest white colored area is of the pink colored square and that’s what we want to track. Therefore, by creating a rectangle around the largest area we get the desired result.</p>
+
+<p><img src="/assets/images/rect.jpg" alt="alt text" title="No Image" /></p>
+
+<p>The red mark inside the rectangle is the centroid of the bounding rectangle.</p>
+
+<h2 id="3-check-ifwhere-object-moves">3. Check if/where object moves</h2>
+
+<p>For this, we can define our own quadrants on a frame and locate the position of the centroid of the bounding rectangle in those quadrants. Based on the quadrant in which the point lies, we can trigger an appropriate keyboard event.</p>
+
+<p><img src="/assets/images/guides.jpg" alt="alt text" title="No Image" /></p>
+
+<p>Here, I’ve created 4 rectangular divisions for triggering 4 different movements: up, down, left, right. Looking closely we can see that the centroid lies in the upper division hence, we can simulate an “Up” key press event and similarly we can trigger left, down, right key press events based on the location of the centroid among the quadrants.</p>
+
+<p>For simulating keyboard key press events, I’ve used <a href="https://github.com/asweigart/pyautogui">pyautogui</a> library.
+Here is the link to the code : <a href="https://github.com/vipul-sharma20/gesture-pacman">https://github.com/vipul-sharma20/gesture-pacman</a></p>
+
+<p>The big question: Where is Pacman ??</p>
+
+<p>Now that we have created the script to input gestures and trigger keyboard events, we can now try it by playing Pacman 😀</p>
+
+<p>Below is the video of me playing Pacman with gestures. This is not exactly the same old classic Pacman which had the <a href="https://en.wikipedia.org/wiki/Pac-Man#Split-screen">kill screen</a> bug, but it’s good enough to demonstrate the working 🙂</p>
+
+<p>In case you were wondering how the header image was captured…</p>
+
+<p>![alt text][orig]</p>
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2015-11-09T14:30:12+05:30">November 9, 2015</time></p>
+        
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/2015/10/summrizer-text-summarizer-implementation-context-extractor.html" class="pagination--pager" title="Summrizer: Text summarizer (Implementation) &amp; Context Extractor
+">Previous</a>
+    
+    
+      <a href="/2016/03/introduction-to-decorators-in-python.html" class="pagination--pager" title="Introduction to decorators in Python
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://twitter.com/vipul_sharma" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+        
+      
+        
+          <li><a href="https://github.com/vipul-sharma20" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://instagram.com/vipul.py" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+        
+          <li><a href="https://instagram.com/vipul.py" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2020 Vipul Sharma. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://kit.fontawesome.com/4eee35f757.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+
+  </body>
+</html>

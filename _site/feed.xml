@@ -1,4 +1,277 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-05-30T18:27:08+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Vipul Sharma</title><subtitle>An amazing website.</subtitle><author><name>Vipul Sharma</name></author><entry><title type="html">Introduction to decorators in Python</title><link href="http://localhost:4000/2016/03/introduction-to-decorators-in-python.html" rel="alternate" type="text/html" title="Introduction to decorators in Python" /><published>2020-05-30T14:30:12+05:30</published><updated>2020-05-30T14:30:12+05:30</updated><id>http://localhost:4000/2016/03/decorators</id><content type="html" xml:base="http://localhost:4000/2016/03/introduction-to-decorators-in-python.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-05-30T19:17:04+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Vipul Sharma</title><subtitle>An amazing website.</subtitle><author><name>Vipul Sharma</name></author><entry><title type="html">Performance Analysis: Goroutine &amp;amp; Python’s Coroutine</title><link href="http://localhost:4000/2017/09/performance-analysis-goroutine-pythons-coroutine.html" rel="alternate" type="text/html" title="Performance Analysis: Goroutine &amp; Python’s Coroutine" /><published>2020-05-30T14:30:12+05:30</published><updated>2020-05-30T14:30:12+05:30</updated><id>http://localhost:4000/2017/09/async-go-py</id><content type="html" xml:base="http://localhost:4000/2017/09/performance-analysis-goroutine-pythons-coroutine.html">&lt;p&gt;I made 1000 HTTP requests using Goroutines and Python’s Coroutines&lt;/p&gt;
+
+&lt;p&gt;Used Go 1.6.2 and Python 3.6
+Implemented in Go using net/http package
+Implemented in Python using aiohttp, requests and urllib3 libraries
+Ran it over $10 DigitalOcean droplet
+Scroll to bottom of this post to see results.&lt;/p&gt;
+
+&lt;h1 id=&quot;go&quot;&gt;Go&lt;/h1&gt;
+
+&lt;p&gt;Go implementation using goroutines:&lt;/p&gt;
+
+&lt;div class=&quot;language-go highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&quot;fmt&quot;&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&quot;net/http&quot;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;http://example.com&quot;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;resc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;errc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;make&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;chan&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;bool&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;make&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;chan&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;go&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;url&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Head&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;nil&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;errc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;resc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;resc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;errc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;python&quot;&gt;Python&lt;/h1&gt;
+
+&lt;p&gt;Python implementation using asyncio with aiohttp, requests and urllib3&lt;/p&gt;
+
+&lt;h2 id=&quot;1-aiohttp&quot;&gt;1. aiohttp&lt;/h2&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;asyncio&lt;/span&gt;
+
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;aiohttp&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;aiohttp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ClientSession&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'http://example.com'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'__main__'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;loop&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;asyncio&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get_event_loop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;loop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;run_until_complete&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;2-requests&quot;&gt;2. requests&lt;/h2&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;asyncio&lt;/span&gt;
+
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;requests&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;futures&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;loop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;run_in_executor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;requests&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;s&quot;&gt;'http://example.com'&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;asyncio&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gather&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;futures&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'__main__'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;loop&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;asyncio&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get_event_loop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;loop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;run_until_complete&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;3-urllib3&quot;&gt;3. urllib3&lt;/h2&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;asyncio&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;urllib3&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;futures&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;loop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;run_in_executor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;s&quot;&gt;'HEAD'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'http://example.com'&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;asyncio&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gather&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;futures&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'__main__'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;loop&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;asyncio&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get_event_loop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;http&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;urllib3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PoolManager&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;loop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;run_until_complete&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;analysis-time&quot;&gt;Analysis (Time)&lt;/h1&gt;
+
+&lt;h2 id=&quot;1-syncasync-head-requests-time-in-seconds&quot;&gt;1. Sync/Async HEAD requests (time in seconds)&lt;/h2&gt;
+
+&lt;iframe src=&quot;//plot.ly/~vipul/38.embed&quot; width=&quot;1000&quot; height=&quot;600&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot;&gt;&lt;/iframe&gt;
+
+&lt;h2 id=&quot;2-syncasync-get-requests-time-in-seconds&quot;&gt;2. Sync/Async GET requests (time in seconds)&lt;/h2&gt;
+&lt;iframe src=&quot;//plot.ly/~vipul/36.embed&quot; width=&quot;1000&quot; height=&quot;600&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot;&gt;&lt;/iframe&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;analysis-memory&quot;&gt;Analysis (Memory)&lt;/h1&gt;
+
+&lt;h2 id=&quot;1-syncasync-head-requests-memory-in-mb&quot;&gt;1. Sync/Async HEAD requests (memory in MB)&lt;/h2&gt;
+
+&lt;iframe src=&quot;//plot.ly/~vipul/42.embed&quot; width=&quot;1000&quot; height=&quot;600&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot;&gt;&lt;/iframe&gt;
+
+&lt;h2 id=&quot;2-asyncsync-get-requests-memory-in-mb&quot;&gt;2. Async/Sync GET requests (memory in MB)&lt;/h2&gt;
+
+&lt;iframe src=&quot;//plot.ly/~vipul/40.embed&quot; width=&quot;1000&quot; height=&quot;600&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot;&gt;&lt;/iframe&gt;
+
+&lt;p&gt;Code for both synchronous and asynchronous implementations are at: &lt;a href=&quot;https://github.com/vipul-sharma20/async-go-py&quot;&gt;https://github.com/vipul-sharma20/async-go-py&lt;/a&gt;&lt;/p&gt;</content><author><name>Vipul Sharma</name></author><summary type="html">I made 1000 HTTP requests using Goroutines and Python’s Coroutines</summary></entry><entry><title type="html">Sharingan: Newspaper text and context extractor</title><link href="http://localhost:4000/2017/03/sharingan-newspaper-text-and-context-extractor.html" rel="alternate" type="text/html" title="Sharingan: Newspaper text and context extractor" /><published>2017-03-13T14:30:12+05:30</published><updated>2017-03-13T14:30:12+05:30</updated><id>http://localhost:4000/2017/03/sharingan</id><content type="html" xml:base="http://localhost:4000/2017/03/sharingan-newspaper-text-and-context-extractor.html">&lt;p&gt;To all TL;DR folks, here is my elevator pitch:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;It’s a tool to extract news articles from newspaper and give the context about the news&lt;/li&gt;
+  &lt;li&gt;link to code: &lt;a href=&quot;https://github.com/vipul-sharma20/sharingan&quot;&gt;https://github.com/vipul-sharma20/sharingan&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Sharingan is a tool built on Python 3.6 using OpenCV 3.2 to extract news content as text from newspaper’s photo and perform news context extraction.&lt;/p&gt;
+
+&lt;p&gt;Note: This is a fun project I started out of curiosity and is still under development. It is still not mature enough to produce very accurate results.
+The working can be divided into two tasks:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Image processing and text recognition&lt;/li&gt;
+  &lt;li&gt;Context extraction&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;image-processing-and-text-extraction&quot;&gt;Image processing and text extraction&lt;/h2&gt;
+
+&lt;p&gt;Our ROI is the text content of the page and therefore, some image processing is required to highlight and extract the text content from the image. Also, the appropriate text content highlighted requires some more processing and cleaning so that there is no noise and false positives while OCR is performed.&lt;/p&gt;
+
+&lt;h2 id=&quot;how&quot;&gt;How ?&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Capture image&lt;/li&gt;
+  &lt;li&gt;Detect edges&lt;/li&gt;
+  &lt;li&gt;Extract desired object / define contours&lt;/li&gt;
+  &lt;li&gt;Thresholding text content&lt;/li&gt;
+  &lt;li&gt;OCR (using tesseract)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;1-capture-image&quot;&gt;1. Capture Image&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/raw.jpeg&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;2-detect-edges&quot;&gt;2. Detect Edges&lt;/h2&gt;
+
+&lt;p&gt;Edge detection technique is used to find boundaries of objects in an image by analyzing varying brightness in the image. Here, it is being used for segmenting image. More precisely, I’ve used Canny Edge Detection technique.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/edge.jpeg&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;3-dilation&quot;&gt;3. Dilation&lt;/h2&gt;
+
+&lt;p&gt;Detecting contours for text at this point will lead to hundreds of nonsensical contours. To achieve a confident boundary detection I’ve used dilation here which is a process of dilating. It increases the white region in the image or size of foreground object. In informal terms, it leaks the white pixels to its neighborhood so that it transforms the text area as more solid looking&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/dilated.jpeg&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;4-finding-contours-and-contour-approximation&quot;&gt;4. Finding Contours and Contour Approximation&lt;/h2&gt;
+
+&lt;p&gt;Finding contours around the white pixels&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/contours.jpeg&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Contour approximation:&lt;/strong&gt; It approximates a contour shape to another shape with less number of vertices depending upon the precision we specify. After performing contour approximation I got this&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/approximation.jpeg&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;what-i-got-&quot;&gt;What I got ?&lt;/h2&gt;
+
+&lt;p&gt;By employing techniques mentioned above, I ended up with these:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/extracted.png&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;inference&quot;&gt;Inference&lt;/h2&gt;
+
+&lt;p&gt;It’s evident that our logic was able to crop out the text content from the page but it also acquired few false positives which can be filtered out in this case with small tweaking. Also, our logic couldn’t isolate the image content (TODO: fix this).&lt;/p&gt;
+
+&lt;h2 id=&quot;clean-images-for-text-extraction&quot;&gt;Clean images for text extraction&lt;/h2&gt;
+
+&lt;p&gt;I implemented adaptive binary thresholding to clean and highlight the text area&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/thresholded.png&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;text-extraction&quot;&gt;Text Extraction&lt;/h2&gt;
+
+&lt;p&gt;I’ve used tesseract to extract the text from the segmented images.&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;Tesseract was originally developed at Hewlett-Packard Laboratories Bristol and at Hewlett-Packard Co, Greeley Colorado between 1985 and 1994, with some more changes made in 1996 to port to Windows, and some C++izing in 1998.
+In 2005 Tesseract was open sourced by HP. Since 2006 it is developed by Google.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;manual-mode&quot;&gt;Manual Mode&lt;/h2&gt;
+
+&lt;p&gt;Sharingan provides both automatic and manual segmentation mode. Below is the demo of manual segmentation.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/manual_mode.gif&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;
+&lt;img src=&quot;/assets/images/manual_mode1.gif&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;context-extraction&quot;&gt;Context extraction&lt;/h2&gt;
+
+&lt;p&gt;The phrase structure of a sentence in English is of the form:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/phrase.png&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The above rule means that a sentence (S) consists of a Noun Phrase (NP) and a Verb Phrase(VP). We can further define grammar for a Noun Phrase but let’s not get into that 🙂&lt;/p&gt;
+
+&lt;p&gt;A Verb Phrase defines the action performed on or by the object whereas a Noun Phrase function as verb subject or object in a sentence. Therefore, NP can be used to extract the important topics from the sentences.
+I’ve used Brown Corpus in Natural Language Toolkit (NLTK) for Part Of Speech (POS) tagging of the sentences and defined custom Context Free Grammar (CFG) for extracting NP.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;“The Brown Corpus was the first million-word electronic corpus of English, created in 1961 at Brown University. This corpus contains text from 500 sources, and the sources have been categorized by genre, such as news, editorial, and so on.”&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;A part-of-speech tagger, or POS-tagger, processes a sequence of words, and attaches a part of speech tag to each word.&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;word_tokenize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;And now for something completely different&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nltk&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pos_tag&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;[(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'And'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'CC'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'now'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'RB'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'for'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'IN'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'something'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'NN'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'completely'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'RB'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'different'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'JJ'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;In my context extractor script, I’ve used unigram as well as bigram POS tagging. A unigram tagger is based on a simple statistical algorithm: For every token/word assign a tag that is more likely for that token/word which is decided as per the lookup match found in the trained data. The drawback of unigram tagging is, we can just tag a token with a “most likely” tag in isolation with the larger context of the text.&lt;/p&gt;
+
+&lt;p&gt;Therefore, for better results we use an n-gram tagger, whose context is current token along with the POS tags of preceding n-1 tokens. The problem with n-gram taggers is sparse data problem which is quite immanent in NLP.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;“As n gets larger, the specificity of the contexts increases, as does the chance that the data we wish to tag contains contexts that were not present in the training data.”&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;I’ve also defined a custom CFG to extract Noun Phrases from the POS tagged list of tokens.&lt;/p&gt;
+
+&lt;p&gt;Applying all this logic to get the keypoints from the text content extracted above gives:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[‘residential terraces’, ‘busy markets’, ‘Puppies’, ‘inhumane conditions’,
+‘popular e-commerce sites’, ‘Sriramapuram’, ‘Russell Market’,
+‘issue licences’, ‘meeting conditions’, ‘positive impact’, ‘pet owners’,
+‘R. Shantha Kumar’, ‘welfare ofﬁcer’, ‘Animal Welfare Board’, ‘India’]
+[‘Kittie’]
+[‘Compassion Unlimited’]
+[‘public spaces’, ‘Animal’, ‘rights activists’, ‘civic body’, ‘Bengaluru’],
+[‘BENGALURU’, ‘Bruhat Bengaluru Mahanagar Palike’, ‘Dane’, ‘English Mastiff’,
+‘Bulldog’, ‘Boxer’, ‘Rottweiler’, ‘Bernard’, ‘Shepherd’, ‘Retriever’,
+‘draft guidelines’, ‘sterilisation’, ‘pet dogs ’, ‘Owners’]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;As said earlier, this project is still under development and requires more tuning to perform better and produce accurate results.&lt;/p&gt;
+
+&lt;p&gt;If anyone is kind enough to help me or suggestions for this project; I am typically online as vipul20 at freenode 🙂&lt;/p&gt;</content><author><name>Vipul Sharma</name></author><summary type="html">To all TL;DR folks, here is my elevator pitch: It’s a tool to extract news articles from newspaper and give the context about the news link to code: https://github.com/vipul-sharma20/sharingan</summary></entry><entry><title type="html">Introduction to decorators in Python</title><link href="http://localhost:4000/2016/03/introduction-to-decorators-in-python.html" rel="alternate" type="text/html" title="Introduction to decorators in Python" /><published>2016-03-26T14:30:12+05:30</published><updated>2016-03-26T14:30:12+05:30</updated><id>http://localhost:4000/2016/03/decorators</id><content type="html" xml:base="http://localhost:4000/2016/03/introduction-to-decorators-in-python.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
 &lt;p&gt;Understanding decorators in Python is one of the most trickiest thing and creating one is one of the most craftiest thing in Python. It requires understanding of few functional programming concepts, how functions work, namespace/scope/lifetime of data items and most importantly closure.&lt;/p&gt;
 
 &lt;h2 id=&quot;what-is-a-decorator-&quot;&gt;What is a decorator ?&lt;/h2&gt;
@@ -146,293 +419,711 @@ Here, the concept of function closure comes into play. A closure in Python is wh
 
 &lt;blockquote&gt;
   &lt;p&gt;Jim Gordon: Bruce Wayne?&lt;/p&gt;
-&lt;/blockquote&gt;</content><author><name>Vipul Sharma</name></author><summary type="html">Introduction Understanding decorators in Python is one of the most trickiest thing and creating one is one of the most craftiest thing in Python. It requires understanding of few functional programming concepts, how functions work, namespace/scope/lifetime of data items and most importantly closure.</summary></entry><entry><title type="html">Performance Analysis: Goroutine &amp;amp; Python’s Coroutine</title><link href="http://localhost:4000/2017/09/performance-analysis-goroutine-pythons-coroutine.html" rel="alternate" type="text/html" title="Performance Analysis: Goroutine &amp; Python’s Coroutine" /><published>2020-05-30T14:30:12+05:30</published><updated>2020-05-30T14:30:12+05:30</updated><id>http://localhost:4000/2017/09/async</id><content type="html" xml:base="http://localhost:4000/2017/09/performance-analysis-goroutine-pythons-coroutine.html">&lt;p&gt;I made 1000 HTTP requests using Goroutines and Python’s Coroutines&lt;/p&gt;
+&lt;/blockquote&gt;</content><author><name>Vipul Sharma</name></author><summary type="html">Introduction Understanding decorators in Python is one of the most trickiest thing and creating one is one of the most craftiest thing in Python. It requires understanding of few functional programming concepts, how functions work, namespace/scope/lifetime of data items and most importantly closure.</summary></entry><entry><title type="html">Playing Pacman with gestures</title><link href="http://localhost:4000/2015/11/playing-pacman-with-gestures.html" rel="alternate" type="text/html" title="Playing Pacman with gestures" /><published>2015-11-09T14:30:12+05:30</published><updated>2015-11-09T14:30:12+05:30</updated><id>http://localhost:4000/2015/11/gesture_pacman</id><content type="html" xml:base="http://localhost:4000/2015/11/playing-pacman-with-gestures.html">&lt;p&gt;&lt;img src=&quot;/assets/images/hi.jpg&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Used Go 1.6.2 and Python 3.6
-Implemented in Go using net/http package
-Implemented in Python using aiohttp, requests and urllib3 libraries
-Ran it over $10 DigitalOcean droplet
-Scroll to bottom of this post to see results.&lt;/p&gt;
+&lt;p&gt;Hello! Lately, I’ve been striking off some tasks from my long pending TODO list. First, I finished off with &lt;a href=&quot;https://github.com/vipul-sharma20/summrizer&quot;&gt;summrizer&lt;/a&gt; and now this, which has been in my list since quite a long time!&lt;/p&gt;
 
-&lt;h1 id=&quot;go&quot;&gt;Go&lt;/h1&gt;
+&lt;p&gt;After implementing a simple &lt;a href=&quot;http://github.com/vipul-sharma20/gesture-opencv&quot;&gt;hand gesture recognizer&lt;/a&gt; using Python + OpenCV, I always wanted to do something more exciting and fascinating, like simulating different keyboard events based on the gesture to achieve small tasks like opening files, folders, applications etc. But what’s the fun in doing such boring tasks.&lt;/p&gt;
 
-&lt;p&gt;Go implementation using goroutines:&lt;/p&gt;
+&lt;p&gt;Therefore, I thought of playing the old school game of Pacman using gestures! No keyboard; only gestures in front of a webcam 😀&lt;/p&gt;
 
-&lt;div class=&quot;language-go highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;
+&lt;p&gt;For all the impatient folks, TL;DR here is the link to the code : &lt;a href=&quot;https://github.com/vipul-sharma20/gesture-pacman&quot;&gt;https://github.com/vipul-sharma20/gesture-pacman&lt;/a&gt;&lt;/p&gt;
 
-&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;&quot;fmt&quot;&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;&quot;net/http&quot;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-
-&lt;span class=&quot;k&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;http://example.com&quot;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;resc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;errc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;make&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;chan&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;bool&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;make&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;chan&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;go&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;url&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Head&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;nil&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;errc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;resc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;}(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;resc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;errc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;h1 id=&quot;python&quot;&gt;Python&lt;/h1&gt;
-
-&lt;p&gt;Python implementation using asyncio with aiohttp, requests and urllib3&lt;/p&gt;
-
-&lt;h2 id=&quot;1-aiohttp&quot;&gt;1. aiohttp&lt;/h2&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;asyncio&lt;/span&gt;
-
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;aiohttp&lt;/span&gt;
-
-
-&lt;span class=&quot;k&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;aiohttp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ClientSession&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'http://example.com'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'__main__'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;loop&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;asyncio&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get_event_loop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;loop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;run_until_complete&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;2-requests&quot;&gt;2. requests&lt;/h2&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;asyncio&lt;/span&gt;
-
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;requests&lt;/span&gt;
-
-
-&lt;span class=&quot;k&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;futures&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;loop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;run_in_executor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-            &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;requests&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;s&quot;&gt;'http://example.com'&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;asyncio&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gather&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;futures&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'__main__'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;loop&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;asyncio&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get_event_loop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;loop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;run_until_complete&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;3-urllib3&quot;&gt;3. urllib3&lt;/h2&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;asyncio&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;urllib3&lt;/span&gt;
-
-
-&lt;span class=&quot;k&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;futures&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;loop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;run_in_executor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-            &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;s&quot;&gt;'HEAD'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'http://example.com'&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;asyncio&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gather&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;futures&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'__main__'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;loop&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;asyncio&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get_event_loop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;http&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;urllib3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PoolManager&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;loop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;run_until_complete&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;h1 id=&quot;analysis-time&quot;&gt;Analysis (Time)&lt;/h1&gt;
-
-&lt;h2 id=&quot;1-syncasync-head-requests-time-in-seconds&quot;&gt;1. Sync/Async HEAD requests (time in seconds)&lt;/h2&gt;
-
-&lt;iframe src=&quot;//plot.ly/~vipul/38.embed&quot; width=&quot;1000&quot; height=&quot;600&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot;&gt;&lt;/iframe&gt;
-
-&lt;h2 id=&quot;2-syncasync-get-requests-time-in-seconds&quot;&gt;2. Sync/Async GET requests (time in seconds)&lt;/h2&gt;
-&lt;iframe src=&quot;//plot.ly/~vipul/36.embed&quot; width=&quot;1000&quot; height=&quot;600&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot;&gt;&lt;/iframe&gt;
-
-&lt;hr /&gt;
-
-&lt;h1 id=&quot;analysis-memory&quot;&gt;Analysis (Memory)&lt;/h1&gt;
-
-&lt;h2 id=&quot;1-syncasync-head-requests-memory-in-mb&quot;&gt;1. Sync/Async HEAD requests (memory in MB)&lt;/h2&gt;
-
-&lt;iframe src=&quot;//plot.ly/~vipul/42.embed&quot; width=&quot;1000&quot; height=&quot;600&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot;&gt;&lt;/iframe&gt;
-
-&lt;h2 id=&quot;2-asyncsync-get-requests-memory-in-mb&quot;&gt;2. Async/Sync GET requests (memory in MB)&lt;/h2&gt;
-
-&lt;iframe src=&quot;//plot.ly/~vipul/40.embed&quot; width=&quot;1000&quot; height=&quot;600&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot;&gt;&lt;/iframe&gt;
-
-&lt;p&gt;Code for both synchronous and asynchronous implementations are at: &lt;a href=&quot;https://github.com/vipul-sharma20/async-go-py&quot;&gt;https://github.com/vipul-sharma20/async-go-py&lt;/a&gt;&lt;/p&gt;</content><author><name>Vipul Sharma</name></author><summary type="html">I made 1000 HTTP requests using Goroutines and Python’s Coroutines</summary></entry><entry><title type="html">Welcome to Jekyll!</title><link href="http://localhost:4000/jekyll/update/2020/05/30/welcome-to-jekyll.html" rel="alternate" type="text/html" title="Welcome to Jekyll!" /><published>2020-05-30T13:30:12+05:30</published><updated>2020-05-30T13:30:12+05:30</updated><id>http://localhost:4000/jekyll/update/2020/05/30/welcome-to-jekyll</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/05/30/welcome-to-jekyll.html">&lt;p&gt;You’ll find this post in your &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
-
-&lt;p&gt;Jekyll requires blog post files to be named according to the following format:&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;YEAR-MONTH-DAY-title.MARKUP&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;Where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;YEAR&lt;/code&gt; is a four-digit number, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MONTH&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DAY&lt;/code&gt; are both two-digit numbers, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MARKUP&lt;/code&gt; is the file extension representing the format used in the file. After that, include the necessary front matter. Take a look at the source for this post to get an idea about how it works.&lt;/p&gt;
-
-&lt;p&gt;Jekyll also offers powerful support for code snippets:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Hi, &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Tom'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; prints 'Hi, Tom' to STDOUT.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;Check out the &lt;a href=&quot;https://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;</content><author><name>Vipul Sharma</name></author><summary type="html">You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-regenerates your site when a file is updated.</summary></entry><entry><title type="html">Sharingan: Newspaper text and context extractor</title><link href="http://localhost:4000/2017/03/sharingan-newspaper-text-and-context-extractor.html" rel="alternate" type="text/html" title="Sharingan: Newspaper text and context extractor" /><published>2019-05-30T14:30:12+05:30</published><updated>2019-05-30T14:30:12+05:30</updated><id>http://localhost:4000/2017/03/sharingan</id><content type="html" xml:base="http://localhost:4000/2017/03/sharingan-newspaper-text-and-context-extractor.html">&lt;p&gt;To all TL;DR folks, here is my elevator pitch:&lt;/p&gt;
+&lt;h2 id=&quot;implementation-of-gesture-mechanism&quot;&gt;Implementation of gesture mechanism&lt;/h2&gt;
+&lt;p&gt;In layman’s terms:&lt;/p&gt;
 &lt;ul&gt;
-  &lt;li&gt;It’s a tool to extract news articles from newspaper and give the context about the news&lt;/li&gt;
-  &lt;li&gt;link to code: &lt;a href=&quot;https://github.com/vipul-sharma20/sharingan&quot;&gt;https://github.com/vipul-sharma20/sharingan&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Capture image frame containing any recognizable object&lt;/li&gt;
+  &lt;li&gt;Detect the object&lt;/li&gt;
+  &lt;li&gt;Check if/where the object moves&lt;/li&gt;
+  &lt;li&gt;Assign tasks (keyboard key press) as per different types of movement&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;Sharingan is a tool built on Python 3.6 using OpenCV 3.2 to extract news content as text from newspaper’s photo and perform news context extraction.&lt;/p&gt;
+&lt;p&gt;The above algorithm seems to be quite easy to implement and yes, its very easy 😀 Please read further for more detailed explanation of each step.&lt;/p&gt;
 
-&lt;p&gt;Note: This is a fun project I started out of curiosity and is still under development. It is still not mature enough to produce very accurate results.
-The working can be divided into two tasks:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;Image processing and text recognition&lt;/li&gt;
-  &lt;li&gt;Context extraction&lt;/li&gt;
-&lt;/ul&gt;
+&lt;h2 id=&quot;1-capture-frame&quot;&gt;1. Capture Frame&lt;/h2&gt;
 
-&lt;h2 id=&quot;image-processing-and-text-extraction&quot;&gt;Image processing and text extraction&lt;/h2&gt;
+&lt;p&gt;Capturing an image frame is the easiest task. We want to sense the gestures therefore, we’ll have to continue taking frames forever to record the change in the location of the object or hand or anything recognizable which we can track and use as a mode to input the gestures.
+Here is a test frame which I will be using to demonstrate all the processes involved:&lt;/p&gt;
 
-&lt;p&gt;Our ROI is the text content of the page and therefore, some image processing is required to highlight and extract the text content from the image. Also, the appropriate text content highlighted requires some more processing and cleaning so that there is no noise and false positives while OCR is performed.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/orig1.jpg&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;how&quot;&gt;How ?&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;Capture image&lt;/li&gt;
-  &lt;li&gt;Detect edges&lt;/li&gt;
-  &lt;li&gt;Extract desired object / define contours&lt;/li&gt;
-  &lt;li&gt;Thresholding text content&lt;/li&gt;
-  &lt;li&gt;OCR (using tesseract)&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;You may notice that here I am holding a #9b465d colored (some people call it “pink”) square paper. We can use this to input gestures by moving it in different directions in front of the webcam and then execute appropriate tasks based on its motion.&lt;/p&gt;
 
-&lt;h2 id=&quot;1-capture-image&quot;&gt;1. Capture Image&lt;/h2&gt;
+&lt;h2 id=&quot;2-detecting-object&quot;&gt;2. Detecting Object&lt;/h2&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/images/raw.jpeg&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
+&lt;h3 id=&quot;thresholding&quot;&gt;Thresholding&lt;/h3&gt;
 
-&lt;h2 id=&quot;2-detect-edges&quot;&gt;2. Detect Edges&lt;/h2&gt;
+&lt;p&gt;In very basic terms, thresholding is like a Low Pass Filter by allowing only particular color ranges to be highlighted as white while the other colors are suppressed by showing them as black.&lt;/p&gt;
 
-&lt;p&gt;Edge detection technique is used to find boundaries of objects in an image by analyzing varying brightness in the image. Here, it is being used for segmenting image. More precisely, I’ve used Canny Edge Detection technique.&lt;/p&gt;
+&lt;p&gt;Before thresholding, the captured image is flipped (I’ve already flipped the above image) and converted from BGR to HSV.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/images/edge.jpeg&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/hsv.jpg&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;3-dilation&quot;&gt;3. Dilation&lt;/h2&gt;
+&lt;p&gt;Initially, I thought of thresholding using Otsu’s Binarization method. In this method, OpenCV automatically calculates/approximates the threshold value of a bimodal image from its image histogram.&lt;/p&gt;
 
-&lt;p&gt;Detecting contours for text at this point will lead to hundreds of nonsensical contours. To achieve a confident boundary detection I’ve used dilation here which is a process of dilating. It increases the white region in the image or size of foreground object. In informal terms, it leaks the white pixels to its neighborhood so that it transforms the text area as more solid looking&lt;/p&gt;
+&lt;p&gt;But for optimal results, we may need a clear background in front of the webcam which is not possible in general. Also, what’s the fun in that 😉 So, I went with the traditional method of global thresholding by providing a range of min and max HSV values as a threshold range for the color pink. In this way, we will not be affected by the background unless it has something of the same color as the object in our hand.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/images/dilated.jpeg&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;Notice the difference in thresholding using Otsu’s method and global method:&lt;/p&gt;
 
-&lt;h2 id=&quot;4-finding-contours-and-contour-approximation&quot;&gt;4. Finding Contours and Contour Approximation&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/otsu.jpg&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Finding contours around the white pixels&lt;/p&gt;
+&lt;p&gt;You can notice here that there is a lot of white whereas we want only our object to be highlighted. We can obviously decide an ROI before thresholding, but that would be more of a restriction in the available region for moving the object.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/images/contours.jpeg&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;Therefore, a global thresholding is more desirable.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;Contour approximation:&lt;/strong&gt; It approximates a contour shape to another shape with less number of vertices depending upon the precision we specify. After performing contour approximation I got this&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/threshed1.jpg&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/images/approximation.jpeg&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;For better results, we can also try thresholding after performing Gaussian Blurring on the original image. We blur the image for smoothing and to reduce noise and details from the image. We are not interested in the details of the image but in the shape/size of the object to track. In my implementation, I’ve NOT used this step as it is a little slow in terms of realtime processing but you might like to see the effect of blurring in thresholding&lt;/p&gt;
 
-&lt;h2 id=&quot;what-i-got-&quot;&gt;What I got ?&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/gauss_blur.jpg&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;By employing techniques mentioned above, I ended up with these:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/gauss_thresh.jpg&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/images/extracted.png&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;Here, we can see that thresholding after blurring has lesser noise and more discrete white regions than the one thresholded without blurring. Unfortunately, we’ll have to compromise this optimal performance as it is a little slow. But, we can get the desired results after some tweaks even without implementing this step. Just read further 😀&lt;/p&gt;
 
-&lt;h2 id=&quot;inference&quot;&gt;Inference&lt;/h2&gt;
+&lt;h2 id=&quot;contour-detection-and-bounding-rectangle&quot;&gt;Contour Detection and Bounding Rectangle&lt;/h2&gt;
 
-&lt;p&gt;It’s evident that our logic was able to crop out the text content from the page but it also acquired few false positives which can be filtered out in this case with small tweaking. Also, our logic couldn’t isolate the image content (TODO: fix this).&lt;/p&gt;
+&lt;p&gt;Once the image is thresholded, we need to create a bounding rectangle so that we always have the exact coordinates of the object in our hand in real-time. To achieve this, we will first need to extract all the contours from the thresholded image and then selecting the contour which has the max area. This max area contour will be the object around which, we will create a bounding rectangle. More precisely, we can track the coordinates of the moving object in real-time by tracking the centroid of the bounding rectangle.&lt;/p&gt;
 
-&lt;h2 id=&quot;clean-images-for-text-extraction&quot;&gt;Clean images for text extraction&lt;/h2&gt;
+&lt;p&gt;Creating bounding rectangles around all the contours detected from the thresholded image&lt;/p&gt;
 
-&lt;p&gt;I implemented adaptive binary thresholding to clean and highlight the text area&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/rect_all.jpg&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/images/thresholded.png&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;The good thing is, we have a bounding rectangle around the object we want to track and the bad thing is clearly visible. We can correct this by creating the bounding rectangle only around the contour which has the maximum area. If we notice the thresholded image again, we can see that the largest white colored area is of the pink colored square and that’s what we want to track. Therefore, by creating a rectangle around the largest area we get the desired result.&lt;/p&gt;
 
-&lt;h2 id=&quot;text-extraction&quot;&gt;Text Extraction&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/rect.jpg&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;I’ve used tesseract to extract the text from the segmented images.&lt;/p&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;Tesseract was originally developed at Hewlett-Packard Laboratories Bristol and at Hewlett-Packard Co, Greeley Colorado between 1985 and 1994, with some more changes made in 1996 to port to Windows, and some C++izing in 1998.
-In 2005 Tesseract was open sourced by HP. Since 2006 it is developed by Google.&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;The red mark inside the rectangle is the centroid of the bounding rectangle.&lt;/p&gt;
 
-&lt;h2 id=&quot;manual-mode&quot;&gt;Manual Mode&lt;/h2&gt;
+&lt;h2 id=&quot;3-check-ifwhere-object-moves&quot;&gt;3. Check if/where object moves&lt;/h2&gt;
 
-&lt;p&gt;Sharingan provides both automatic and manual segmentation mode. Below is the demo of manual segmentation.&lt;/p&gt;
+&lt;p&gt;For this, we can define our own quadrants on a frame and locate the position of the centroid of the bounding rectangle in those quadrants. Based on the quadrant in which the point lies, we can trigger an appropriate keyboard event.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/images/manual_mode.gif&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;
-&lt;img src=&quot;/assets/images/manual_mode1.gif&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/guides.jpg&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;context-extraction&quot;&gt;Context extraction&lt;/h2&gt;
+&lt;p&gt;Here, I’ve created 4 rectangular divisions for triggering 4 different movements: up, down, left, right. Looking closely we can see that the centroid lies in the upper division hence, we can simulate an “Up” key press event and similarly we can trigger left, down, right key press events based on the location of the centroid among the quadrants.&lt;/p&gt;
 
-&lt;p&gt;The phrase structure of a sentence in English is of the form:&lt;/p&gt;
+&lt;p&gt;For simulating keyboard key press events, I’ve used &lt;a href=&quot;https://github.com/asweigart/pyautogui&quot;&gt;pyautogui&lt;/a&gt; library.
+Here is the link to the code : &lt;a href=&quot;https://github.com/vipul-sharma20/gesture-pacman&quot;&gt;https://github.com/vipul-sharma20/gesture-pacman&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/images/phrase.png&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;The big question: Where is Pacman ??&lt;/p&gt;
 
-&lt;p&gt;The above rule means that a sentence (S) consists of a Noun Phrase (NP) and a Verb Phrase(VP). We can further define grammar for a Noun Phrase but let’s not get into that 🙂&lt;/p&gt;
+&lt;p&gt;Now that we have created the script to input gestures and trigger keyboard events, we can now try it by playing Pacman 😀&lt;/p&gt;
 
-&lt;p&gt;A Verb Phrase defines the action performed on or by the object whereas a Noun Phrase function as verb subject or object in a sentence. Therefore, NP can be used to extract the important topics from the sentences.
-I’ve used Brown Corpus in Natural Language Toolkit (NLTK) for Part Of Speech (POS) tagging of the sentences and defined custom Context Free Grammar (CFG) for extracting NP.&lt;/p&gt;
+&lt;p&gt;Below is the video of me playing Pacman with gestures. This is not exactly the same old classic Pacman which had the &lt;a href=&quot;https://en.wikipedia.org/wiki/Pac-Man#Split-screen&quot;&gt;kill screen&lt;/a&gt; bug, but it’s good enough to demonstrate the working 🙂&lt;/p&gt;
 
-&lt;blockquote&gt;
-  &lt;p&gt;“The Brown Corpus was the first million-word electronic corpus of English, created in 1961 at Brown University. This corpus contains text from 500 sources, and the sources have been categorized by genre, such as news, editorial, and so on.”&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;In case you were wondering how the header image was captured…&lt;/p&gt;
 
-&lt;p&gt;A part-of-speech tagger, or POS-tagger, processes a sequence of words, and attaches a part of speech tag to each word.&lt;/p&gt;
+&lt;p&gt;![alt text][orig]&lt;/p&gt;</content><author><name>Vipul Sharma</name></author><summary type="html"></summary></entry><entry><title type="html">Summrizer: Text summarizer (Implementation) &amp;amp; Context Extractor</title><link href="http://localhost:4000/2015/10/summrizer-text-summarizer-implementation-context-extractor.html" rel="alternate" type="text/html" title="Summrizer: Text summarizer (Implementation) &amp; Context Extractor" /><published>2015-10-27T22:22:00+05:30</published><updated>2015-10-27T22:22:00+05:30</updated><id>http://localhost:4000/2015/10/summrizer-text-summarizer-implementation-context-extractor</id><content type="html" xml:base="http://localhost:4000/2015/10/summrizer-text-summarizer-implementation-context-extractor.html">&lt;p&gt;&lt;img src=&quot;/assets/images/screen.jpg&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
 
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;word_tokenize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;And now for something completely different&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nltk&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pos_tag&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;[(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'And'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'CC'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'now'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'RB'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'for'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'IN'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'something'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'NN'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'completely'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'RB'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'different'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'JJ'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div dir=&quot;ltr&quot; style=&quot;text-align: left;&quot;&gt;
+  &lt;p&gt;
+  &lt;/p&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;Recently, I&amp;#8217;ve been working on implementing a text summarization script in Python (previous blog &lt;a href=&quot;http://vipulsharma20.blogspot.in/2015/10/summrizer-text-summarizer.html&quot; rel=&quot;nofollow&quot; target=&quot;_blank&quot;&gt;&lt;span style=&quot;color: red;&quot;&gt;post&lt;/span&gt;&lt;/a&gt;). I&amp;#8217;ve built a naive implementation of a text summarizer and also a custom Text Context Analyzer which is basically a kind of self-customized Part Of Speech and Noun Phrase tagger which determines that what the content is about i.e. the important context of the text content.&lt;/span&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;br /&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;For all the impatient folks, TL;DR here is the link to the&amp;nbsp;code : &lt;a href=&quot;https://github.com/vipul-sharma20/summrizer&quot;&gt;&lt;span style=&quot;color: red;&quot;&gt;https://github.com/vipul-sharma20/summrizer&lt;/span&gt;&lt;/a&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;br /&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;Please read further for the complete explanation of the implementation.&lt;/span&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;b&gt;NOTE: &lt;/b&gt;Works only for English language 🙂&lt;/span&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;i&gt;&lt;br /&gt;&lt;/i&gt; &lt;/span&gt;
+  &lt;/div&gt;
+  
+  &lt;h2 style=&quot;text-align: justify;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;Implementing Summarizing Script&lt;/span&gt;
+  &lt;/h2&gt;
+  
+  &lt;div&gt;
+    &lt;div style=&quot;text-align: justify;&quot;&gt;
+      &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;This summary script works well for news articles and blog posts and that&amp;#8217;s the basic motive of implementing this script. It inputs the text content, splits it into paragraphs, splits it into sentences, filter out&amp;nbsp;&lt;a href=&quot;https://en.wikipedia.org/wiki/Stop_words&quot; target=&quot;_blank&quot;&gt;&lt;span style=&quot;color: red;&quot;&gt;stopwords&lt;/span&gt;&lt;/a&gt;, calculates&amp;nbsp;score&amp;nbsp;&lt;i&gt;(relevance)&lt;/i&gt; of each sentence, and on the basis of the scores assigned to each sentence it displays the most relevant results depending upon how concise we want our summary to be.&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;br /&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;Splitting the content into paragraphs and then to sentence is easier than rest of the tasks so it can be skipped. Before implementing the scoring algorithm, I filtered out the &lt;a href=&quot;https://en.wikipedia.org/wiki/Stop_words&quot; rel=&quot;nofollow&quot; target=&quot;_blank&quot;&gt;&lt;span style=&quot;color: red;&quot;&gt;stopwords&lt;/span&gt;&lt;/a&gt;. Stopwords are the most commonly used words in any language. For example: In English we have words like &lt;i&gt;&lt;b&gt;this, that, he, she, I&amp;#8230;&lt;/b&gt;&lt;/i&gt;etc. These are among the most frequently used words in the&amp;nbsp;English language which may not have significance in deciding the importance of a sentence. Therefore, it is required to remove these stopwords from the text content so that the scoring algorithm does not need to score a sentence based on some irrelevant words.&lt;/span&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;br /&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  
+  &lt;h3 style=&quot;text-align: justify;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;Scoring&lt;/span&gt;
+  &lt;/h3&gt;
+  
+  &lt;div&gt;
+    &lt;div style=&quot;text-align: justify;&quot;&gt;
+      &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;The &lt;a href=&quot;https://github.com/vipul-sharma20/summrizer/blob/master/getSummary.py#L14-%23L30&quot; style=&quot;color: red; font-style: italic;&quot; target=&quot;_blank&quot;&gt;scoreSentence()&lt;/a&gt;&lt;span style=&quot;color: red; font-style: italic;&quot;&gt;&amp;nbsp;&lt;/span&gt;function receives two sentences, finds the intersection between the two i.e. the words/tokens common in both the sentences and then the result is normalized by the average length of the two sentence.&lt;/span&gt;
+    &lt;/div&gt;
+    
+    &lt;div style=&quot;text-align: left;&quot;&gt;
+      &lt;span style=&quot;background-color: white; color: #333333; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; font-size: 12px; line-height: 16px; text-align: center; white-space: pre;&quot;&gt;&lt;br /&gt;&lt;/span&gt;
+    &lt;/div&gt;
+    
+    &lt;div style=&quot;text-align: left;&quot;&gt;
+      &lt;span style=&quot;font-size: large;&quot;&gt;&lt;span style=&quot;background-color: white; text-align: center;&quot;&gt;&lt;/span&gt;&lt;span style=&quot;background-color: white; color: #333333; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; line-height: 16px; text-align: center; white-space: pre;&quot;&gt;avg &lt;/span&gt;&lt;span style=&quot;box-sizing: border-box; color: #a71d5d; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; line-height: 16px; text-align: center; white-space: pre;&quot;&gt;=&lt;/span&gt;&lt;span style=&quot;background-color: white; color: #333333; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; line-height: 16px; text-align: center; white-space: pre;&quot;&gt; &lt;/span&gt;&lt;span style=&quot;box-sizing: border-box; color: #0086b3; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; line-height: 16px; text-align: center; white-space: pre;&quot;&gt;len&lt;/span&gt;&lt;span style=&quot;background-color: white; color: #333333; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; line-height: 16px; text-align: center; white-space: pre;&quot;&gt;(s1)&lt;/span&gt;&lt;span style=&quot;box-sizing: border-box; color: #a71d5d; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; line-height: 16px; text-align: center; white-space: pre;&quot;&gt;+&lt;/span&gt;&lt;span style=&quot;box-sizing: border-box; color: #0086b3; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; line-height: 16px; text-align: center; white-space: pre;&quot;&gt;len&lt;/span&gt;&lt;span style=&quot;background-color: white; color: #333333; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; line-height: 16px; text-align: center; white-space: pre;&quot;&gt;(s2) &lt;/span&gt;&lt;span style=&quot;box-sizing: border-box; color: #a71d5d; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; line-height: 16px; text-align: center; white-space: pre;&quot;&gt;/&lt;/span&gt;&lt;span style=&quot;background-color: white; color: #333333; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; line-height: 16px; text-align: center; white-space: pre;&quot;&gt; &lt;/span&gt;&lt;span style=&quot;box-sizing: border-box; color: #0086b3; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; line-height: 16px; text-align: center; white-space: pre;&quot;&gt;2.0&lt;/span&gt;&lt;/span&gt;
+    &lt;/div&gt;
+    
+    &lt;div style=&quot;text-align: left;&quot;&gt;
+      &lt;span style=&quot;font-size: large;&quot;&gt;&lt;span style=&quot;background-color: white; color: #333333; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; line-height: 16px; text-align: center; white-space: pre;&quot;&gt;score &lt;/span&gt;&lt;span style=&quot;box-sizing: border-box; color: #a71d5d; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; line-height: 16px; text-align: center; white-space: pre;&quot;&gt;=&lt;/span&gt;&lt;span style=&quot;background-color: white; color: #333333; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; line-height: 16px; text-align: center; white-space: pre;&quot;&gt; &lt;/span&gt;&lt;span style=&quot;box-sizing: border-box; color: #0086b3; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; line-height: 16px; text-align: center; white-space: pre;&quot;&gt;len&lt;/span&gt;&lt;span style=&quot;background-color: white; color: #333333; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; line-height: 16px; text-align: center; white-space: pre;&quot;&gt;(s1.intersection(s2)) &lt;/span&gt;&lt;span style=&quot;box-sizing: border-box; color: #a71d5d; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; line-height: 16px; text-align: center; white-space: pre;&quot;&gt;/&lt;/span&gt;&lt;span style=&quot;background-color: white; color: #333333; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; line-height: 16px; text-align: center; white-space: pre;&quot;&gt; avg&lt;/span&gt;&lt;/span&gt;
+    &lt;/div&gt;
+    
+    &lt;div style=&quot;text-align: left;&quot;&gt;
+    &lt;/div&gt;
+    
+    &lt;div style=&quot;text-align: left;&quot;&gt;
+      &lt;div style=&quot;text-align: justify;&quot;&gt;
+        &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif;&quot;&gt;&lt;span style=&quot;font-size: large;&quot;&gt;The most important and interesting part is: how to make use of this scoring algorithm? Here, I&amp;#8217;ve created an all-pair-score-graph of sentences i.e. a completely connected and weighted graph which contains scores between all the pairs of sentences in a paragraph. The function,&amp;nbsp;&lt;i&gt;&lt;a href=&quot;https://github.com/vipul-sharma20/summrizer/blob/master/getSummary.py#L48-%23L67&quot; target=&quot;_blank&quot;&gt;&lt;span style=&quot;color: red;&quot;&gt;sentenceGraph()&lt;/span&gt;&lt;/a&gt; &lt;/i&gt;performs this task.&lt;/span&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;div style=&quot;text-align: left;&quot;&gt;
+      &lt;div style=&quot;text-align: justify;&quot;&gt;
+        &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;Suppose &lt;i&gt;&lt;b&gt;scoreGraph&lt;/b&gt; &lt;/i&gt;is the obtained weighted graph. So, &lt;i&gt;&lt;b&gt;scoreGraph[0][5]&lt;/b&gt;&lt;/i&gt; will contain the score between sentence no. 1 and sentence no. 6. And similarly, there will be separate intersection score for all the pairs. Therefore, if there are 6 sentences in a paragraph, we will have a &lt;i&gt;6&amp;#215;6&lt;/i&gt; matrix as a score-graph.&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;div style=&quot;text-align: left;&quot;&gt;
+      &lt;div style=&quot;text-align: justify;&quot;&gt;
+        &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;br /&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;div style=&quot;text-align: left;&quot;&gt;
+      &lt;div style=&quot;text-align: justify;&quot;&gt;
+        &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;The &lt;i&gt;&lt;b&gt;scoreGraph&lt;/b&gt; &lt;/i&gt;consist of paired scores. So, to calculate individual score of each sentence, we sum up all the intersection of a particular sentence with the other sentences in the paragraph and store the result in a dictionary with the sentence as the &lt;i&gt;key &lt;/i&gt;and the calculated score as the &lt;i&gt;value&lt;/i&gt;. The function, &lt;i&gt;&lt;a href=&quot;https://github.com/vipul-sharma20/summrizer/blob/master/getSummary.py#L70-%23L86&quot; rel=&quot;nofollow&quot; target=&quot;_blank&quot;&gt;&lt;span style=&quot;color: red;&quot;&gt;build()&lt;/span&gt;&lt;/a&gt; &lt;/i&gt;performs this task.&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;div style=&quot;text-align: left;&quot;&gt;
+      &lt;div style=&quot;text-align: justify;&quot;&gt;
+        &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;br /&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;h3 style=&quot;text-align: justify;&quot;&gt;
+      &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;Summary&lt;/span&gt;
+    &lt;/h3&gt;
+    
+    &lt;div style=&quot;text-align: left;&quot;&gt;
+      &lt;div style=&quot;text-align: justify;&quot;&gt;
+        &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;To build the summary from the final score dictionary, we can choose as per our need, depending upon the conciseness of the summary required.&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;div style=&quot;text-align: left;&quot;&gt;
+      &amp;lt;/p&amp;gt; 
+      
+      &lt;div style=&quot;text-align: justify;&quot;&gt;
+        &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;Complete code of summarizing script : &lt;/span&gt;&lt;span style=&quot;font-size: large;&quot;&gt;&lt;i style=&quot;font-family: Arial, Helvetica, sans-serif;&quot;&gt;&lt;a href=&quot;https://github.com/vipul-sharma20/summrizer/blob/master/getSummary.py&quot; rel=&quot;nofollow&quot; target=&quot;_blank&quot;&gt;&lt;span style=&quot;color: red;&quot;&gt;getSummary.py&lt;/span&gt;&lt;/a&gt;&lt;/i&gt;&lt;span style=&quot;font-family: Arial, Helvetica, sans-serif;&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;h3 style=&quot;text-align: justify;&quot;&gt;
+      &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;Example&lt;/span&gt;
+    &lt;/h3&gt;
+    
+    &lt;div style=&quot;text-align: left;&quot;&gt;
+      &lt;div style=&quot;text-align: justify;&quot;&gt;
+        &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;I&amp;#8217;ve tested the scoring algorithm on a paragraph of an article from techcrunch:&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;div style=&quot;text-align: left;&quot;&gt;
+      &lt;div style=&quot;text-align: justify;&quot;&gt;
+        &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;br /&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;div style=&quot;text-align: left;&quot;&gt;
+      &lt;div style=&quot;text-align: justify;&quot;&gt;
+        &lt;i&gt;&lt;b&gt;&lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&amp;#8220;The BBC has been testing a new service called SoundIndex, which lists the top 1,000 artists based on discussions crawled from Bebo, Last.fm, Google Groups, iTunes, MySpace and YouTube. The top five bands according to SoundIndex right now are Coldplay, Rihanna, The Ting Tings, Duffy and Mariah Carey , but the index is refreshed every six hours. SoundIndex also lets users sort by popular tracks, search by artist, or create customized charts based on music preferences or filters by age range, sex or location. Results can also be limited to just one data source (such as Last.fm).&amp;#8221;&lt;/span&gt;&lt;/b&gt;&lt;/i&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;div style=&quot;text-align: left;&quot;&gt;
+      &lt;h3 style=&quot;text-align: justify;&quot;&gt;
+        &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;Result&lt;/span&gt;
+      &lt;/h3&gt;
+    &lt;/div&gt;
+    
+    &lt;div style=&quot;text-align: left;&quot;&gt;
+      &lt;div style=&quot;text-align: justify;&quot;&gt;
+        &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;span style=&quot;color: #38761d;&quot;&gt;The BBC has been testing a new service called SoundIndex, which lists the top 1,000 artists based on discussions crawled from Bebo, Last.fm, Google Groups, iTunes, MySpace and YouTube : &lt;/span&gt;&lt;span style=&quot;color: #660000;&quot;&gt;0.338329361595&lt;/span&gt;&lt;/span&gt;
+      &lt;/div&gt;
+      
+      &lt;div style=&quot;text-align: justify;&quot;&gt;
+        &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;span style=&quot;color: #660000;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;div style=&quot;text-align: justify;&quot;&gt;
+      &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;span style=&quot;color: #38761d;&quot;&gt;The top five bands according to SoundIndex right now are Coldplay, Rihanna, The Ting Tings, Duffy and Mariah Carey , but the index is refreshed every six hours. : &lt;/span&gt;&lt;span style=&quot;color: #660000;&quot;&gt;0.286057692308&lt;/span&gt;&lt;/span&gt;
+    &lt;/div&gt;
+    
+    &lt;p&gt;
+      &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;/span&gt;
+    &lt;/p&gt;
+    
+    &lt;div style=&quot;text-align: justify;&quot;&gt;
+      &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;span style=&quot;color: #38761d;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;/span&gt;
+    &lt;/div&gt;
+    
+    &lt;div style=&quot;text-align: justify;&quot;&gt;
+      &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;span style=&quot;color: #38761d;&quot;&gt;SoundIndex also lets users sort by popular tracks, search by artist, or create customized charts based on music preferences or filters by age range, sex or location. : &lt;/span&gt;&lt;span style=&quot;color: #660000;&quot;&gt;0.285784751456&lt;/span&gt;&lt;/span&gt;
+    &lt;/div&gt;
+    
+    &lt;p&gt;
+      &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;/span&gt;
+    &lt;/p&gt;
+    
+    &lt;div style=&quot;text-align: justify;&quot;&gt;
+      &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;span style=&quot;color: #38761d;&quot;&gt;Results can also be limited to just one data source (such as Last.fm). : &lt;/span&gt;&lt;span style=&quot;color: #660000;&quot;&gt;0.237041838857&lt;/span&gt;&lt;/span&gt;
+    &lt;/div&gt;
+    
+    &lt;p&gt;
+    &lt;/p&gt;
+    
+    &lt;div style=&quot;text-align: left;&quot;&gt;
+      &lt;div style=&quot;text-align: justify;&quot;&gt;
+        &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;br /&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;div style=&quot;text-align: left;&quot;&gt;
+      &lt;div style=&quot;text-align: justify;&quot;&gt;
+        &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;As per the context of the news, it is evident that the first two sentences are the most relevant part of the paragraph and hence have higher score than the rest of the sentences.&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;div style=&quot;text-align: left;&quot;&gt;
+      &lt;div style=&quot;text-align: justify;&quot;&gt;
+        &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;br /&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;div style=&quot;text-align: left;&quot;&gt;
+      &lt;div style=&quot;text-align: justify;&quot;&gt;
+        &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;Speaking of Coldplay, I highly recommend :&amp;nbsp;&lt;span style=&quot;color: red;&quot;&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=5gvofiXHbUI&quot; rel=&quot;nofollow&quot; target=&quot;_blank&quot;&gt;&lt;span style=&quot;color: red;&quot;&gt;&lt;b&gt;Coldplay &amp;#8211; Fix You (Live 2012 from Paris)&lt;/b&gt;&lt;/span&gt;&lt;/a&gt;&amp;nbsp;&lt;/span&gt;😀&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&amp;lt;/p&amp;gt; 
+        
+        &lt;h3&gt;
+          &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;Comparison&lt;/span&gt;
+        &lt;/h3&gt;
+        
+        &lt;p&gt;
+          &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;I&amp;#8217;ve tried various text compacting and text summarizing websites and used the above paragraph to test their performance and here are the results:&lt;/span&gt;
+        &lt;/p&gt;
+        
+        &lt;ul&gt;
+          &lt;li&gt;
+            &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif;&quot;&gt;&lt;span style=&quot;color: red; font-size: large;&quot;&gt;&lt;a href=&quot;http://autosummarizer.com/index.php&quot;&gt;&lt;span style=&quot;color: red;&quot;&gt;http://autosummarizer.com/index.php&lt;/span&gt;&lt;/a&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-size: large;&quot;&gt;summarized it to &lt;span style=&quot;color: #38761d;&quot;&gt;&lt;i&gt;&amp;#8220;&lt;span style=&quot;line-height: 25.666667938232422px; text-align: center;&quot;&gt;Sound Index also lets users sort by popular tracks, search by artist, or create customized charts based on music preferences or filters by age range, sex or location.&lt;/span&gt;&amp;#8220;&lt;/i&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+          &lt;/li&gt;
+          &lt;li&gt;
+            &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;a href=&quot;http://freesummarizer.com/&quot;&gt;&lt;span style=&quot;color: red;&quot;&gt;http://freesummarizer.com&lt;/span&gt;&lt;/a&gt; summarized it to &lt;span style=&quot;color: #38761d;&quot;&gt;&lt;i&gt;&amp;#8220;&lt;/i&gt;&lt;span style=&quot;background-color: white; line-height: 22px; text-align: left;&quot;&gt;&lt;i&gt;SoundIndex also lets users sort by popular tracks, search by artist, or create customized charts based on music preferences or filters by age range, sex or location.&lt;/i&gt;&lt;/span&gt;&lt;/span&gt;&lt;i&gt;&lt;span style=&quot;color: #38761d;&quot;&gt;&amp;#8220;&lt;/span&gt;&lt;/i&gt;&lt;/span&gt;
+          &lt;/li&gt;
+          &lt;li&gt;
+            &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;a href=&quot;http://smmry.com/&quot;&gt;&lt;span style=&quot;color: red;&quot;&gt;http://smmry.com&lt;/span&gt;&lt;/a&gt; did nothing but just converted the paragraph into sentences and displayed them 😐&lt;/span&gt;
+          &lt;/li&gt;
+          &lt;li&gt;
+            &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;span style=&quot;color: red;&quot;&gt;&lt;a href=&quot;http://textcompactor.com/&quot;&gt;&lt;span style=&quot;color: red;&quot;&gt;http://textcompactor.com&lt;/span&gt;&lt;/a&gt; &lt;/span&gt;summarized it to the following when I set 50 % for summary limit:&amp;nbsp;&lt;span style=&quot;color: #38761d;&quot;&gt;&lt;i&gt;&amp;#8220;&lt;span style=&quot;background-color: white; text-align: start;&quot;&gt;The BBC has been testing a new service called SoundIndex, which lists the top 1,000 artists based on discussions crawled from Bebo, Last.fm, Google Groups, iTunes, MySpace and YouTube. The top five bands according to SoundIndex right now are Coldplay, Rihanna, The Ting Tings, Duffy and Mariah Carey , but the index is refreshed every six hours.&lt;/span&gt;&amp;#8220;&lt;/i&gt;&lt;/span&gt;&lt;/span&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;div style=&quot;text-align: left;&quot;&gt;
+      &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;span style=&quot;text-align: justify;&quot;&gt;&lt;a href=&quot;http://textcompactor.com/&quot; style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;color: red;&quot;&gt;http://textcompactor.com&lt;/span&gt;&lt;/a&gt;&amp;nbsp;produced the same result as my script when used for 50% compaction limit&lt;/span&gt;&lt;/span&gt;&lt;span style=&quot;color: red; font-family: Arial, Helvetica, sans-serif; text-align: justify;&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large; text-align: justify;&quot;&gt;😀 others were pretty disappointing.&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large; text-align: justify;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large; text-align: justify;&quot;&gt;Try copy-pasting the paragraph used in the example to verify the results.&lt;/span&gt;
+    &lt;/div&gt;
+    
+    &lt;h2 style=&quot;text-align: justify;&quot;&gt;
+      &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;Context Extractor&lt;/span&gt;
+    &lt;/h2&gt;
+  &lt;/div&gt;
+  
+  &lt;div&gt;
+    &lt;div style=&quot;text-align: justify;&quot;&gt;
+      &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;The summarizing script, as explained above, works on top of a scoring algorithm. One might need to extract the only the context or the main topics from a sentence so as to know what the text content is about. This provides a very abstract idea about the content which we might be dealing with.&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  
+  &lt;div&gt;
+    &lt;div style=&quot;text-align: justify;&quot;&gt;
+      &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;br /&gt;&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  
+  &lt;div&gt;
+    &lt;div style=&quot;text-align: justify;&quot;&gt;
+      &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;The phrase structure of a sentence in English is of the form:&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  
+  &lt;div&gt;
 
-&lt;p&gt;In my context extractor script, I’ve used unigram as well as bigram POS tagging. A unigram tagger is based on a simple statistical algorithm: For every token/word assign a tag that is more likely for that token/word which is decided as per the lookup match found in the trained data. The drawback of unigram tagging is, we can just tag a token with a “most likely” tag in isolation with the larger context of the text.&lt;/p&gt;
+    &lt;dl style=&quot;color: #252525; line-height: 22px; margin-bottom: 0.5em; margin-top: 0.2em;&quot;&gt;
+      &lt;dd style=&quot;margin-bottom: 0.1em; margin-left: 1.6em; margin-right: 0px; text-align: center;&quot;&gt;
+        &lt;div style=&quot;text-align: center;&quot;&gt;
+          &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;img alt=&quot;S to NP quad VP&quot; class=&quot;mwe-math-fallback-image-inline tex&quot; height=&quot;23&quot; src=&quot;http://138.68.252.233/wp-content/uploads/2015/10/f1d5f6f249c1a8bba0bb0c78afbadb55.png&quot; style=&quot;border: none; display: inline-block; vertical-align: middle;&quot; width=&quot;200&quot; /&gt;&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/dd&gt;
+    &lt;/dl&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;The above rule means that a sentence (S) consists of a &lt;a href=&quot;https://en.wikipedia.org/wiki/Noun_phrase&quot; rel=&quot;nofollow&quot; target=&quot;_blank&quot;&gt;&lt;span style=&quot;color: red;&quot;&gt;Noun Phrase&lt;/span&gt;&lt;/a&gt; (NP) and a &lt;a href=&quot;https://en.wikipedia.org/wiki/Verb_phrase&quot; rel=&quot;nofollow&quot; target=&quot;_blank&quot;&gt;&lt;span style=&quot;color: red;&quot;&gt;Verb Phrase&lt;/span&gt;&lt;/a&gt; (VP). We can further define grammar for a Noun Phrase but let&amp;#8217;s not get into that 🙂&lt;/span&gt;
+  &lt;/div&gt;
+  
+  &lt;p&gt;
+  &lt;/p&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;A Verb Phrase defines the action performed on or by the object whereas a Noun Phrase function as verb subject or object in a sentence. Therefore, NP can be used to extract the important topics from the sentences.&lt;/span&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;I&amp;#8217;ve used Brown Corpus in Natural Language Toolkit (NLTK) for Part Of Speech (POS) tagging of the sentences and defined custom Context Free Grammar (CFG) for extracting NP.&lt;/span&gt;
+  &lt;/div&gt;
+  
+  &lt;blockquote&gt;
+    &lt;div style=&quot;text-align: center;&quot;&gt;
+      &lt;span style=&quot;color: #38761d; font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;b&gt;&amp;#8220;The Brown Corpus was the first million-word electronic corpus of English, created in 1961 at Brown University. This corpus contains text from 500 sources, and the sources have been categorized by genre, such as&amp;nbsp;&lt;em&gt;news&lt;/em&gt;,&amp;nbsp;&lt;em&gt;editorial&lt;/em&gt;, and so on.&amp;#8221;&lt;/b&gt;&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/blockquote&gt;
+  
+  &lt;p&gt;
+    &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif;&quot;&gt;See more at: &lt;a href=&quot;http://www.nltk.org/book/ch02.html#brown-corpus&quot; rel=&quot;nofollow&quot; target=&quot;_blank&quot;&gt;&lt;span style=&quot;color: red;&quot;&gt;NLTK-Brown Corpus&lt;/span&gt;&lt;/a&gt;&lt;/span&gt;
+  &lt;/p&gt;
+  
+  &lt;blockquote&gt;
+    &lt;div style=&quot;text-align: justify;&quot;&gt;
+      &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif;&quot;&gt;&lt;span style=&quot;font-size: large;&quot;&gt;A part-of-speech tagger, or&amp;nbsp;&lt;span style=&quot;font-weight: bold;&quot;&gt;POS-tagger&lt;/span&gt;, processes a sequence of words, and attaches a part of speech tag to each word&lt;/span&gt;&lt;a href=&quot;https://www.blogger.com/blogger.g?blogID=3213730204187539187&quot; name=&quot;pos_tagger_index_term&quot;&gt;&lt;br /&gt;&lt;/a&gt;&lt;/span&gt;
+    &lt;/div&gt;
+    
+    &lt;table border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; style=&quot;border-bottom-color: gray; border-bottom-style: solid; border-bottom-width: 1px; border-top-color: gray; border-top-style: solid; border-top-width: 1px; margin: 0px; padding: 0px; width: 95%px;&quot;&gt;
+      &lt;tr&gt;
+        &lt;td style=&quot;background-color: #eeeeff; border-color: gray; border-style: solid; border-width: 0px 2px 1px 1px; font-weight: bold; margin: 0px; padding: 0.2em;&quot;&gt;
+          &lt;table border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; style=&quot;width: 100%px;&quot;&gt;
+            &lt;tr&gt;
+              &lt;td style=&quot;padding-left: 0.5em;&quot;&gt;
+                &lt;pre style=&quot;font-weight: bold; margin: 0px; padding: 0px;&quot;&gt;&lt;span style=&quot;color: #9b0000;&quot;&gt;&amp;gt;&amp;gt;&amp;gt; &lt;/span&gt;text = word_tokenize(&lt;span style=&quot;color: #00aa00;&quot;&gt;&quot;And now for something completely different&quot;&lt;/span&gt;)&lt;br /&gt;&lt;span style=&quot;color: #9b0000;&quot;&gt;&amp;gt;&amp;gt;&amp;gt; &lt;/span&gt;nltk.pos_tag(text)&lt;br /&gt;&lt;span style=&quot;color: blue;&quot;&gt;[('And', 'CC'), ('now', 'RB'), ('for', 'IN'), ('something', 'NN'),&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;color: blue;&quot;&gt;('completely', 'RB'), ('different', 'JJ')]&lt;/span&gt;&lt;/pre&gt;
+              &lt;/td&gt;
+            &lt;/tr&gt;
+          &lt;/table&gt;
+        &lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/table&gt;
+  &lt;/blockquote&gt;
+  
+  &lt;p&gt;
+    &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif;&quot;&gt;See more at: &lt;a href=&quot;http://www.nltk.org/book/ch05.html#using-a-tagger&quot; rel=&quot;nofollow&quot; target=&quot;_blank&quot;&gt;&lt;span style=&quot;color: red;&quot;&gt;NLTK-Using a Tagger&lt;/span&gt;&lt;/a&gt;&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;font-family: Arial, Helvetica, sans-serif;&quot;&gt;&lt;br /&gt;&lt;/span&gt;
+  &lt;/p&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;In my context extractor&amp;nbsp;script, I&amp;#8217;ve used unigram as well as bigram POS tagging. A unigram tagger is based on a simple statistical algorithm: For every token/word assign a tag that is more likely for that token/word which is decided as per the lookup match found in the trained data. The drawback of unigram tagging is, we can just tag a token with a &amp;#8220;most likely&amp;#8221; tag in isolation with the larger context of the text.&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;br /&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;Therefore, for better results we use an &lt;i&gt;n-gram&lt;/i&gt; tagger, whose context is current token along with the POS tags of preceding &lt;i&gt;n-1 &lt;/i&gt;tokens. The problem with n-gram taggers is &lt;i&gt;sparse data&lt;/i&gt; problem which is quite immanent in NLP.&lt;/span&gt;
+  &lt;/div&gt;
+  
+  &lt;p&gt;
+  &lt;/p&gt;
+  
+  &lt;blockquote&gt;
+    &lt;div style=&quot;text-align: center;&quot;&gt;
+      &lt;span style=&quot;color: #38761d; font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;b&gt;&amp;#8220;As&amp;nbsp;&lt;em&gt;n&lt;/em&gt;&amp;nbsp;gets larger, the specificity of the contexts increases, as does the chance that the data we wish to tag contains contexts that were not present in the training data.&amp;#8221;&lt;/b&gt;&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/blockquote&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;br /&gt;&lt;/span&gt; &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;Even for &lt;i&gt;n=2&lt;/i&gt; i.e. in case of a bigram tagger we can face this &lt;i&gt;sparse data&lt;/i&gt; problem. Therefore to avoid this, I&amp;#8217;ve initially used a Bigram Tagger and if it fails to tag some tokens, it backs off to the Unigram Tagger for tagging and if even the Unigram Tagger fails to tag the tokens, it backs off to a RegEx Tagger which has some naive rules for tagging nouns, adjectives, cardinal numbers, determinants etc.&lt;/span&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;br /&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif;&quot;&gt;&lt;span style=&quot;font-size: large;&quot;&gt;I&amp;#8217;ve also defined a &lt;a href=&quot;https://github.com/vipul-sharma20/summrizer/blob/master/context.py#L24-%23L30&quot; rel=&quot;nofollow&quot; target=&quot;_blank&quot;&gt;&lt;span style=&quot;color: red;&quot;&gt;custom CFG&lt;/span&gt;&lt;/a&gt; (&lt;a href=&quot;https://www.cs.rochester.edu/~nelson/courses/csc_173/grammars/cfg.html&quot; rel=&quot;nofollow&quot; target=&quot;_blank&quot;&gt;&lt;span style=&quot;color: red;&quot;&gt;Context Free Grammar&lt;/span&gt;&lt;/a&gt;) to extract Noun Phrases from the POS tagged list of tokens.&lt;/span&gt;&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;font-family: Arial, Helvetica, sans-serif;&quot;&gt;&lt;span style=&quot;font-size: large;&quot;&gt;&lt;b&gt;&lt;i&gt;(I can discuss how the custom CFG works if someone is interested 🙂 ! )&lt;/i&gt;&lt;/b&gt;&lt;/span&gt;&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;font-family: Arial, Helvetica, sans-serif;&quot;&gt;&lt;span style=&quot;font-size: large;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif;&quot;&gt;&lt;span style=&quot;font-size: large;&quot;&gt;Here is the code which performs this task : &lt;i&gt;&lt;a href=&quot;https://github.com/vipul-sharma20/summrizer/blob/master/context.py&quot; rel=&quot;nofollow&quot; target=&quot;_blank&quot;&gt;&lt;span style=&quot;color: red;&quot;&gt;context.py&lt;/span&gt;&lt;/a&gt;&lt;/i&gt;&lt;/span&gt;&lt;/span&gt;&amp;lt;/p&amp;gt; 
+    
+    &lt;h3&gt;
+      &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif;&quot;&gt;&lt;span style=&quot;font-size: large;&quot;&gt;Example&lt;/span&gt;&lt;/span&gt;
+    &lt;/h3&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;I&amp;#8217;ve used the same content as used in the summarizer script as the test example for context extracting script:&lt;/span&gt;
+  &lt;/div&gt;
+  
+  &lt;p&gt;
+  &lt;/p&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+    &lt;i&gt;&lt;b&gt;&lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&amp;#8220;The BBC has been testing a new service called SoundIndex, which lists the top 1,000 artists based on discussions crawled from Bebo, Last.fm, Google Groups, iTunes,&amp;nbsp;MySpace&amp;nbsp;and YouTube. The top five bands according to SoundIndex right now are Coldplay, Rihanna, The Ting Tings, Duffy and Mariah&amp;nbsp;Carey ,&amp;nbsp;but the index is refreshed every six hours. SoundIndex also lets users sort by popular tracks, search by artist, or create customized charts based on music preferences or filters by age range, sex or location. Results can also be limited to just one data source (such as Last.fm).&amp;#8221;&lt;/span&gt;&lt;/b&gt;&lt;/i&gt;
+  &lt;/div&gt;
+  
+  &lt;p&gt;
+  &lt;/p&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+  &lt;/div&gt;
+  
+  &lt;h4 style=&quot;text-align: justify;&quot;&gt;
+    &lt;b&gt;&lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;Result&lt;/span&gt;&lt;/b&gt;
+  &lt;/h4&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+    &lt;span style=&quot;color: #38761d; font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;[&amp;#8216;BBC&amp;#8217;, &amp;#8216;new service&amp;#8217;, &amp;#8216;SoundIndex&amp;#8217;, &amp;#8216;Bebo&amp;#8217;, &amp;#8216;Last.fm&amp;#8217;, &amp;#8216;Google Groups&amp;#8217;, &amp;#8216;MySpace&amp;#8217;, &amp;#8216;YouTube&amp;#8217;, &amp;#8216;SoundIndex&amp;#8217;, &amp;#8216;Coldplay&amp;#8217;, &amp;#8216;Rihanna&amp;#8217;, &amp;#8216;Ting Tings&amp;#8217;, &amp;#8216;Duffy&amp;#8217;, &amp;#8216;Mariah Carey&amp;#8217;, &amp;#8216;SoundIndex&amp;#8217;, &amp;#8216;lets users sort&amp;#8217;, &amp;#8216;popular tracks&amp;#8217;, &amp;#8216;music preferences&amp;#8217;, &amp;#8216;age range&amp;#8217;, &amp;#8216;data source&amp;#8217;, &amp;#8216;Last.fm&amp;#8217;]&lt;/span&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+    &lt;span style=&quot;color: #38761d; font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;br /&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;This is the list of topics discussed in the test paragraph which looks good :D. NLP can never yield 100% accurate results. All we can do is train using the data set therefore in this case, some undesired results may arise.&lt;/span&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;&lt;br /&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;Please suggest me some improvements 🙂 I would love to hear your views 😀&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</content><author><name>Vipul Sharma</name></author><summary type="html"></summary></entry><entry><title type="html">Summrizer: Text summarizer (Introduction)</title><link href="http://localhost:4000/2015/10/summrizer-text-summarizer-introduction.html" rel="alternate" type="text/html" title="Summrizer: Text summarizer (Introduction)" /><published>2015-10-20T01:56:00+05:30</published><updated>2015-10-20T01:56:00+05:30</updated><id>http://localhost:4000/2015/10/summrizer-text-summarizer-introduction</id><content type="html" xml:base="http://localhost:4000/2015/10/summrizer-text-summarizer-introduction.html">&lt;p&gt;&lt;img src=&quot;/assets/images/keyboard.jpg&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Therefore, for better results we use an n-gram tagger, whose context is current token along with the POS tags of preceding n-1 tokens. The problem with n-gram taggers is sparse data problem which is quite immanent in NLP.&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;EDIT: &lt;/b&gt;Completed the project 🙂 see &lt;a href=&quot;http://vipulsharma20.blogspot.in/2015/10/summrizer-text-summarizer_27.html&quot; rel=&quot;nofollow&quot; target=&quot;_blank&quot;&gt;&lt;span style=&quot;color: red;&quot;&gt;here&lt;/span&gt;&lt;/a&gt;
+  &lt;/p&gt;
 
-&lt;blockquote&gt;
-  &lt;p&gt;“As n gets larger, the specificity of the contexts increases, as does the chance that the data we wish to tag contains contexts that were not present in the training data.”&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;
+    I had started working on this project 6-7 months ago. I left it mid-way as I got busy with something else but, now I am again onto this :D. The plan was to create something insanely awesome but, then I recalled few words; someone told me once that first one should create a Minimum Viable Product and then go for more features.
+  &lt;/p&gt;
 
-&lt;p&gt;I’ve also defined a custom CFG to extract Noun Phrases from the POS tagged list of tokens.&lt;/p&gt;
+&lt;p&gt;
+    Currently, I am working on a pretty naive text summarizer by implementing a basic text scoring algorithm with some use of NLTK. Although, I&amp;#8217;ve worked with Stanford&amp;#8217;s CoreNLP earlier, I wanted to exploit the power of NLTK.
+  &lt;/p&gt;
 
-&lt;p&gt;Applying all this logic to get the keypoints from the text content extracted above gives:&lt;/p&gt;
+&lt;p&gt;
+    I&amp;#8217;ve tested the script by summarizing some articles from &lt;a href=&quot;http://techcrunch.com/&quot;&gt;techcrunch.com&lt;/a&gt;&amp;nbsp;and compared the summary results with results from some online text summarizing websites like:
+  &lt;/p&gt;
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[‘residential terraces’, ‘busy markets’, ‘Puppies’, ‘inhumane conditions’,
-‘popular e-commerce sites’, ‘Sriramapuram’, ‘Russell Market’,
-‘issue licences’, ‘meeting conditions’, ‘positive impact’, ‘pet owners’,
-‘R. Shantha Kumar’, ‘welfare ofﬁcer’, ‘Animal Welfare Board’, ‘India’]
-[‘Kittie’]
-[‘Compassion Unlimited’]
-[‘public spaces’, ‘Animal’, ‘rights activists’, ‘civic body’, ‘Bengaluru’],
-[‘BENGALURU’, ‘Bruhat Bengaluru Mahanagar Palike’, ‘Dane’, ‘English Mastiff’,
-‘Bulldog’, ‘Boxer’, ‘Rottweiler’, ‘Bernard’, ‘Shepherd’, ‘Retriever’,
-‘draft guidelines’, ‘sterilisation’, ‘pet dogs ’, ‘Owners’]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ul style=&quot;text-align: left;&quot;&gt;
+    &lt;li&gt;
+      &lt;a href=&quot;http://smmry.com/&quot;&gt;http://smmry.com&lt;/a&gt;&amp;nbsp;(this is already pretty bad in summarizing texts)
+    &lt;/li&gt;
+    &lt;li&gt;
+      &lt;a href=&quot;http://freesummarizer.com/&quot;&gt;http://freesummarizer.com&lt;/a&gt;&amp;nbsp;(not so good but better than smmry.com)
+    &lt;/li&gt;
+    &lt;li&gt;
+      &lt;a href=&quot;http://autosummarizer.com/index.php&quot;&gt;http://autosummarizer.com/index.php&lt;/a&gt;&amp;nbsp;(most of my results matches with this one)
+    &lt;/li&gt;
+  &lt;/ul&gt;
 
-&lt;p&gt;As said earlier, this project is still under development and requires more tuning to perform better and produce accurate results.&lt;/p&gt;
+&lt;p&gt;
+    After this basic implementation works fine, I&amp;#8217;ll try to implement some complex language processing concepts for which I may be dealing with more of NLTK or even CoreNLP (personally, I like Stanford&amp;#8217;s CoreNLP more).
+  &lt;/p&gt;
 
-&lt;p&gt;If anyone is kind enough to help me or suggestions for this project; I am typically online as vipul20 at freenode 🙂&lt;/p&gt;</content><author><name>Vipul Sharma</name></author><summary type="html">To all TL;DR folks, here is my elevator pitch: It’s a tool to extract news articles from newspaper and give the context about the news link to code: https://github.com/vipul-sharma20/sharingan</summary></entry></feed>
+&lt;p&gt;
+    Code:&amp;nbsp;&lt;a href=&quot;https://github.com/vipul-sharma20/summrizer&quot;&gt;https://github.com/vipul-sharma20/summrizer&lt;/a&gt;
+  &lt;/p&gt;
+
+&lt;p&gt;
+    I&amp;#8217;ve also created a separate branch and initialized it with a Django based web application. Once the script works fine, I&amp;#8217;ll try to host this script as a web application for text summarizing. But, my priority and focus is on creating a more efficient summarizing script 😀
+  &lt;/p&gt;</content><author><name>Vipul Sharma</name></author><summary type="html"></summary></entry><entry><title type="html">Writing training mission for Openhatch</title><link href="http://localhost:4000/2015/09/writing-training-mission-for-openhatch.html" rel="alternate" type="text/html" title="Writing training mission for Openhatch" /><published>2015-09-12T02:59:00+05:30</published><updated>2015-09-12T02:59:00+05:30</updated><id>http://localhost:4000/2015/09/writing-training-mission-for-openhatch</id><content type="html" xml:base="http://localhost:4000/2015/09/writing-training-mission-for-openhatch.html">&lt;div dir=&quot;ltr&quot; style=&quot;text-align: left;&quot;&gt;
+  &lt;div style=&quot;clear: both; text-align: center;&quot;&gt;
+    &lt;a href=&quot;http://138.68.252.233/wp-content/uploads/2015/09/openhatch.png&quot; style=&quot;margin-left: 1em; margin-right: 1em;&quot;&gt;&lt;img border=&quot;0&quot; height=&quot;300&quot; src=&quot;http://138.68.252.233/wp-content/uploads/2015/09/openhatch-300x225.png&quot; width=&quot;400&quot; /&gt;&lt;/a&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+    I am grateful to this wonderful community who introduced me to the world of Open Source and I owe them a lot for my success in GSoC, 2015. I learned a lot of new things by interacting with this awesome community.
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+    In the beginning of my journey to Open Source, I learned about few concepts through the training missions of Openhatch (&lt;a href=&quot;http://openhatch.org/missions/&quot;&gt;http://openhatch.org/missions/&lt;/a&gt;) and now I want to share what I learned in the past 3 months by writing a new training mission for Openhatch. I had written a training mission on &amp;#8220;Using the shell&amp;#8221; earlier in February this year (&lt;a href=&quot;http://openhatch.org/missions/shell/about&quot;&gt;http://openhatch.org/missions/shell/about&lt;/a&gt;) and now I am looking forward to write a training mission on: using the version control system, mercurial (hg). I am myself a newbie to mercurial and have learned just a little bit during my GSoC project this year. But, still I&amp;#8217;ll try to write a good mission by discussing it with the community and will also take some inspiration from the existing missions on SVN and GIT which are quite exciting to follow.&amp;nbsp;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+    I would love to hear if anyone has some cool ideas/suggestions for the training mission on mercurial, on how to make it more interactive and make a user more involved with the mission and checking their progress by defining some objectives or some small task which can test if they are learning right or not.
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+    It has been quite some time since I&amp;#8217;ve developed on Django, now I am very much excited to write some good stuff and contribute to Openhatch 😀 Will update the progress through blog posts.
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+    I almost forgot to thank &lt;a href=&quot;https://openhatch.org/wiki/Sufjan&quot; rel=&quot;nofollow&quot; target=&quot;_blank&quot;&gt;Sufjan&lt;/a&gt; ! it always helps me to write code 😉 Say hi !
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;clear: both; text-align: center;&quot;&gt;
+    &lt;a href=&quot;http://138.68.252.233/wp-content/uploads/2015/09/card.png&quot; style=&quot;margin-left: 1em; margin-right: 1em;&quot;&gt;&lt;img border=&quot;0&quot; height=&quot;232&quot; src=&quot;http://138.68.252.233/wp-content/uploads/2015/09/card-300x218.png&quot; width=&quot;320&quot; /&gt;&lt;/a&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: justify;&quot;&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</content><author><name>Vipul</name></author><summary type="html">I am grateful to this wonderful community who introduced me to the world of Open Source and I owe them a lot for my success in GSoC, 2015. I learned a lot of new things by interacting with this awesome community. In the beginning of my journey to Open Source, I learned about few concepts through the training missions of Openhatch (http://openhatch.org/missions/) and now I want to share what I learned in the past 3 months by writing a new training mission for Openhatch. I had written a training mission on &amp;#8220;Using the shell&amp;#8221; earlier in February this year (http://openhatch.org/missions/shell/about) and now I am looking forward to write a training mission on: using the version control system, mercurial (hg). I am myself a newbie to mercurial and have learned just a little bit during my GSoC project this year. But, still I&amp;#8217;ll try to write a good mission by discussing it with the community and will also take some inspiration from the existing missions on SVN and GIT which are quite exciting to follow.&amp;nbsp; I would love to hear if anyone has some cool ideas/suggestions for the training mission on mercurial, on how to make it more interactive and make a user more involved with the mission and checking their progress by defining some objectives or some small task which can test if they are learning right or not. It has been quite some time since I&amp;#8217;ve developed on Django, now I am very much excited to write some good stuff and contribute to Openhatch 😀 Will update the progress through blog posts. I almost forgot to thank Sufjan ! it always helps me to write code 😉 Say hi !</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/wp-content/uploads/2015/09/openhatch.png" /><media:content medium="image" url="http://localhost:4000/wp-content/uploads/2015/09/openhatch.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">GSoC 2015: Coding Period</title><link href="http://localhost:4000/2015/08/gsoc-2015-coding-period.html" rel="alternate" type="text/html" title="GSoC 2015: Coding Period" /><published>2015-08-04T18:56:00+05:30</published><updated>2015-08-04T18:56:00+05:30</updated><id>http://localhost:4000/2015/08/gsoc-2015-coding-period</id><content type="html" xml:base="http://localhost:4000/2015/08/gsoc-2015-coding-period.html">&lt;div dir=&quot;ltr&quot; style=&quot;text-align: left;&quot;&gt;
+  I&amp;#8217;ve been working on implementing advanced search feature to filter tickets based on its metadata like effort, severity, difficulty, priority, author, tags and assignee. In this way a user can filter tickets based on specific requirements by filling the advanced search form.&lt;br /&gt;For this I created a new view:&lt;i&gt; /+tickets/query &lt;/i&gt;which contains a form for searching tickets.&amp;lt;/p&amp;gt; 
+  
+  &lt;p&gt;
+    Screenshot:
+  &lt;/p&gt;
+  
+  &lt;div style=&quot;clear: both; text-align: center;&quot;&gt;
+    &lt;a href=&quot;http://138.68.252.233/wp-content/uploads/2015/08/advanced.png&quot; style=&quot;margin-left: 1em; margin-right: 1em;&quot;&gt;&lt;img border=&quot;0&quot; height=&quot;339&quot; src=&quot;http://138.68.252.233/wp-content/uploads/2015/08/advanced-300x160.png&quot; width=&quot;640&quot; /&gt;&lt;/a&gt;
+  &lt;/div&gt;
+  
+  &lt;p&gt;
+    CR: &lt;a href=&quot;https://codereview.appspot.com/256230043&quot;&gt;https://codereview.appspot.com/256230043&lt;/a&gt;
+  &lt;/p&gt;
+  
+  &lt;p&gt;
+    It still requires some UI improvements which I&amp;#8217;ll finish it soon.
+  &lt;/p&gt;
+  
+  &lt;p&gt;
+    I&amp;#8217;ve also been improving the implementation of comment mechanism in ticket modify view.&lt;br /&gt;The new implementation now supports markdown syntax. A user can reply to comments and also new comment is automatically posted if any metadata is updated.&lt;br /&gt;For eg: if effort field is changed from None to 3, a comment will be posted as &amp;#8220;Update: Effort changed from None to 3&amp;#8221; which will be like any other comment.
+  &lt;/p&gt;
+  
+  &lt;p&gt;
+    Screenshot:
+  &lt;/p&gt;
+  
+  &lt;div style=&quot;clear: both; text-align: center;&quot;&gt;
+    &lt;a href=&quot;http://138.68.252.233/wp-content/uploads/2015/08/comments.png&quot; style=&quot;margin-left: 1em; margin-right: 1em;&quot;&gt;&lt;img border=&quot;0&quot; height=&quot;340&quot; src=&quot;http://138.68.252.233/wp-content/uploads/2015/08/comments-300x160.png&quot; width=&quot;640&quot; /&gt;&lt;/a&gt;
+  &lt;/div&gt;
+  
+  &lt;p&gt;
+    CR: &lt;a href=&quot;https://codereview.appspot.com/256840043/&quot;&gt;https://codereview.appspot.com/256840043/&lt;/a&gt;&amp;lt;/div&amp;gt;
+&lt;/p&gt;&lt;/div&gt;</content><author><name>Vipul</name></author><summary type="html">I&amp;#8217;ve been working on implementing advanced search feature to filter tickets based on its metadata like effort, severity, difficulty, priority, author, tags and assignee. In this way a user can filter tickets based on specific requirements by filling the advanced search form.For this I created a new view: /+tickets/query which contains a form for searching tickets.&amp;lt;/p&amp;gt; Screenshot: CR: https://codereview.appspot.com/256230043 It still requires some UI improvements which I&amp;#8217;ll finish it soon. I&amp;#8217;ve also been improving the implementation of comment mechanism in ticket modify view.The new implementation now supports markdown syntax. A user can reply to comments and also new comment is automatically posted if any metadata is updated.For eg: if effort field is changed from None to 3, a comment will be posted as &amp;#8220;Update: Effort changed from None to 3&amp;#8221; which will be like any other comment. Screenshot: CR: https://codereview.appspot.com/256840043/&amp;lt;/div&amp;gt;</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/wp-content/uploads/2015/08/advanced.png" /><media:content medium="image" url="http://localhost:4000/wp-content/uploads/2015/08/advanced.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">GSoC 2015: Coding Period</title><link href="http://localhost:4000/2015/07/gsoc-2015-coding-period-2.html" rel="alternate" type="text/html" title="GSoC 2015: Coding Period" /><published>2015-07-14T21:13:00+05:30</published><updated>2015-07-14T21:13:00+05:30</updated><id>http://localhost:4000/2015/07/gsoc-2015-coding-period-2</id><content type="html" xml:base="http://localhost:4000/2015/07/gsoc-2015-coding-period-2.html">&lt;div dir=&quot;ltr&quot; style=&quot;text-align: left;&quot;&gt;
+  Passed my mid term evaluations 🙂 Thanks to my mentors for all their support and guidance.&amp;lt;/p&amp;gt; 
+  
+  &lt;p&gt;
+    I&amp;#8217;ve been working on implementing threaded comments in ticket modify view. Earlier the comments were created by creating message markups of all the comments and then concatenating them in the content part of the ticket item. In this way, editing/reply to comments was not possible.
+  &lt;/p&gt;
+  
+  &lt;p&gt;
+    &lt;b&gt;New implementation:&lt;/b&gt; &lt;br /&gt;Each comment is a new item which refers to the itemid of the ticket in which it is created. In this way, it is easy to query all the comments of a particular ticket.
+  &lt;/p&gt;
+  
+  &lt;p&gt;
+    Initially, I worked on non-threaded comments, then added a feature to reply to comments. It is similar to non-threaded comments but the difference is, there is a new field &amp;#8220;reply_to&amp;#8221; which stores the itemid of the comment to which a reply is made which is hence, stored in the &amp;#8220;refers_to&amp;#8221; field of the comment reply. After this, I tried to create a tree of all the comments in a ticket which included comments, replies of comments, replies of replies and so on.
+  &lt;/p&gt;
+  
+  &lt;p&gt;
+    Something like :&lt;br /&gt;&amp;nbsp;[[&amp;lt;MoinMoin.storage.middleware.protecting.ProtectedRevision object at 0x7f907596d550&amp;gt;, [&amp;lt;MoinMoin.storage.middleware.protecting.ProtectedRevision object at 0x7f9075963d50&amp;gt;, []]]]
+  &lt;/p&gt;
+  
+  &lt;p&gt;
+    The list above, is the tree of 1 single comment which has 1 reply and 1 reply to reply.
+  &lt;/p&gt;
+  
+  &lt;p&gt;
+    Still more work has to be done to render the comments in threaded form in the UI. Also, there is some issues in the recursive function I wrote for parsing the comments/reply tree which I think can be fixed soon.
+  &lt;/p&gt;
+  
+  &lt;p&gt;
+    CR: &lt;a href=&quot;https://codereview.appspot.com/256840043/&quot;&gt;https://codereview.appspot.com/256840043/&lt;/a&gt;
+  &lt;/p&gt;
+&lt;/div&gt;</content><author><name>Vipul</name></author><summary type="html">Passed my mid term evaluations 🙂 Thanks to my mentors for all their support and guidance.&amp;lt;/p&amp;gt; I&amp;#8217;ve been working on implementing threaded comments in ticket modify view. Earlier the comments were created by creating message markups of all the comments and then concatenating them in the content part of the ticket item. In this way, editing/reply to comments was not possible. New implementation: Each comment is a new item which refers to the itemid of the ticket in which it is created. In this way, it is easy to query all the comments of a particular ticket. Initially, I worked on non-threaded comments, then added a feature to reply to comments. It is similar to non-threaded comments but the difference is, there is a new field &amp;#8220;reply_to&amp;#8221; which stores the itemid of the comment to which a reply is made which is hence, stored in the &amp;#8220;refers_to&amp;#8221; field of the comment reply. After this, I tried to create a tree of all the comments in a ticket which included comments, replies of comments, replies of replies and so on. Something like :&amp;nbsp;[[&amp;lt;MoinMoin.storage.middleware.protecting.ProtectedRevision object at 0x7f907596d550&amp;gt;, [&amp;lt;MoinMoin.storage.middleware.protecting.ProtectedRevision object at 0x7f9075963d50&amp;gt;, []]]] The list above, is the tree of 1 single comment which has 1 reply and 1 reply to reply. Still more work has to be done to render the comments in threaded form in the UI. Also, there is some issues in the recursive function I wrote for parsing the comments/reply tree which I think can be fixed soon. CR: https://codereview.appspot.com/256840043/</summary></entry><entry><title type="html">GSoC 2015: Coding Period (7th June – 22nd June)</title><link href="http://localhost:4000/2015/06/gsoc-2015-coding-period-7th-june-22nd-june.html" rel="alternate" type="text/html" title="GSoC 2015: Coding Period (7th June &amp;#8211; 22nd June)" /><published>2015-06-23T02:22:00+05:30</published><updated>2015-06-23T02:22:00+05:30</updated><id>http://localhost:4000/2015/06/gsoc-2015-coding-period-7th-june-22nd-june</id><content type="html" xml:base="http://localhost:4000/2015/06/gsoc-2015-coding-period-7th-june-22nd-june.html">&lt;div dir=&quot;ltr&quot; style=&quot;text-align: left;&quot;&gt;
+  &lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt;In the 3rd week of the coding period, I worked on file upload feature, to upload files in the ticket create and modify view. Now one can upload any patch file, media file or screenshots.&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt;CR (for file upload feature) : &lt;a href=&quot;https://codereview.appspot.com/246020043/&quot;&gt;https://codereview.appspot.com/246020043/&lt;/a&gt;&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt;&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt; We had a meeting over our IRC channel where I discussed about my work and cleared few doubts with my mentors.&lt;/span&gt;&amp;lt;/p&amp;gt; 
+  
+  &lt;p&gt;
+    &lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt;I also worked on improving the UI of ticket create and modify views and made it look more consistent in both basic and modernized themes.&lt;/span&gt;
+  &lt;/p&gt;
+  
+  &lt;div style=&quot;text-align: center;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt;&lt;b&gt;Basic Theme (Before)&lt;/b&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;clear: both; text-align: center;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt;&lt;img border=&quot;0&quot; src=&quot;http://138.68.252.233/wp-content/uploads/2015/06/TtSO06S-300x163.png&quot; height=&quot;345&quot; width=&quot;640&quot; /&gt;&lt;b&gt;&amp;nbsp;&lt;/b&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;clear: both; text-align: center;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt;&lt;br /&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;clear: both; text-align: center;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt;&lt;b&gt;&lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt;&lt;b&gt;Basic Theme (After)&lt;/b&gt;&lt;/span&gt; &lt;/b&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;clear: both; text-align: center;&quot;&gt;
+    &lt;a href=&quot;http://138.68.252.233/wp-content/uploads/2015/06/jyKlC3K.png&quot; style=&quot;margin-left: 1em; margin-right: 1em;&quot;&gt;&lt;img border=&quot;0&quot; src=&quot;http://138.68.252.233/wp-content/uploads/2015/06/jyKlC3K.png&quot; height=&quot;346&quot; width=&quot;640&quot; /&gt;&lt;/a&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;clear: both; text-align: center;&quot;&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: center;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt;&lt;b&gt;&amp;nbsp;Modernized Theme (Before)&lt;/b&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;clear: both; text-align: center;&quot;&gt;
+    &lt;a href=&quot;http://138.68.252.233/wp-content/uploads/2015/06/lZsYdqq.png&quot; style=&quot;margin-left: 1em; margin-right: 1em;&quot;&gt;&lt;img border=&quot;0&quot; src=&quot;http://138.68.252.233/wp-content/uploads/2015/06/lZsYdqq.png&quot; height=&quot;346&quot; width=&quot;640&quot; /&gt;&lt;/a&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: center;&quot;&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: center;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt;&lt;b&gt;&amp;nbsp;Modernized Theme (After)&lt;/b&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;clear: both; text-align: center;&quot;&gt;
+    &lt;b&gt;&lt;a href=&quot;http://138.68.252.233/wp-content/uploads/2015/06/poVia4D.png&quot; style=&quot;margin-left: 1em; margin-right: 1em;&quot;&gt;&lt;img border=&quot;0&quot; src=&quot;http://138.68.252.233/wp-content/uploads/2015/06/poVia4D.png&quot; height=&quot;346&quot; width=&quot;640&quot; /&gt;&lt;/a&gt;&lt;/b&gt;
+  &lt;/div&gt;
+  
+  &lt;p&gt;
+  &lt;/p&gt;
+  
+  &lt;div style=&quot;text-align: center;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt;&lt;b&gt;360&amp;#215;640 view&lt;/b&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;clear: both; text-align: center;&quot;&gt;
+    &lt;a href=&quot;http://138.68.252.233/wp-content/uploads/2015/06/l8jJvlQ.png&quot; style=&quot;margin-left: 1em; margin-right: 1em;&quot;&gt;&lt;img border=&quot;0&quot; src=&quot;http://138.68.252.233/wp-content/uploads/2015/06/l8jJvlQ.png&quot; height=&quot;320&quot; width=&quot;180&quot; /&gt;&lt;/a&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: left;&quot;&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;text-align: left;&quot;&gt;
+    &lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt;CR (for UI improvements): &lt;a href=&quot;https://codereview.appspot.com/247160044/&quot;&gt;https://codereview.appspot.com/247160044/&lt;/a&gt;&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</content><author><name>Vipul</name></author><summary type="html">In the 3rd week of the coding period, I worked on file upload feature, to upload files in the ticket create and modify view. Now one can upload any patch file, media file or screenshots.CR (for file upload feature) : https://codereview.appspot.com/246020043/ We had a meeting over our IRC channel where I discussed about my work and cleared few doubts with my mentors.&amp;lt;/p&amp;gt; I also worked on improving the UI of ticket create and modify views and made it look more consistent in both basic and modernized themes. &amp;nbsp;Basic Theme (Before) &amp;nbsp; Basic Theme (After) &amp;nbsp;Modernized Theme (Before) &amp;nbsp;Modernized Theme (After) 360&amp;#215;640 view CR (for UI improvements): https://codereview.appspot.com/247160044/</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/wp-content/uploads/2015/06/TtSO06S.png" /><media:content medium="image" url="http://localhost:4000/wp-content/uploads/2015/06/TtSO06S.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry></feed>

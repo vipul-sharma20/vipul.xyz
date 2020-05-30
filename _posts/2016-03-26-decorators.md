@@ -1,7 +1,7 @@
 ---
 layout: single
 title:  "Introduction to decorators in Python"
-date:   2020-05-30 14:30:12 +0530
+date:   2016-03-26 14:30:12 +0530
 permalink: "/2016/03/introduction-to-decorators-in-python.html"
 categories: jekyll update
 ---

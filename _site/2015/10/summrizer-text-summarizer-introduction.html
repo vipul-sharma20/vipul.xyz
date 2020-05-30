@@ -9,8 +9,8 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Welcome to Jekyll! - Vipul Sharma</title>
-<meta name="description" content="You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-regenerates your site when a file is updated.  ">
+<!-- begin _includes/seo.html --><title>Summrizer: Text summarizer (Introduction) - Vipul Sharma</title>
+<meta name="description" content="  ">
 
 
   <meta name="author" content="Vipul Sharma">
@@ -19,26 +19,26 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Vipul Sharma">
-<meta property="og:title" content="Welcome to Jekyll!">
-<meta property="og:url" content="http://localhost:4000/jekyll/update/2020/05/30/welcome-to-jekyll.html">
+<meta property="og:title" content="Summrizer: Text summarizer (Introduction)">
+<meta property="og:url" content="http://localhost:4000/2015/10/summrizer-text-summarizer-introduction.html">
 
 
-  <meta property="og:description" content="You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-regenerates your site when a file is updated.  ">
-
-
-
-
-
-
-
-  <meta property="article:published_time" content="2020-05-30T13:30:12+05:30">
+  <meta property="og:description" content="  ">
 
 
 
 
 
 
-<link rel="canonical" href="http://localhost:4000/jekyll/update/2020/05/30/welcome-to-jekyll.html">
+
+  <meta property="article:published_time" content="2015-10-20T01:56:00+05:30">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/2015/10/summrizer-text-summarizer-introduction.html">
 
 
 
@@ -277,15 +277,15 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="Welcome to Jekyll!">
-    <meta itemprop="description" content="You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-regenerates your site when a file is updated.">
-    <meta itemprop="datePublished" content="2020-05-30T13:30:12+05:30">
+    <meta itemprop="headline" content="Summrizer: Text summarizer (Introduction)">
+    <meta itemprop="description" content="">
+    <meta itemprop="datePublished" content="2015-10-20T01:56:00+05:30">
     
 
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">Welcome to Jekyll!
+          <h1 id="page-title" class="page__title" itemprop="headline">Summrizer: Text summarizer (Introduction)
 </h1>
           
         </header>
@@ -293,23 +293,47 @@
 
       <section class="page__content" itemprop="text">
         
-        <p>You’ll find this post in your <code class="language-plaintext highlighter-rouge">_posts</code> directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run <code class="language-plaintext highlighter-rouge">jekyll serve</code>, which launches a web server and auto-regenerates your site when a file is updated.</p>
+        <p><img src="/assets/images/keyboard.jpg" alt="alt text" /></p>
 
-<p>Jekyll requires blog post files to be named according to the following format:</p>
+<p>
+    <b>EDIT: </b>Completed the project 🙂 see <a href="http://vipulsharma20.blogspot.in/2015/10/summrizer-text-summarizer_27.html" rel="nofollow" target="_blank"><span style="color: red;">here</span></a>
+  </p>
 
-<p><code class="language-plaintext highlighter-rouge">YEAR-MONTH-DAY-title.MARKUP</code></p>
+<p>
+    I had started working on this project 6-7 months ago. I left it mid-way as I got busy with something else but, now I am again onto this :D. The plan was to create something insanely awesome but, then I recalled few words; someone told me once that first one should create a Minimum Viable Product and then go for more features.
+  </p>
 
-<p>Where <code class="language-plaintext highlighter-rouge">YEAR</code> is a four-digit number, <code class="language-plaintext highlighter-rouge">MONTH</code> and <code class="language-plaintext highlighter-rouge">DAY</code> are both two-digit numbers, and <code class="language-plaintext highlighter-rouge">MARKUP</code> is the file extension representing the format used in the file. After that, include the necessary front matter. Take a look at the source for this post to get an idea about how it works.</p>
+<p>
+    Currently, I am working on a pretty naive text summarizer by implementing a basic text scoring algorithm with some use of NLTK. Although, I&#8217;ve worked with Stanford&#8217;s CoreNLP earlier, I wanted to exploit the power of NLTK.
+  </p>
 
-<p>Jekyll also offers powerful support for code snippets:</p>
+<p>
+    I&#8217;ve tested the script by summarizing some articles from <a href="http://techcrunch.com/">techcrunch.com</a>&nbsp;and compared the summary results with results from some online text summarizing websites like:
+  </p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">print_hi</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
-  <span class="nb">puts</span> <span class="s2">"Hi, </span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">"</span>
-<span class="k">end</span>
-<span class="n">print_hi</span><span class="p">(</span><span class="s1">'Tom'</span><span class="p">)</span>
-<span class="c1">#=&gt; prints 'Hi, Tom' to STDOUT.</span></code></pre></figure>
+<ul style="text-align: left;">
+    <li>
+      <a href="http://smmry.com/">http://smmry.com</a>&nbsp;(this is already pretty bad in summarizing texts)
+    </li>
+    <li>
+      <a href="http://freesummarizer.com/">http://freesummarizer.com</a>&nbsp;(not so good but better than smmry.com)
+    </li>
+    <li>
+      <a href="http://autosummarizer.com/index.php">http://autosummarizer.com/index.php</a>&nbsp;(most of my results matches with this one)
+    </li>
+  </ul>
 
-<p>Check out the <a href="https://jekyllrb.com/docs/home">Jekyll docs</a> for more info on how to get the most out of Jekyll. File all bugs/feature requests at <a href="https://github.com/jekyll/jekyll">Jekyll’s GitHub repo</a>. If you have questions, you can ask them on <a href="https://talk.jekyllrb.com/">Jekyll Talk</a>.</p>
+<p>
+    After this basic implementation works fine, I&#8217;ll try to implement some complex language processing concepts for which I may be dealing with more of NLTK or even CoreNLP (personally, I like Stanford&#8217;s CoreNLP more).
+  </p>
+
+<p>
+    Code:&nbsp;<a href="https://github.com/vipul-sharma20/summrizer">https://github.com/vipul-sharma20/summrizer</a>
+  </p>
+
+<p>
+    I&#8217;ve also created a separate branch and initialized it with a Django based web application. Once the script works fine, I&#8217;ll try to host this script as a web application for text summarizing. But, my priority and focus is on creating a more efficient summarizing script 😀
+  </p>
 
 
         
@@ -321,7 +345,7 @@
 
 
         
-          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-05-30T13:30:12+05:30">May 30, 2020</time></p>
+          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2015-10-20T01:56:00+05:30">October 20, 2015</time></p>
         
       </footer>
 
@@ -330,11 +354,11 @@
       
   <nav class="pagination">
     
-      <a href="/2017/03/sharingan-newspaper-text-and-context-extractor.html" class="pagination--pager" title="Sharingan: Newspaper text and context extractor
+      <a href="/2015/09/writing-training-mission-for-openhatch.html" class="pagination--pager" title="Writing training mission for Openhatch
 ">Previous</a>
     
     
-      <a href="/2016/03/introduction-to-decorators-in-python.html" class="pagination--pager" title="Introduction to decorators in Python
+      <a href="/2015/10/summrizer-text-summarizer-implementation-context-extractor.html" class="pagination--pager" title="Summrizer: Text summarizer (Implementation) &amp; Context Extractor
 ">Next</a>
     
   </nav>

@@ -1,7 +1,7 @@
 ---
 layout: single
 title:  "Sharingan: Newspaper text and context extractor"
-date:   2019-05-30 14:30:12 +0530
+date:   2017-03-13 14:30:12 +0530
 permalink: "/2017/03/sharingan-newspaper-text-and-context-extractor.html"
 categories: jekyll update
 ---

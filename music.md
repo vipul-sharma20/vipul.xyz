@@ -5,6 +5,4 @@ permalink: /music/
 collection: portfolio
 entries_layout: grid
 classes: wide
-header:
-  teaser: /assets/images/me.jpg
 ---

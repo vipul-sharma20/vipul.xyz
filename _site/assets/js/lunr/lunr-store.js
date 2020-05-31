@@ -1,6 +1,6 @@
 var store = [{
         "title": "Swat Kats 2",
-        "excerpt":"         View this post on Instagram           SWAT Kats Season 2 (1994) intro #electricguitar #guitar #epiphone #cartoonnetwork #swatkats #guitarcover Had to record it quickly. Therefore, not so good tone, playing and editing 🤷‍♂️  A post shared by  विपुल शर्मा (Vipul Sharma) (@vipul.py) on Dec 15, 2019 at 4:33am PST    ","categories": [],
+        "excerpt":"View this post on Instagram SWAT Kats Season 2 (1994) intro #electricguitar #guitar #epiphone #cartoonnetwork #swatkats #guitarcover Had to record it quickly. Therefore, not so good tone, playing and editing 🤷‍♂️ A post shared by विपुल शर्मा (Vipul Sharma) (@vipul.py) on Dec 15, 2019 at 4:33am PST Apparently there were...","categories": [],
         "tags": [],
         "url": "http://localhost:4000/music/swat-kats-2",
         "teaser": "http://localhost:4000/assets/images/swat-kats-2-cover.png"

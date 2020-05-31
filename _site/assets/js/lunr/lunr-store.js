@@ -1,4 +1,16 @@
 var store = [{
+        "title": "Swat Kats 2",
+        "excerpt":"         View this post on Instagram           SWAT Kats Season 2 (1994) intro #electricguitar #guitar #epiphone #cartoonnetwork #swatkats #guitarcover Had to record it quickly. Therefore, not so good tone, playing and editing 🤷‍♂️  A post shared by  विपुल शर्मा (Vipul Sharma) (@vipul.py) on Dec 15, 2019 at 4:33am PST    ","categories": [],
+        "tags": [],
+        "url": "http://localhost:4000/music/swat-kats-2",
+        "teaser": "http://localhost:4000/assets/images/swat-kats-2-cover.png"
+      },{
+        "title": "Hey Joe",
+        "excerpt":"View this post on Instagram Hey Joe: Jimi Hendrix #guitarcover #guitarplayer #guitarsolo #guitarist #guitar #epiphone #jimihendrix #iamacomplanboy A post shared by विपुल शर्मा (Vipul Sharma) (@vipul.py) on Apr 4, 2020 at 9:39am PDT I don’t really like my cover of this solo piece of this Jimi Hendrix’s version of Hey...","categories": [],
+        "tags": [],
+        "url": "http://localhost:4000/music/hey-joe",
+        "teaser": "http://localhost:4000/assets/images/hey-joe-cover.png"
+      },{
         "title": "The Sound of Silence",
         "excerpt":"View this post on Instagram #guitarcover #guitarist #guitaristsofinstagram #fender #soundofsilence A post shared by विपुल शर्मा (Vipul Sharma) (@vipul.py) on May 3, 2020 at 4:18am PDT This is the first acoustic cover I have recorded with my new microphone. It’s a Maono AU-A04, a low-end condenser microphone, which seems to...","categories": [],
         "tags": [],

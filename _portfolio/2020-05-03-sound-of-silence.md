@@ -1,4 +1,5 @@
 ---
+order: 2
 title: "The Sound of Silence"
 date: 2020-05-03T12:27:00+00:00
 permalink: "/music/the-sound-of-silence"

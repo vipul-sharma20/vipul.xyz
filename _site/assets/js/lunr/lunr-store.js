@@ -1,9 +1,9 @@
 var store = [{
-        "title": "Under construction",
-        "excerpt":" ","categories": [],
+        "title": "Sadness and Sorrow",
+        "excerpt":"View this post on Instagram Sadness and Sorrow - Naruto I remember the first time I recorded this in 2016, it was raining and today it started raining when I started recording this. Coincidence? I think not. I think the rain made this piece even better 4 years ago and...","categories": [],
         "tags": [],
-        "url": "http://localhost:4000/music/test",
-        "teaser": null
+        "url": "http://localhost:4000/music/sadness-and-sorrow",
+        "teaser": "http://localhost:4000/assets/images/sadness-and-sorrow-cover.jpg"
       },{
         "title": "Gesture Recognition using OpenCV + Python",
         "excerpt":"This python script can be used to analyse hand gestures by contour detection and convex hull of palm region using OpenCV, a library used for computer vision processes. code: https://github.com/vipul-sharma20/gesture-opencv The video below shows the working of the code: How? 1. Capture frames and convert to grayscale Our ROI is...","categories": ["Uncategorized"],

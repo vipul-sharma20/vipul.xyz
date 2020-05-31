@@ -2,7 +2,7 @@ var store = [{
         "title": "The Sound of Silence",
         "excerpt":"View this post on Instagram #guitarcover #guitarist #guitaristsofinstagram #fender #soundofsilence A post shared by विपुल शर्मा (Vipul Sharma) (@vipul.py) on May 3, 2020 at 4:18am PDT This is the first acoustic cover I have recorded with my new microphone. It’s a Maono AU-A04, a low-end condenser microphone, which seems to...","categories": [],
         "tags": [],
-        "url": "http://localhost:4000/music/sound-of-silence",
+        "url": "http://localhost:4000/music/the-sound-of-silence",
         "teaser": "http://localhost:4000/assets/images/sound-of-silence-cover.png"
       },{
         "title": "Sadness and Sorrow",

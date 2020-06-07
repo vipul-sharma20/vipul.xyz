@@ -100,4 +100,10 @@ var store = [{
         "tags": [],
         "url": "http://localhost:4000/2017/09/performance-analysis-goroutine-pythons-coroutine.html",
         "teaser": null
+      },{
+        "title": "Load Balancing UniMRCP server with OpenSIPS",
+        "excerpt":"About In this post I’ll explain how we use OpenSIPS 2.4.7 (LTS) for load balancing SIP traffic among multiple MRCP servers in Vernacular.ai deployments. Our MRCP server is built over UniMRCP, an open source cross-platform implementation of MRCP protocol. This post can help anyone trying to load balance traffic among...","categories": [],
+        "tags": [],
+        "url": "http://localhost:4000/2020/06/mrcp-server-load-balancer.html",
+        "teaser": null
       }]

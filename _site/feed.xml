@@ -1,4 +1,346 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-06-01T01:50:52+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Vipul Sharma</title><subtitle>An amazing website.</subtitle><author><name>Vipul Sharma</name></author><entry><title type="html">Performance Analysis: Goroutine &amp;amp; Python’s Coroutine</title><link href="http://localhost:4000/2017/09/performance-analysis-goroutine-pythons-coroutine.html" rel="alternate" type="text/html" title="Performance Analysis: Goroutine &amp; Python’s Coroutine" /><published>2017-09-03T14:30:12+05:30</published><updated>2017-09-03T14:30:12+05:30</updated><id>http://localhost:4000/2017/09/async-go-py</id><content type="html" xml:base="http://localhost:4000/2017/09/performance-analysis-goroutine-pythons-coroutine.html">&lt;p&gt;I made 1000 HTTP requests using Goroutines and Python’s Coroutines&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-06-07T17:31:46+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Vipul Sharma</title><subtitle>An amazing website.</subtitle><author><name>Vipul Sharma</name></author><entry><title type="html">Load Balancing UniMRCP server with OpenSIPS</title><link href="http://localhost:4000/2020/06/mrcp-server-load-balancer.html" rel="alternate" type="text/html" title="Load Balancing UniMRCP server with OpenSIPS" /><published>2020-06-07T14:30:12+05:30</published><updated>2020-06-07T14:30:12+05:30</updated><id>http://localhost:4000/2020/06/mrcp-server-load-balancer</id><content type="html" xml:base="http://localhost:4000/2020/06/mrcp-server-load-balancer.html">&lt;h2 id=&quot;about&quot;&gt;About&lt;/h2&gt;
+
+&lt;p&gt;In this post I’ll explain how we use OpenSIPS 2.4.7 (LTS) for load balancing
+SIP traffic among multiple MRCP servers in &lt;a href=&quot;https://vernacular.ai&quot;&gt;Vernacular.ai&lt;/a&gt;
+deployments.&lt;/p&gt;
+
+&lt;p&gt;Our MRCP server is built over &lt;a href=&quot;https://github.com/unispeech/unimrcp&quot;&gt;UniMRCP&lt;/a&gt;, an open source cross-platform
+implementation of MRCP protocol.  This post can help anyone trying to load
+balance traffic among multiple UniMRCP servers (referred as MRCP servers
+hereafter)&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/OpenSIPS/opensips&quot;&gt;OpenSIPS&lt;/a&gt; is a GPL implementation of a multi-functionality SIP Server that
+targets to deliver a high-level technical solution (performance, security and
+quality) to be used in professional SIP server platforms.&lt;/p&gt;
+
+&lt;p&gt;OpenSIPS provides a variety of modules which help to implement these solutions.
+For our load balancer, we use OpenSIPS’ &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;load_balancer&lt;/code&gt; module to achieve this.&lt;/p&gt;
+
+&lt;p&gt;Our load balancer code is published at: &lt;a href=&quot;https://github.com/Vernacular-ai/mrcp-load-balancer&quot;&gt;https://github.com/Vernacular-ai/mrcp-load-balancer&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;features-of-this-load-balancer&quot;&gt;Features of this Load Balancer&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Load distribution based on available MRCP server resources and usage.&lt;/li&gt;
+  &lt;li&gt;Check uptime of MRCP servers and route requests to active servers.&lt;/li&gt;
+  &lt;li&gt;Report live dialogs/calls.&lt;/li&gt;
+  &lt;li&gt;Retry fallback to other resources on session creation failure.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;architecture&quot;&gt;Architecture&lt;/h2&gt;
+
+&lt;p&gt;You can check the architecture diagram when a set of MRCP servers are deployed
+with a load balancer below:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/lb_mrcp_architecture.png&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;request-flow&quot;&gt;Request Flow&lt;/h2&gt;
+
+&lt;p&gt;Let’s consider a scenario where a request from a client is routed to an MRCP
+server via LB.  Reference diagram below shows the flow in red.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/request_flow.png&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;OpenSIPS is a SIP server and hence we use it as a SIP load balancer. Which
+means that all the SIP requests received by the LB will be routed to the
+appropriate MRCP servers.&lt;/p&gt;
+
+&lt;p&gt;When a SIP &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;INVITE&lt;/code&gt; request is initiated by the client, it gets routed by
+OpenSIPS &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;load_balancer&lt;/code&gt; module to the appropriate available resource (MRCP
+server) and adds a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Via&lt;/code&gt; header which has the info of all the nodes a
+particular SIP request has visited. This way once the request reaches a
+destination, it has info (address) of all the nodes it has visited and hence
+the address of the client who originated the request.&lt;/p&gt;
+
+&lt;p&gt;The server therefore, uses this client address and establishes a connection
+with the client for RTP streams and MRCPv2 messages. In summary, SIP messages
+are routed through the LB and after that all the RTP streams and MRCPv2
+messages are communicated between the client and the server directly.&lt;/p&gt;
+
+&lt;p&gt;Check the sample flow diagram below for better understanding:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/request_flow_complete.png&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;opensips-scripting&quot;&gt;OpenSIPS Scripting&lt;/h2&gt;
+
+&lt;p&gt;OpenSIPS works on it’s own scripting language which is similar to C and Bash
+Script.  All the routing logic is kept in a cfg file which is given to OpenSIPS
+when it is started.&lt;/p&gt;
+
+&lt;p&gt;The OpenSIPs configuration script has three main logical parts:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Global parameters&lt;/li&gt;
+  &lt;li&gt;Modules section&lt;/li&gt;
+  &lt;li&gt;Routing logic&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;global-parameters&quot;&gt;Global parameters&lt;/h3&gt;
+
+&lt;p&gt;These are basically the global core parameters which affects the OpenSIPS core and the modules being used by it.&lt;/p&gt;
+
+&lt;p&gt;Example:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# OpenSIPS listener transport type, host and port&lt;/span&gt;
+listen &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; udp:172.31.24.28:9060
+listen &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; tcp:172.31.24.28:9060
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;modules-section&quot;&gt;Modules section&lt;/h3&gt;
+&lt;p&gt;This section has definition of all the modules to be loaded for OpenSIPS and initialization of module parameters.&lt;/p&gt;
+
+&lt;p&gt;Example:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# LOAD BALANCER module&lt;/span&gt;
+loadmodule &lt;span class=&quot;s2&quot;&gt;&quot;load_balancer.so&quot;&lt;/span&gt;
+modparam&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;load_balancer&quot;&lt;/span&gt;, &lt;span class=&quot;s2&quot;&gt;&quot;db_url&quot;&lt;/span&gt;, &lt;span class=&quot;s2&quot;&gt;&quot;text:///usr/src/opensips-2.4.7/dbtext&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+modparam&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;load_balancer&quot;&lt;/span&gt;, &lt;span class=&quot;s2&quot;&gt;&quot;probing_method&quot;&lt;/span&gt;, &lt;span class=&quot;s2&quot;&gt;&quot;OPTIONS&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;routing-logic&quot;&gt;Routing logic&lt;/h3&gt;
+&lt;p&gt;This is where the magic happens. This section has all the SIP traffic routing conditions.&lt;/p&gt;
+
+&lt;p&gt;Example:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;route&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;# Sends reply to a SIP OPTIONS request&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;is_method&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;OPTIONS&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        options_reply&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;how-lb-works-in-opensips&quot;&gt;How LB works in OpenSIPS?&lt;/h2&gt;
+
+&lt;p&gt;Listed below are a few aspects of LB module:&lt;/p&gt;
+
+&lt;h3 id=&quot;destination-set&quot;&gt;Destination Set&lt;/h3&gt;
+&lt;p&gt;A destination is defined by its address (a SIP URI) and its description as
+capacity. This destination is defined in a text DB for our deployment which can
+be found at &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;opensips/dbtext/load_balancer&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;+----+----------+------------------------+------------+
+| id | group_id | dst_uri                | resources  |
++----+----------+------------------------+------------+
+|  1 |        1 | sip:x.x.x.x:8060       | pstn=100   |
+|  2 |        1 | sip:y.y.y.y:8060       | pstn=50    |
++----+----------+------------------------+------------+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;These destinations determines the kind of services/resources they offer.&lt;/p&gt;
+
+&lt;h3 id=&quot;invoking-the-load-balancer&quot;&gt;Invoking the Load Balancer&lt;/h3&gt;
+&lt;p&gt;You can  invoke the load balancer routing from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;opensips.cfg&lt;/code&gt; by calling the
+appropriate functions defined in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;load_balancer&lt;/code&gt; module. Here, we are using
+the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lb_start_or_next&lt;/code&gt; function which tries to route an incoming SIP &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;INVITE&lt;/code&gt;
+request to the destination and if the routing fails, it tries for the next
+destination from the destination set until there are no available.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;is_method&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;INVITE&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(!&lt;/span&gt;lb_start_or_next&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;1&quot;&lt;/span&gt;,&lt;span class=&quot;s2&quot;&gt;&quot;pstn&quot;&lt;/span&gt;,&lt;span class=&quot;s2&quot;&gt;&quot;1&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        send_reply&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;503&quot;&lt;/span&gt;,&lt;span class=&quot;s2&quot;&gt;&quot;Service Unavailable&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;nb&quot;&gt;exit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;load-balancing-logic&quot;&gt;Load Balancing Logic&lt;/h3&gt;
+&lt;p&gt;The logic used by the LB module to select the destination is:&lt;/p&gt;
+
+&lt;p&gt;Gets the destination set based on the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;group_id&lt;/code&gt; (first parameter of the
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lb_start_or_next()&lt;/code&gt; function)&lt;/p&gt;
+
+&lt;p&gt;Selects from the set only the destinations that are able to provide the
+requested resources (second parameter of the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lb_start_or_next()&lt;/code&gt; function)&lt;/p&gt;
+
+&lt;p&gt;For the selected destinations, it evaluated the current load for each requested
+resource the winning destination is the one with the biggest value for the
+minimum available load per resources.&lt;/p&gt;
+
+&lt;p&gt;Example&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;2 destinations in the LB set
+
+1) offers 100 channels for PSTN
+2) offers 50 channels for PSTN
+
+When calling lb_start_or_next(&quot;1&quot;,&quot;pstn&quot;)
+
+Destinations (1) and (2) will be selected at as they both
+offer pstn
+
+Assume the current load as below
+
+(1) PSTN - 20 channels used
+(2) PSTN - 10 channels used
+
+evaluating available load (capacity-load) :
+
+(1) PSTN - 80 channels available
+(2) PSTN - 40 channels available
+
+final selected destination is (1) as it has the the biggest
+(=80) available load for the most loaded resource.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;flow-diagram-without-lb&quot;&gt;Flow diagram without LB&lt;/h2&gt;
+
+&lt;p&gt;Checkout the SIP trace diagram for a call scenario without LB
+&lt;img src=&quot;/assets/images/without_lb.png&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;flow-diagram-with-lb&quot;&gt;Flow diagram with LB&lt;/h2&gt;
+
+&lt;p&gt;Checkout the SIP trace diagram for a call scenario with LB
+&lt;img src=&quot;/assets/images/without_lb.png&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;modules-used&quot;&gt;Modules Used&lt;/h2&gt;
+&lt;p&gt;Apart from the internal modules used by OpenSIPS, we use some other modules needed by the load_balancer module. Following are a few important ones:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://opensips.org/html/docs/modules/2.4.x/dialog.html&quot;&gt;dialog module&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://opensips.org/html/docs/modules/2.4.x/signaling.html&quot;&gt;signalling module&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://opensips.org/docs/modules/2.4.x/sl.html&quot;&gt;stateless module&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://opensips.org/docs/modules/2.4.x/options.html&quot;&gt;options module&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://opensips.org/docs/modules/2.4.x/tm.html&quot;&gt;transaction module&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://opensips.org/html/docs/modules/2.4.x/db_text.html&quot;&gt;text db module&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://opensips.org/html/docs/modules/2.4.x/dispatcher.html&quot;&gt;dispatcher module&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;advanced&quot;&gt;Advanced&lt;/h2&gt;
+
+&lt;p&gt;A few good to know usage details of OpenSIPS&lt;/p&gt;
+
+&lt;h3 id=&quot;getting-number-of-active-callsdialogs&quot;&gt;Getting number of active calls/dialogs&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;opensipsctl fifo get_statistics dialog:&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Example:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@centosmrcp:/usr/src/opensips-2.4.7# opensipsctl fifo get_statistics dialog:
+dialog:active_dialogs:: 120
+dialog:early_dialogs:: 161
+dialog:processed_dialogs:: 101002
+dialog:expired_dialogs:: 14
+dialog:failed_dialogs:: 23434
+dialog:create_sent:: 100930
+dialog:update_sent:: 12986
+dialog:delete_sent:: 100927
+dialog:create_recv:: 15
+dialog:update_recv:: 23
+dialog:delete_recv:: 24
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Meaning of these values:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;active_dialogs&lt;/code&gt;: Number of active dialogs (confirmed/ACK or not)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;early_dialogs&lt;/code&gt;: Number of early dialogs (only provisional responses)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;processed_dialogs&lt;/code&gt;: Number of processed dialogs since startup&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;expired_dialogs&lt;/code&gt;: Number of expired (timeout) dialogs since startup&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;failed_dialogs&lt;/code&gt;: Number of failed dialogs (never established due to cancels and negative replies—internal and external)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;create_sent&lt;/code&gt;: Number of replicated dialog create requests sent to another instance (used when replicating dialogs between servers)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;update_sent&lt;/code&gt;: Number of replicated dialog update requests sent to another instance&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;delete_sent&lt;/code&gt;: Number of replicated dialog delete requests sent to another instance&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;create_recv&lt;/code&gt;: Number of dialog create events received from other instances&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;update_recv&lt;/code&gt;: Number of dialog update events received from other instances&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;delete_recv&lt;/code&gt;: Number of dialog delete events received from other instances&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;running-opensips-in-foreground&quot;&gt;Running OpenSIPS in foreground&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;./opensips -f -F /path/to/opensips.cfg&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;running-opensips-in-debug-mode&quot;&gt;Running OpenSIPS in debug mode&lt;/h3&gt;
+
+&lt;p&gt;Set &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;debug_mode=yes&lt;/code&gt; in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;opensips.cfg&lt;/code&gt; file. This will run OpenSIPS in debug mode in foreground.&lt;/p&gt;
+
+&lt;h3 id=&quot;log-levels&quot;&gt;Log levels&lt;/h3&gt;
+
+&lt;p&gt;Below are the log levels that can be configures in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;opensips.cfg&lt;/code&gt; file:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# -3 - Alert level
+# -2 - Critical level
+# -1 - Error level
+#  1 - Warning level
+#  2 - Notice level
+#  3 - Info level
+#  4 - Debug level
+log_level=1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;activeinactive-destinations-pings&quot;&gt;Active/Inactive Destinations (Pings)&lt;/h3&gt;
+
+&lt;p&gt;OpenSIPS uses &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;OPTIONS&lt;/code&gt; request to ping all the destinations to check their
+state. Any destination not replying to these pings is marked as inactive and
+remains to be until OpenSIPS receives a successful response of these pings. All
+the traffic is routed to the active servers only.&lt;/p&gt;
+
+&lt;p&gt;These pings are only made when the destinations are added with probe mode is set as 2.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;0: No probing&lt;/li&gt;
+  &lt;li&gt;1: Probe on disable only&lt;/li&gt;
+  &lt;li&gt;2: Always probe&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;failover-mechanism-for-incoming-requests&quot;&gt;Failover mechanism for incoming requests&lt;/h3&gt;
+
+&lt;p&gt;If an incoming request is routed by LB to a destination and it times out, it
+gets routed to a different destination and the former destination is marked as
+inactive. This destination remains as inactive until OpenSIPS receives a
+successful ping from it.&lt;/p&gt;
+
+&lt;h3 id=&quot;how-many-children-are-enough&quot;&gt;How many children are enough?&lt;/h3&gt;
+
+&lt;p&gt;Answer:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;There is no simple answer, choosing the appropriate number of children
+is scenario-dependant.
+
+If, for example, you are not performing I/O operations (DB queries, exec
+commands, etc.), then the number of children should be dictated by the
+number of cores on your box.
+
+On the other side, when your SIP workers will perform lots of disk
+operations (which are slow), then you should use a lot more children
+than mentioned above. (e.g. 12, 16 or 20 children).
+
+Best regards,
+
+Liviu Chircu
+OpenSIPS Developer
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Source thread:
+&lt;a href=&quot;https://opensips.org/pipermail/users/2013-December/027530.html&quot;&gt;https://opensips.org/pipermail/users/2013-December/027530.html&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;configuring-unimrcp-client-with-load-balancer&quot;&gt;Configuring UniMRCP client with Load Balancer&lt;/h3&gt;
+
+&lt;p&gt;Edit the client-profiles config at:
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/usr/local/unimrcp/client-profiles/unimrcp.xml&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Update the server-ip and port:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;server-ip&amp;gt;172.31.24.28&amp;lt;/server-ip&amp;gt; &amp;lt;!-- LB IP here --&amp;gt;
+&amp;lt;server-port&amp;gt;9060&amp;lt;/server-port&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Edit the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;unimrcpclient.xml&lt;/code&gt; at:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/usr/local/unimrcp/client-profiles/unimrcp.xml
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Update the client’s sip-transport type:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;sip-port&amp;gt;8062&amp;lt;/sip-port&amp;gt;
+&amp;lt;sip-transport&amp;gt;tcp&amp;lt;/sip-transport&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;run recog&lt;/code&gt; request will go via LB.&lt;/p&gt;
+
+&lt;h2 id=&quot;contributing&quot;&gt;Contributing&lt;/h2&gt;
+
+&lt;p&gt;For contribution and reporting issues please checkout the repository &lt;a href=&quot;https://github.com/Vernacular-ai/mrcp-load-balancer&quot;&gt;here&lt;/a&gt;&lt;/p&gt;</content><author><name>Vipul Sharma</name></author><summary type="html">Walkthrough on how to use OpenSIPS to load balance thousands of concurrent calls among multiple UniMRCP servers</summary></entry><entry><title type="html">Performance Analysis: Goroutine &amp;amp; Python’s Coroutine</title><link href="http://localhost:4000/2017/09/performance-analysis-goroutine-pythons-coroutine.html" rel="alternate" type="text/html" title="Performance Analysis: Goroutine &amp; Python’s Coroutine" /><published>2017-09-03T14:30:12+05:30</published><updated>2017-09-03T14:30:12+05:30</updated><id>http://localhost:4000/2017/09/async-go-py</id><content type="html" xml:base="http://localhost:4000/2017/09/performance-analysis-goroutine-pythons-coroutine.html">&lt;p&gt;I made 1000 HTTP requests using Goroutines and Python’s Coroutines&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;Used Go 1.6.2 and Python 3.6&lt;/li&gt;
@@ -1063,70 +1405,4 @@ Here is the link to the code : &lt;a href=&quot;https://github.com/vipul-sharma2
   &lt;p&gt;
     CR: &lt;a href=&quot;https://codereview.appspot.com/256840043/&quot;&gt;https://codereview.appspot.com/256840043/&lt;/a&gt;
   &lt;/p&gt;
-&lt;/div&gt;</content><author><name>Vipul</name></author><summary type="html">Passed my mid term evaluations 🙂 Thanks to my mentors for all their support and guidance.&amp;lt;/p&amp;gt; I&amp;#8217;ve been working on implementing threaded comments in ticket modify view. Earlier the comments were created by creating message markups of all the comments and then concatenating them in the content part of the ticket item. In this way, editing/reply to comments was not possible. New implementation: Each comment is a new item which refers to the itemid of the ticket in which it is created. In this way, it is easy to query all the comments of a particular ticket. Initially, I worked on non-threaded comments, then added a feature to reply to comments. It is similar to non-threaded comments but the difference is, there is a new field &amp;#8220;reply_to&amp;#8221; which stores the itemid of the comment to which a reply is made which is hence, stored in the &amp;#8220;refers_to&amp;#8221; field of the comment reply. After this, I tried to create a tree of all the comments in a ticket which included comments, replies of comments, replies of replies and so on. Something like :&amp;nbsp;[[&amp;lt;MoinMoin.storage.middleware.protecting.ProtectedRevision object at 0x7f907596d550&amp;gt;, [&amp;lt;MoinMoin.storage.middleware.protecting.ProtectedRevision object at 0x7f9075963d50&amp;gt;, []]]] The list above, is the tree of 1 single comment which has 1 reply and 1 reply to reply. Still more work has to be done to render the comments in threaded form in the UI. Also, there is some issues in the recursive function I wrote for parsing the comments/reply tree which I think can be fixed soon. CR: https://codereview.appspot.com/256840043/</summary></entry><entry><title type="html">GSoC 2015: Coding Period (7th June – 22nd June)</title><link href="http://localhost:4000/2015/06/gsoc-2015-coding-period-7th-june-22nd-june.html" rel="alternate" type="text/html" title="GSoC 2015: Coding Period (7th June &amp;#8211; 22nd June)" /><published>2015-06-23T02:22:00+05:30</published><updated>2015-06-23T02:22:00+05:30</updated><id>http://localhost:4000/2015/06/gsoc-2015-coding-period-7th-june-22nd-june</id><content type="html" xml:base="http://localhost:4000/2015/06/gsoc-2015-coding-period-7th-june-22nd-june.html">&lt;div dir=&quot;ltr&quot; style=&quot;text-align: left;&quot;&gt;
-  &lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt;In the 3rd week of the coding period, I worked on file upload feature, to upload files in the ticket create and modify view. Now one can upload any patch file, media file or screenshots.&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt;CR (for file upload feature) : &lt;a href=&quot;https://codereview.appspot.com/246020043/&quot;&gt;https://codereview.appspot.com/246020043/&lt;/a&gt;&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt;&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt; We had a meeting over our IRC channel where I discussed about my work and cleared few doubts with my mentors.&lt;/span&gt;&amp;lt;/p&amp;gt; 
-  
-  &lt;p&gt;
-    &lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt;I also worked on improving the UI of ticket create and modify views and made it look more consistent in both basic and modernized themes.&lt;/span&gt;
-  &lt;/p&gt;
-  
-  &lt;div style=&quot;text-align: center;&quot;&gt;
-    &lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt;&lt;b&gt;Basic Theme (Before)&lt;/b&gt;&lt;/span&gt;
-  &lt;/div&gt;
-  
-  &lt;div style=&quot;clear: both; text-align: center;&quot;&gt;
-    &lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt;&lt;img border=&quot;0&quot; src=&quot;http://138.68.252.233/wp-content/uploads/2015/06/TtSO06S-300x163.png&quot; height=&quot;345&quot; width=&quot;640&quot; /&gt;&lt;b&gt;&amp;nbsp;&lt;/b&gt;&lt;/span&gt;
-  &lt;/div&gt;
-  
-  &lt;div style=&quot;clear: both; text-align: center;&quot;&gt;
-    &lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt;&lt;br /&gt;&lt;/span&gt;
-  &lt;/div&gt;
-  
-  &lt;div style=&quot;clear: both; text-align: center;&quot;&gt;
-    &lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt;&lt;b&gt;&lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt;&lt;b&gt;Basic Theme (After)&lt;/b&gt;&lt;/span&gt; &lt;/b&gt;&lt;/span&gt;
-  &lt;/div&gt;
-  
-  &lt;div style=&quot;clear: both; text-align: center;&quot;&gt;
-    &lt;a href=&quot;http://138.68.252.233/wp-content/uploads/2015/06/jyKlC3K.png&quot; style=&quot;margin-left: 1em; margin-right: 1em;&quot;&gt;&lt;img border=&quot;0&quot; src=&quot;http://138.68.252.233/wp-content/uploads/2015/06/jyKlC3K.png&quot; height=&quot;346&quot; width=&quot;640&quot; /&gt;&lt;/a&gt;
-  &lt;/div&gt;
-  
-  &lt;div style=&quot;clear: both; text-align: center;&quot;&gt;
-  &lt;/div&gt;
-  
-  &lt;div style=&quot;text-align: center;&quot;&gt;
-    &lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt;&lt;b&gt;&amp;nbsp;Modernized Theme (Before)&lt;/b&gt;&lt;/span&gt;
-  &lt;/div&gt;
-  
-  &lt;div style=&quot;clear: both; text-align: center;&quot;&gt;
-    &lt;a href=&quot;http://138.68.252.233/wp-content/uploads/2015/06/lZsYdqq.png&quot; style=&quot;margin-left: 1em; margin-right: 1em;&quot;&gt;&lt;img border=&quot;0&quot; src=&quot;http://138.68.252.233/wp-content/uploads/2015/06/lZsYdqq.png&quot; height=&quot;346&quot; width=&quot;640&quot; /&gt;&lt;/a&gt;
-  &lt;/div&gt;
-  
-  &lt;div style=&quot;text-align: center;&quot;&gt;
-  &lt;/div&gt;
-  
-  &lt;div style=&quot;text-align: center;&quot;&gt;
-    &lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt;&lt;b&gt;&amp;nbsp;Modernized Theme (After)&lt;/b&gt;&lt;/span&gt;
-  &lt;/div&gt;
-  
-  &lt;div style=&quot;clear: both; text-align: center;&quot;&gt;
-    &lt;b&gt;&lt;a href=&quot;http://138.68.252.233/wp-content/uploads/2015/06/poVia4D.png&quot; style=&quot;margin-left: 1em; margin-right: 1em;&quot;&gt;&lt;img border=&quot;0&quot; src=&quot;http://138.68.252.233/wp-content/uploads/2015/06/poVia4D.png&quot; height=&quot;346&quot; width=&quot;640&quot; /&gt;&lt;/a&gt;&lt;/b&gt;
-  &lt;/div&gt;
-  
-  &lt;p&gt;
-  &lt;/p&gt;
-  
-  &lt;div style=&quot;text-align: center;&quot;&gt;
-    &lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt;&lt;b&gt;360&amp;#215;640 view&lt;/b&gt;&lt;/span&gt;
-  &lt;/div&gt;
-  
-  &lt;div style=&quot;clear: both; text-align: center;&quot;&gt;
-    &lt;a href=&quot;http://138.68.252.233/wp-content/uploads/2015/06/l8jJvlQ.png&quot; style=&quot;margin-left: 1em; margin-right: 1em;&quot;&gt;&lt;img border=&quot;0&quot; src=&quot;http://138.68.252.233/wp-content/uploads/2015/06/l8jJvlQ.png&quot; height=&quot;320&quot; width=&quot;180&quot; /&gt;&lt;/a&gt;
-  &lt;/div&gt;
-  
-  &lt;div style=&quot;text-align: left;&quot;&gt;
-  &lt;/div&gt;
-  
-  &lt;div style=&quot;text-align: left;&quot;&gt;
-    &lt;span style=&quot;font-family: Arial,Helvetica,sans-serif;&quot;&gt;CR (for UI improvements): &lt;a href=&quot;https://codereview.appspot.com/247160044/&quot;&gt;https://codereview.appspot.com/247160044/&lt;/a&gt;&lt;/span&gt;
-  &lt;/div&gt;
-&lt;/div&gt;</content><author><name>Vipul</name></author><summary type="html">In the 3rd week of the coding period, I worked on file upload feature, to upload files in the ticket create and modify view. Now one can upload any patch file, media file or screenshots.CR (for file upload feature) : https://codereview.appspot.com/246020043/ We had a meeting over our IRC channel where I discussed about my work and cleared few doubts with my mentors.&amp;lt;/p&amp;gt; I also worked on improving the UI of ticket create and modify views and made it look more consistent in both basic and modernized themes. &amp;nbsp;Basic Theme (Before) &amp;nbsp; Basic Theme (After) &amp;nbsp;Modernized Theme (Before) &amp;nbsp;Modernized Theme (After) 360&amp;#215;640 view CR (for UI improvements): https://codereview.appspot.com/247160044/</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/wp-content/uploads/2015/06/TtSO06S.png" /><media:content medium="image" url="http://localhost:4000/wp-content/uploads/2015/06/TtSO06S.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry></feed>
+&lt;/div&gt;</content><author><name>Vipul</name></author><summary type="html">Passed my mid term evaluations 🙂 Thanks to my mentors for all their support and guidance.&amp;lt;/p&amp;gt; I&amp;#8217;ve been working on implementing threaded comments in ticket modify view. Earlier the comments were created by creating message markups of all the comments and then concatenating them in the content part of the ticket item. In this way, editing/reply to comments was not possible. New implementation: Each comment is a new item which refers to the itemid of the ticket in which it is created. In this way, it is easy to query all the comments of a particular ticket. Initially, I worked on non-threaded comments, then added a feature to reply to comments. It is similar to non-threaded comments but the difference is, there is a new field &amp;#8220;reply_to&amp;#8221; which stores the itemid of the comment to which a reply is made which is hence, stored in the &amp;#8220;refers_to&amp;#8221; field of the comment reply. After this, I tried to create a tree of all the comments in a ticket which included comments, replies of comments, replies of replies and so on. Something like :&amp;nbsp;[[&amp;lt;MoinMoin.storage.middleware.protecting.ProtectedRevision object at 0x7f907596d550&amp;gt;, [&amp;lt;MoinMoin.storage.middleware.protecting.ProtectedRevision object at 0x7f9075963d50&amp;gt;, []]]] The list above, is the tree of 1 single comment which has 1 reply and 1 reply to reply. Still more work has to be done to render the comments in threaded form in the UI. Also, there is some issues in the recursive function I wrote for parsing the comments/reply tree which I think can be fixed soon. CR: https://codereview.appspot.com/256840043/</summary></entry></feed>

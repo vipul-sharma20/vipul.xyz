@@ -1,0 +1,788 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.19.2 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Load Balancing UniMRCP server with OpenSIPS - Vipul Sharma</title>
+<meta name="description" content="Walkthrough on how to use OpenSIPS to load balance thousands of concurrent calls among multiple UniMRCP servers ">
+
+
+  <meta name="author" content="Vipul Sharma">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Vipul Sharma">
+<meta property="og:title" content="Load Balancing UniMRCP server with OpenSIPS">
+<meta property="og:url" content="http://localhost:4000/2020/06/mrcp-server-load-balancer.html">
+
+
+  <meta property="og:description" content="Walkthrough on how to use OpenSIPS to load balance thousands of concurrent calls among multiple UniMRCP servers ">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-06-07T14:30:12+05:30">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/2020/06/mrcp-server-load-balancer.html">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Vipul Sharma",
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Vipul Sharma Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Vipul
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/music/">Music</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/me.jpg" alt="Vipul Sharma" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Vipul Sharma</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Engineer at Vernacular.ai</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">India</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="https://github.com/vipul-sharma20" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/vipul20/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">Linkedin</span></a></li>
+          
+        
+          
+            <li><a href="https://instagram.com/vipul.py" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://twitter.com/vipul_sharma" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Load Balancing UniMRCP server with OpenSIPS">
+    <meta itemprop="description" content="Walkthrough on how to use OpenSIPS to load balance thousands of concurrent calls among multiple UniMRCP servers">
+    <meta itemprop="datePublished" content="2020-06-07T14:30:12+05:30">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Load Balancing UniMRCP server with OpenSIPS
+</h1>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> Contents</h4></header>
+              <ul class="toc__menu">
+  <li><a href="#about">About</a></li>
+  <li><a href="#features-of-this-load-balancer">Features of this Load Balancer</a></li>
+  <li><a href="#architecture">Architecture</a></li>
+  <li><a href="#request-flow">Request Flow</a></li>
+  <li><a href="#opensips-scripting">OpenSIPS Scripting</a>
+    <ul>
+      <li><a href="#global-parameters">Global parameters</a></li>
+      <li><a href="#modules-section">Modules section</a></li>
+      <li><a href="#routing-logic">Routing logic</a></li>
+    </ul>
+  </li>
+  <li><a href="#how-lb-works-in-opensips">How LB works in OpenSIPS?</a>
+    <ul>
+      <li><a href="#destination-set">Destination Set</a></li>
+      <li><a href="#invoking-the-load-balancer">Invoking the Load Balancer</a></li>
+      <li><a href="#load-balancing-logic">Load Balancing Logic</a></li>
+    </ul>
+  </li>
+  <li><a href="#flow-diagram-without-lb">Flow diagram without LB</a></li>
+  <li><a href="#flow-diagram-with-lb">Flow diagram with LB</a></li>
+  <li><a href="#modules-used">Modules Used</a></li>
+  <li><a href="#advanced">Advanced</a>
+    <ul>
+      <li><a href="#getting-number-of-active-callsdialogs">Getting number of active calls/dialogs</a></li>
+      <li><a href="#running-opensips-in-foreground">Running OpenSIPS in foreground</a></li>
+      <li><a href="#running-opensips-in-debug-mode">Running OpenSIPS in debug mode</a></li>
+      <li><a href="#log-levels">Log levels</a></li>
+      <li><a href="#activeinactive-destinations-pings">Active/Inactive Destinations (Pings)</a></li>
+      <li><a href="#failover-mechanism-for-incoming-requests">Failover mechanism for incoming requests</a></li>
+      <li><a href="#how-many-children-are-enough">How many children are enough?</a></li>
+      <li><a href="#configuring-unimrcp-client-with-load-balancer">Configuring UniMRCP client with Load Balancer</a></li>
+    </ul>
+  </li>
+  <li><a href="#contributing">Contributing</a></li>
+</ul>
+
+            </nav>
+          </aside>
+        
+        <h2 id="about">About</h2>
+
+<p>In this post I’ll explain how we use OpenSIPS 2.4.7 (LTS) for load balancing
+SIP traffic among multiple MRCP servers in <a href="https://vernacular.ai">Vernacular.ai</a>
+deployments.</p>
+
+<p>Our MRCP server is built over <a href="https://github.com/unispeech/unimrcp">UniMRCP</a>, an open source cross-platform
+implementation of MRCP protocol.  This post can help anyone trying to load
+balance traffic among multiple UniMRCP servers (referred as MRCP servers
+hereafter)</p>
+
+<p><a href="https://github.com/OpenSIPS/opensips">OpenSIPS</a> is a GPL implementation of a multi-functionality SIP Server that
+targets to deliver a high-level technical solution (performance, security and
+quality) to be used in professional SIP server platforms.</p>
+
+<p>OpenSIPS provides a variety of modules which help to implement these solutions.
+For our load balancer, we use OpenSIPS’ <code class="language-plaintext highlighter-rouge">load_balancer</code> module to achieve this.</p>
+
+<p>Our load balancer code is published at: <a href="https://github.com/Vernacular-ai/mrcp-load-balancer">https://github.com/Vernacular-ai/mrcp-load-balancer</a></p>
+
+<h2 id="features-of-this-load-balancer">Features of this Load Balancer</h2>
+
+<ul>
+  <li>Load distribution based on available MRCP server resources and usage.</li>
+  <li>Check uptime of MRCP servers and route requests to active servers.</li>
+  <li>Report live dialogs/calls.</li>
+  <li>Retry fallback to other resources on session creation failure.</li>
+</ul>
+
+<h2 id="architecture">Architecture</h2>
+
+<p>You can check the architecture diagram when a set of MRCP servers are deployed
+with a load balancer below:</p>
+
+<p><img src="/assets/images/lb_mrcp_architecture.png" alt="alt text" /></p>
+
+<h2 id="request-flow">Request Flow</h2>
+
+<p>Let’s consider a scenario where a request from a client is routed to an MRCP
+server via LB.  Reference diagram below shows the flow in red.</p>
+
+<p><img src="/assets/images/request_flow.png" alt="alt text" /></p>
+
+<p>OpenSIPS is a SIP server and hence we use it as a SIP load balancer. Which
+means that all the SIP requests received by the LB will be routed to the
+appropriate MRCP servers.</p>
+
+<p>When a SIP <code class="language-plaintext highlighter-rouge">INVITE</code> request is initiated by the client, it gets routed by
+OpenSIPS <code class="language-plaintext highlighter-rouge">load_balancer</code> module to the appropriate available resource (MRCP
+server) and adds a <code class="language-plaintext highlighter-rouge">Via</code> header which has the info of all the nodes a
+particular SIP request has visited. This way once the request reaches a
+destination, it has info (address) of all the nodes it has visited and hence
+the address of the client who originated the request.</p>
+
+<p>The server therefore, uses this client address and establishes a connection
+with the client for RTP streams and MRCPv2 messages. In summary, SIP messages
+are routed through the LB and after that all the RTP streams and MRCPv2
+messages are communicated between the client and the server directly.</p>
+
+<p>Check the sample flow diagram below for better understanding:</p>
+
+<p><img src="/assets/images/request_flow_complete.png" alt="alt text" /></p>
+
+<h2 id="opensips-scripting">OpenSIPS Scripting</h2>
+
+<p>OpenSIPS works on it’s own scripting language which is similar to C and Bash
+Script.  All the routing logic is kept in a cfg file which is given to OpenSIPS
+when it is started.</p>
+
+<p>The OpenSIPs configuration script has three main logical parts:</p>
+
+<ul>
+  <li>Global parameters</li>
+  <li>Modules section</li>
+  <li>Routing logic</li>
+</ul>
+
+<h3 id="global-parameters">Global parameters</h3>
+
+<p>These are basically the global core parameters which affects the OpenSIPS core and the modules being used by it.</p>
+
+<p>Example:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># OpenSIPS listener transport type, host and port</span>
+listen <span class="o">=</span> udp:172.31.24.28:9060
+listen <span class="o">=</span> tcp:172.31.24.28:9060
+</code></pre></div></div>
+
+<h3 id="modules-section">Modules section</h3>
+<p>This section has definition of all the modules to be loaded for OpenSIPS and initialization of module parameters.</p>
+
+<p>Example:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># LOAD BALANCER module</span>
+loadmodule <span class="s2">"load_balancer.so"</span>
+modparam<span class="o">(</span><span class="s2">"load_balancer"</span>, <span class="s2">"db_url"</span>, <span class="s2">"text:///usr/src/opensips-2.4.7/dbtext"</span><span class="o">)</span>
+modparam<span class="o">(</span><span class="s2">"load_balancer"</span>, <span class="s2">"probing_method"</span>, <span class="s2">"OPTIONS"</span><span class="o">)</span>
+</code></pre></div></div>
+
+<h3 id="routing-logic">Routing logic</h3>
+<p>This is where the magic happens. This section has all the SIP traffic routing conditions.</p>
+
+<p>Example:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>route<span class="o">{</span>
+    <span class="c"># Sends reply to a SIP OPTIONS request</span>
+    <span class="k">if</span> <span class="o">(</span>is_method<span class="o">(</span><span class="s2">"OPTIONS"</span><span class="o">))</span> <span class="o">{</span>
+        options_reply<span class="o">()</span><span class="p">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="how-lb-works-in-opensips">How LB works in OpenSIPS?</h2>
+
+<p>Listed below are a few aspects of LB module:</p>
+
+<h3 id="destination-set">Destination Set</h3>
+<p>A destination is defined by its address (a SIP URI) and its description as
+capacity. This destination is defined in a text DB for our deployment which can
+be found at <code class="language-plaintext highlighter-rouge">opensips/dbtext/load_balancer</code></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+----+----------+------------------------+------------+
+| id | group_id | dst_uri                | resources  |
++----+----------+------------------------+------------+
+|  1 |        1 | sip:x.x.x.x:8060       | pstn=100   |
+|  2 |        1 | sip:y.y.y.y:8060       | pstn=50    |
++----+----------+------------------------+------------+
+</code></pre></div></div>
+
+<p>These destinations determines the kind of services/resources they offer.</p>
+
+<h3 id="invoking-the-load-balancer">Invoking the Load Balancer</h3>
+<p>You can  invoke the load balancer routing from <code class="language-plaintext highlighter-rouge">opensips.cfg</code> by calling the
+appropriate functions defined in the <code class="language-plaintext highlighter-rouge">load_balancer</code> module. Here, we are using
+the <code class="language-plaintext highlighter-rouge">lb_start_or_next</code> function which tries to route an incoming SIP <code class="language-plaintext highlighter-rouge">INVITE</code>
+request to the destination and if the routing fails, it tries for the next
+destination from the destination set until there are no available.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">(</span>is_method<span class="o">(</span><span class="s2">"INVITE"</span><span class="o">))</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(!</span>lb_start_or_next<span class="o">(</span><span class="s2">"1"</span>,<span class="s2">"pstn"</span>,<span class="s2">"1"</span><span class="o">))</span> <span class="o">{</span>
+        send_reply<span class="o">(</span><span class="s2">"503"</span>,<span class="s2">"Service Unavailable"</span><span class="o">)</span><span class="p">;</span>
+        <span class="nb">exit</span><span class="p">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="load-balancing-logic">Load Balancing Logic</h3>
+<p>The logic used by the LB module to select the destination is:</p>
+
+<p>Gets the destination set based on the <code class="language-plaintext highlighter-rouge">group_id</code> (first parameter of the
+<code class="language-plaintext highlighter-rouge">lb_start_or_next()</code> function)</p>
+
+<p>Selects from the set only the destinations that are able to provide the
+requested resources (second parameter of the <code class="language-plaintext highlighter-rouge">lb_start_or_next()</code> function)</p>
+
+<p>For the selected destinations, it evaluated the current load for each requested
+resource the winning destination is the one with the biggest value for the
+minimum available load per resources.</p>
+
+<p>Example</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2 destinations in the LB set
+
+1) offers 100 channels for PSTN
+2) offers 50 channels for PSTN
+
+When calling lb_start_or_next("1","pstn")
+
+Destinations (1) and (2) will be selected at as they both
+offer pstn
+
+Assume the current load as below
+
+(1) PSTN - 20 channels used
+(2) PSTN - 10 channels used
+
+evaluating available load (capacity-load) :
+
+(1) PSTN - 80 channels available
+(2) PSTN - 40 channels available
+
+final selected destination is (1) as it has the the biggest
+(=80) available load for the most loaded resource.
+</code></pre></div></div>
+
+<h2 id="flow-diagram-without-lb">Flow diagram without LB</h2>
+
+<p>Checkout the SIP trace diagram for a call scenario without LB
+<img src="/assets/images/without_lb.png" alt="alt text" /></p>
+
+<h2 id="flow-diagram-with-lb">Flow diagram with LB</h2>
+
+<p>Checkout the SIP trace diagram for a call scenario with LB
+<img src="/assets/images/without_lb.png" alt="alt text" /></p>
+
+<h2 id="modules-used">Modules Used</h2>
+<p>Apart from the internal modules used by OpenSIPS, we use some other modules needed by the load_balancer module. Following are a few important ones:</p>
+
+<ul>
+  <li><a href="https://opensips.org/html/docs/modules/2.4.x/dialog.html">dialog module</a></li>
+  <li><a href="https://opensips.org/html/docs/modules/2.4.x/signaling.html">signalling module</a></li>
+  <li><a href="https://opensips.org/docs/modules/2.4.x/sl.html">stateless module</a></li>
+  <li><a href="https://opensips.org/docs/modules/2.4.x/options.html">options module</a></li>
+  <li><a href="https://opensips.org/docs/modules/2.4.x/tm.html">transaction module</a></li>
+  <li><a href="https://opensips.org/html/docs/modules/2.4.x/db_text.html">text db module</a></li>
+  <li><a href="https://opensips.org/html/docs/modules/2.4.x/dispatcher.html">dispatcher module</a></li>
+</ul>
+
+<h2 id="advanced">Advanced</h2>
+
+<p>A few good to know usage details of OpenSIPS</p>
+
+<h3 id="getting-number-of-active-callsdialogs">Getting number of active calls/dialogs</h3>
+
+<p><code class="language-plaintext highlighter-rouge">opensipsctl fifo get_statistics dialog:</code></p>
+
+<p>Example:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@centosmrcp:/usr/src/opensips-2.4.7# opensipsctl fifo get_statistics dialog:
+dialog:active_dialogs:: 120
+dialog:early_dialogs:: 161
+dialog:processed_dialogs:: 101002
+dialog:expired_dialogs:: 14
+dialog:failed_dialogs:: 23434
+dialog:create_sent:: 100930
+dialog:update_sent:: 12986
+dialog:delete_sent:: 100927
+dialog:create_recv:: 15
+dialog:update_recv:: 23
+dialog:delete_recv:: 24
+</code></pre></div></div>
+
+<p>Meaning of these values:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">active_dialogs</code>: Number of active dialogs (confirmed/ACK or not)</li>
+  <li><code class="language-plaintext highlighter-rouge">early_dialogs</code>: Number of early dialogs (only provisional responses)</li>
+  <li><code class="language-plaintext highlighter-rouge">processed_dialogs</code>: Number of processed dialogs since startup</li>
+  <li><code class="language-plaintext highlighter-rouge">expired_dialogs</code>: Number of expired (timeout) dialogs since startup</li>
+  <li><code class="language-plaintext highlighter-rouge">failed_dialogs</code>: Number of failed dialogs (never established due to cancels and negative replies—internal and external)</li>
+  <li><code class="language-plaintext highlighter-rouge">create_sent</code>: Number of replicated dialog create requests sent to another instance (used when replicating dialogs between servers)</li>
+  <li><code class="language-plaintext highlighter-rouge">update_sent</code>: Number of replicated dialog update requests sent to another instance</li>
+  <li><code class="language-plaintext highlighter-rouge">delete_sent</code>: Number of replicated dialog delete requests sent to another instance</li>
+  <li><code class="language-plaintext highlighter-rouge">create_recv</code>: Number of dialog create events received from other instances</li>
+  <li><code class="language-plaintext highlighter-rouge">update_recv</code>: Number of dialog update events received from other instances</li>
+  <li><code class="language-plaintext highlighter-rouge">delete_recv</code>: Number of dialog delete events received from other instances</li>
+</ul>
+
+<h3 id="running-opensips-in-foreground">Running OpenSIPS in foreground</h3>
+
+<p><code class="language-plaintext highlighter-rouge">./opensips -f -F /path/to/opensips.cfg</code></p>
+
+<h3 id="running-opensips-in-debug-mode">Running OpenSIPS in debug mode</h3>
+
+<p>Set <code class="language-plaintext highlighter-rouge">debug_mode=yes</code> in <code class="language-plaintext highlighter-rouge">opensips.cfg</code> file. This will run OpenSIPS in debug mode in foreground.</p>
+
+<h3 id="log-levels">Log levels</h3>
+
+<p>Below are the log levels that can be configures in the <code class="language-plaintext highlighter-rouge">opensips.cfg</code> file:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># -3 - Alert level
+# -2 - Critical level
+# -1 - Error level
+#  1 - Warning level
+#  2 - Notice level
+#  3 - Info level
+#  4 - Debug level
+log_level=1
+</code></pre></div></div>
+
+<h3 id="activeinactive-destinations-pings">Active/Inactive Destinations (Pings)</h3>
+
+<p>OpenSIPS uses <code class="language-plaintext highlighter-rouge">OPTIONS</code> request to ping all the destinations to check their
+state. Any destination not replying to these pings is marked as inactive and
+remains to be until OpenSIPS receives a successful response of these pings. All
+the traffic is routed to the active servers only.</p>
+
+<p>These pings are only made when the destinations are added with probe mode is set as 2.</p>
+
+<ul>
+  <li>0: No probing</li>
+  <li>1: Probe on disable only</li>
+  <li>2: Always probe</li>
+</ul>
+
+<h3 id="failover-mechanism-for-incoming-requests">Failover mechanism for incoming requests</h3>
+
+<p>If an incoming request is routed by LB to a destination and it times out, it
+gets routed to a different destination and the former destination is marked as
+inactive. This destination remains as inactive until OpenSIPS receives a
+successful ping from it.</p>
+
+<h3 id="how-many-children-are-enough">How many children are enough?</h3>
+
+<p>Answer:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>There is no simple answer, choosing the appropriate number of children
+is scenario-dependant.
+
+If, for example, you are not performing I/O operations (DB queries, exec
+commands, etc.), then the number of children should be dictated by the
+number of cores on your box.
+
+On the other side, when your SIP workers will perform lots of disk
+operations (which are slow), then you should use a lot more children
+than mentioned above. (e.g. 12, 16 or 20 children).
+
+Best regards,
+
+Liviu Chircu
+OpenSIPS Developer
+</code></pre></div></div>
+
+<p>Source thread:
+<a href="https://opensips.org/pipermail/users/2013-December/027530.html">https://opensips.org/pipermail/users/2013-December/027530.html</a></p>
+
+<h3 id="configuring-unimrcp-client-with-load-balancer">Configuring UniMRCP client with Load Balancer</h3>
+
+<p>Edit the client-profiles config at:
+<code class="language-plaintext highlighter-rouge">/usr/local/unimrcp/client-profiles/unimrcp.xml</code></p>
+
+<p>Update the server-ip and port:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;server-ip&gt;172.31.24.28&lt;/server-ip&gt; &lt;!-- LB IP here --&gt;
+&lt;server-port&gt;9060&lt;/server-port&gt;
+</code></pre></div></div>
+
+<p>Edit the <code class="language-plaintext highlighter-rouge">unimrcpclient.xml</code> at:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/usr/local/unimrcp/client-profiles/unimrcp.xml
+</code></pre></div></div>
+
+<p>Update the client’s sip-transport type:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;sip-port&gt;8062&lt;/sip-port&gt;
+&lt;sip-transport&gt;tcp&lt;/sip-transport&gt;
+</code></pre></div></div>
+
+<p>Now the <code class="language-plaintext highlighter-rouge">run recog</code> request will go via LB.</p>
+
+<h2 id="contributing">Contributing</h2>
+
+<p>For contribution and reporting issues please checkout the repository <a href="https://github.com/Vernacular-ai/mrcp-load-balancer">here</a></p>
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-06-07T14:30:12+05:30">June 7, 2020</time></p>
+        
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/2017/09/performance-analysis-goroutine-pythons-coroutine.html" class="pagination--pager" title="Performance Analysis: Goroutine &amp; Python’s Coroutine
+">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/vipul-sharma20" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/vipul20/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+        
+          <li><a href="https://instagram.com/vipul.py" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+        
+          <li><a href="https://twitter.com/vipul_sharma" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+        
+      
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2020 Vipul Sharma. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://kit.fontawesome.com/4eee35f757.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+
+  </body>
+</html>

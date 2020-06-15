@@ -205,7 +205,7 @@ Checkout the SIP trace diagram for a call scenario without LB
 ## Flow diagram with LB
 
 Checkout the SIP trace diagram for a call scenario with LB
-![alt text][5]
+![alt text][6]
 
 
 ## Modules Used
@@ -364,5 +364,5 @@ For contribution and reporting issues please checkout the repository [here](http
 [3]: /assets/images/request_flow.png
 [4]: /assets/images/request_flow_complete.png
 [5]: /assets/images/without_lb.png
-[6]: /assets/images/with_lb.png
+[6]: /assets/images/lb.png
 [company]: https://vernacular.ai

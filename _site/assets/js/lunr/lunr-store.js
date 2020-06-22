@@ -106,4 +106,10 @@ var store = [{
         "tags": [],
         "url": "http://localhost:4000/2020/06/mrcp-server-load-balancer.html",
         "teaser": null
+      },{
+        "title": "nvim-jira: A Jira plugin for Neovim",
+        "excerpt":"What is it? Neovim version 0.4 and above is now shipped with the Lua runtime built into the editor. This has provided a great alternative to Vimscript. I saw a really cool plugin:https://github.com/glacambre/firenvim which is written Lua and I thought of trying it out myself. I don’t know Lua and...","categories": [],
+        "tags": [],
+        "url": "http://localhost:4000/2020/06/nvim-jira",
+        "teaser": null
       }]

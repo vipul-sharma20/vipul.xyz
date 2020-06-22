@@ -1,4 +1,48 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-06-09T13:12:24+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Vipul Sharma</title><subtitle>An amazing website.</subtitle><author><name>Vipul Sharma</name></author><entry><title type="html">Load Balancing UniMRCP server with OpenSIPS</title><link href="http://localhost:4000/2020/06/mrcp-server-load-balancer.html" rel="alternate" type="text/html" title="Load Balancing UniMRCP server with OpenSIPS" /><published>2020-06-07T14:30:12+05:30</published><updated>2020-06-07T14:30:12+05:30</updated><id>http://localhost:4000/2020/06/mrcp-server-load-balancer</id><content type="html" xml:base="http://localhost:4000/2020/06/mrcp-server-load-balancer.html">&lt;h2 id=&quot;about&quot;&gt;About&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-06-23T01:20:43+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Vipul Sharma</title><subtitle>An amazing website.</subtitle><author><name>Vipul Sharma</name></author><entry><title type="html">nvim-jira: A Jira plugin for Neovim</title><link href="http://localhost:4000/2020/06/nvim-jira" rel="alternate" type="text/html" title="nvim-jira: A Jira plugin for Neovim" /><published>2020-06-22T14:30:12+05:30</published><updated>2020-06-22T14:30:12+05:30</updated><id>http://localhost:4000/2020/06/nvim-jira</id><content type="html" xml:base="http://localhost:4000/2020/06/nvim-jira">&lt;h2 id=&quot;what-is-it&quot;&gt;What is it?&lt;/h2&gt;
+
+&lt;p&gt;Neovim version 0.4 and above is now shipped with the Lua runtime built into the
+editor. This has provided a great alternative to Vimscript.&lt;/p&gt;
+
+&lt;p&gt;I saw a really cool plugin:&lt;a href=&quot;https://github.com/glacambre/firenvim&quot;&gt;https://github.com/glacambre/firenvim&lt;/a&gt; which is
+written Lua and I thought of trying it out myself. I don’t know Lua and I am
+not a very good plugin developer. I thought of learning a little bit of Lua and
+make a Neovim plugin over this last weekend.&lt;/p&gt;
+
+&lt;p&gt;I had started working on creating a Jira plugin using Python but then I dropped
+that plan and used this opportunity to learn Lua and build the plugin.&lt;/p&gt;
+
+&lt;p&gt;This is what I came up with: &lt;a href=&quot;https://github.com/vipul-sharma20/nvim-jira&quot;&gt;https://github.com/vipul-sharma20/nvim-jira&lt;/a&gt;.
+Right now you can fetch all the Jira tickets which are assigned to you or the
+ones you are watching. You can check all the comments posted and you can post
+your own comments too. This is what it does for now.&lt;/p&gt;
+
+&lt;h2 id=&quot;what-next&quot;&gt;What Next?&lt;/h2&gt;
+
+&lt;p&gt;I have noticed a few bugs and minor issues which I would fix like the
+keybindings which I’ve created are pretty bad in terms of the design choices.
+Aesthetically too, it needs some improvements. Some features I would like to
+add are:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Ticket transitions&lt;/li&gt;
+  &lt;li&gt;Ticket Reassignment&lt;/li&gt;
+  &lt;li&gt;Tagging people in comments&lt;/li&gt;
+  &lt;li&gt;Ticket searching&lt;/li&gt;
+  &lt;li&gt;etc.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This is still a work in progress. I would’ve preferred writing this post once I
+was done with the plugin but am not going to dedicatedly work only on this
+project, it will keep getting improved over time.&lt;/p&gt;
+
+&lt;h2 id=&quot;first-thoughts-on-lua&quot;&gt;First thoughts on Lua&lt;/h2&gt;
+
+&lt;p&gt;First I went through &lt;a href=&quot;https://learnxinyminutes.com/docs/lua/&quot;&gt;the lean x in y minutes page for Lua&lt;/a&gt; to get a gist of
+the language constructs, syntax and stuff. Looked pretty simple and clean.
+Learning resources seems quite limited and I also struggled to send just a
+simple HTTP request at first. After reading through some docs, it was easy to
+work with it.  I felt Lua is a reasonable choice to be added in the stdlib of
+Neovim considering its low footprint, size, speed and its embeddable nature.
+It’s perfect for scripting where these constraints are important.&lt;/p&gt;</content><author><name>Vipul Sharma</name></author><summary type="html">I wrote a Jira plugin for Neovim in Lua</summary></entry><entry><title type="html">Load Balancing UniMRCP server with OpenSIPS</title><link href="http://localhost:4000/2020/06/mrcp-server-load-balancer.html" rel="alternate" type="text/html" title="Load Balancing UniMRCP server with OpenSIPS" /><published>2020-06-07T14:30:12+05:30</published><updated>2020-06-07T14:30:12+05:30</updated><id>http://localhost:4000/2020/06/mrcp-server-load-balancer</id><content type="html" xml:base="http://localhost:4000/2020/06/mrcp-server-load-balancer.html">&lt;h2 id=&quot;about&quot;&gt;About&lt;/h2&gt;
 
 &lt;p&gt;In this post I’ll explain how we use OpenSIPS 2.4.7 (LTS) for load balancing
 SIP traffic among multiple MRCP servers in &lt;a href=&quot;https://vernacular.ai&quot;&gt;Vernacular.ai&lt;/a&gt;
@@ -191,7 +235,7 @@ final selected destination is (1) as it has the the biggest
 &lt;h2 id=&quot;flow-diagram-with-lb&quot;&gt;Flow diagram with LB&lt;/h2&gt;
 
 &lt;p&gt;Checkout the SIP trace diagram for a call scenario with LB
-&lt;img src=&quot;/assets/images/without_lb.png&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/assets/images/lb.png&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;modules-used&quot;&gt;Modules Used&lt;/h2&gt;
 &lt;p&gt;Apart from the internal modules used by OpenSIPS, we use some other modules needed by the load_balancer module. Following are a few important ones:&lt;/p&gt;
@@ -1375,34 +1419,4 @@ Here is the link to the code : &lt;a href=&quot;https://github.com/vipul-sharma2
   
   &lt;p&gt;
     CR: &lt;a href=&quot;https://codereview.appspot.com/256840043/&quot;&gt;https://codereview.appspot.com/256840043/&lt;/a&gt;&amp;lt;/div&amp;gt;
-&lt;/p&gt;&lt;/div&gt;</content><author><name>Vipul</name></author><summary type="html">I&amp;#8217;ve been working on implementing advanced search feature to filter tickets based on its metadata like effort, severity, difficulty, priority, author, tags and assignee. In this way a user can filter tickets based on specific requirements by filling the advanced search form.For this I created a new view: /+tickets/query which contains a form for searching tickets.&amp;lt;/p&amp;gt; Screenshot: CR: https://codereview.appspot.com/256230043 It still requires some UI improvements which I&amp;#8217;ll finish it soon. I&amp;#8217;ve also been improving the implementation of comment mechanism in ticket modify view.The new implementation now supports markdown syntax. A user can reply to comments and also new comment is automatically posted if any metadata is updated.For eg: if effort field is changed from None to 3, a comment will be posted as &amp;#8220;Update: Effort changed from None to 3&amp;#8221; which will be like any other comment. Screenshot: CR: https://codereview.appspot.com/256840043/&amp;lt;/div&amp;gt;</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/wp-content/uploads/2015/08/advanced.png" /><media:content medium="image" url="http://localhost:4000/wp-content/uploads/2015/08/advanced.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">GSoC 2015: Coding Period</title><link href="http://localhost:4000/2015/07/gsoc-2015-coding-period-2.html" rel="alternate" type="text/html" title="GSoC 2015: Coding Period" /><published>2015-07-14T21:13:00+05:30</published><updated>2015-07-14T21:13:00+05:30</updated><id>http://localhost:4000/2015/07/gsoc-2015-coding-period-2</id><content type="html" xml:base="http://localhost:4000/2015/07/gsoc-2015-coding-period-2.html">&lt;div dir=&quot;ltr&quot; style=&quot;text-align: left;&quot;&gt;
-  Passed my mid term evaluations 🙂 Thanks to my mentors for all their support and guidance.&amp;lt;/p&amp;gt; 
-  
-  &lt;p&gt;
-    I&amp;#8217;ve been working on implementing threaded comments in ticket modify view. Earlier the comments were created by creating message markups of all the comments and then concatenating them in the content part of the ticket item. In this way, editing/reply to comments was not possible.
-  &lt;/p&gt;
-  
-  &lt;p&gt;
-    &lt;b&gt;New implementation:&lt;/b&gt; &lt;br /&gt;Each comment is a new item which refers to the itemid of the ticket in which it is created. In this way, it is easy to query all the comments of a particular ticket.
-  &lt;/p&gt;
-  
-  &lt;p&gt;
-    Initially, I worked on non-threaded comments, then added a feature to reply to comments. It is similar to non-threaded comments but the difference is, there is a new field &amp;#8220;reply_to&amp;#8221; which stores the itemid of the comment to which a reply is made which is hence, stored in the &amp;#8220;refers_to&amp;#8221; field of the comment reply. After this, I tried to create a tree of all the comments in a ticket which included comments, replies of comments, replies of replies and so on.
-  &lt;/p&gt;
-  
-  &lt;p&gt;
-    Something like :&lt;br /&gt;&amp;nbsp;[[&amp;lt;MoinMoin.storage.middleware.protecting.ProtectedRevision object at 0x7f907596d550&amp;gt;, [&amp;lt;MoinMoin.storage.middleware.protecting.ProtectedRevision object at 0x7f9075963d50&amp;gt;, []]]]
-  &lt;/p&gt;
-  
-  &lt;p&gt;
-    The list above, is the tree of 1 single comment which has 1 reply and 1 reply to reply.
-  &lt;/p&gt;
-  
-  &lt;p&gt;
-    Still more work has to be done to render the comments in threaded form in the UI. Also, there is some issues in the recursive function I wrote for parsing the comments/reply tree which I think can be fixed soon.
-  &lt;/p&gt;
-  
-  &lt;p&gt;
-    CR: &lt;a href=&quot;https://codereview.appspot.com/256840043/&quot;&gt;https://codereview.appspot.com/256840043/&lt;/a&gt;
-  &lt;/p&gt;
-&lt;/div&gt;</content><author><name>Vipul</name></author><summary type="html">Passed my mid term evaluations 🙂 Thanks to my mentors for all their support and guidance.&amp;lt;/p&amp;gt; I&amp;#8217;ve been working on implementing threaded comments in ticket modify view. Earlier the comments were created by creating message markups of all the comments and then concatenating them in the content part of the ticket item. In this way, editing/reply to comments was not possible. New implementation: Each comment is a new item which refers to the itemid of the ticket in which it is created. In this way, it is easy to query all the comments of a particular ticket. Initially, I worked on non-threaded comments, then added a feature to reply to comments. It is similar to non-threaded comments but the difference is, there is a new field &amp;#8220;reply_to&amp;#8221; which stores the itemid of the comment to which a reply is made which is hence, stored in the &amp;#8220;refers_to&amp;#8221; field of the comment reply. After this, I tried to create a tree of all the comments in a ticket which included comments, replies of comments, replies of replies and so on. Something like :&amp;nbsp;[[&amp;lt;MoinMoin.storage.middleware.protecting.ProtectedRevision object at 0x7f907596d550&amp;gt;, [&amp;lt;MoinMoin.storage.middleware.protecting.ProtectedRevision object at 0x7f9075963d50&amp;gt;, []]]] The list above, is the tree of 1 single comment which has 1 reply and 1 reply to reply. Still more work has to be done to render the comments in threaded form in the UI. Also, there is some issues in the recursive function I wrote for parsing the comments/reply tree which I think can be fixed soon. CR: https://codereview.appspot.com/256840043/</summary></entry></feed>
+&lt;/p&gt;&lt;/div&gt;</content><author><name>Vipul</name></author><summary type="html">I&amp;#8217;ve been working on implementing advanced search feature to filter tickets based on its metadata like effort, severity, difficulty, priority, author, tags and assignee. In this way a user can filter tickets based on specific requirements by filling the advanced search form.For this I created a new view: /+tickets/query which contains a form for searching tickets.&amp;lt;/p&amp;gt; Screenshot: CR: https://codereview.appspot.com/256230043 It still requires some UI improvements which I&amp;#8217;ll finish it soon. I&amp;#8217;ve also been improving the implementation of comment mechanism in ticket modify view.The new implementation now supports markdown syntax. A user can reply to comments and also new comment is automatically posted if any metadata is updated.For eg: if effort field is changed from None to 3, a comment will be posted as &amp;#8220;Update: Effort changed from None to 3&amp;#8221; which will be like any other comment. Screenshot: CR: https://codereview.appspot.com/256840043/&amp;lt;/div&amp;gt;</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/wp-content/uploads/2015/08/advanced.png" /><media:content medium="image" url="http://localhost:4000/wp-content/uploads/2015/08/advanced.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry></feed>

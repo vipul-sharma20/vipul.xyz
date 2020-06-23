@@ -17,9 +17,43 @@ $global-transition : none;
 
 body {
     line-height: 1.3;
+    font-family: 'Gentium Basic', serif;
 }
 
 .sidebar {
     opacity: 1;
 }
 
+h1 {
+    font-family: 'Gentium Basic', serif;
+    font-style: italic;
+}
+
+h2, h3, h4, h5, h6, .toc, .nav__title {
+    font-family: 'Gentium Basic', serif;
+}
+
+.archive__item-title {
+    font-family: 'Gentium Basic', serif;
+    font-style: italic;
+}
+
+.archive__subtitle, .masthead__inner-wrap, .sidebar .author__name {
+    font-family: 'Gentium Basic', serif;
+}
+
+.archive__subtitle {
+    color: #000
+}
+
+.sidebar p, .sidebar li {
+    font-family: 'Gentium Basic', serif;
+}
+
+.archive__item a:-webkit-any-link {
+    text-decoration: none;
+}
+
+.archive__item a:visited {
+    color: #000;
+}

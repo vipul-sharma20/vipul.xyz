@@ -34,7 +34,7 @@ search                   : true
 
 paginate: 5
 paginate_path: /page:num/
-include                  : ["_pages", "_portfolio"]
+include                  : ["_pages", "_portfolio", "_includes"]
 
 author:
   name: "Vipul Sharma"

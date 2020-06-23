@@ -15,6 +15,10 @@ $global-transition : none;
     max-height: 600px;
 }
 
+html {
+    background-color: #fff;
+}
+
 body {
     line-height: 1.3;
     font-family: 'Gentium Basic', serif;
@@ -31,6 +35,10 @@ h1 {
 
 h2, h3, h4, h5, h6, .toc, .nav__title {
     font-family: 'Gentium Basic', serif;
+}
+
+.archive {
+    margin-top: 0;
 }
 
 .archive__item-title {
@@ -56,4 +64,36 @@ h2, h3, h4, h5, h6, .toc, .nav__title {
 
 .archive__item a:visited {
     color: #000;
+}
+
+.greedy-nav {
+    background: #FFF;
+}
+
+.greedy-nav .visible-links a:before {
+    background: #000;
+}
+
+.masthead {
+    border-bottom: none;
+}
+
+.toc .nav__title {
+    background: #000;
+}
+
+.page__footer {
+    background: #000;
+}
+
+.social-icons .fa-instagram, .social-icons .fa-linkedin, .social-icons .fa-twitter, .social-icons .fa-twitter-square {
+    color: #000;
+}
+
+.search__toggle {
+    color: #000;
+}
+
+.pagination li a.current, .pagination li a.current.disabled {
+    background: #393e46;
 }

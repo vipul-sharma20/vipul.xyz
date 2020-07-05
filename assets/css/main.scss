@@ -86,6 +86,10 @@ h2, h3, h4, h5, h6, .toc, .nav__title {
     background: #000;
 }
 
+.page__content {
+    font-size: 0.9em;
+}
+
 .social-icons .fa-instagram, .social-icons .fa-linkedin, .social-icons .fa-twitter, .social-icons .fa-twitter-square {
     color: #000;
 }
@@ -96,4 +100,12 @@ h2, h3, h4, h5, h6, .toc, .nav__title {
 
 .pagination li a.current, .pagination li a.current.disabled {
     background: #393e46;
+}
+
+.grid__item .archive__item-excerpt {
+    font-size: 0.85em;
+}
+
+.grid__item .archive__item-title {
+    font-size: 1.1em;
 }

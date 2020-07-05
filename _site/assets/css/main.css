@@ -1311,8 +1311,14 @@ h2, h3, h4, h5, h6, .toc, .nav__title { font-family: 'Gentium Basic', serif; }
 
 .page__footer { background: #000; }
 
+.page__content { font-size: 0.9em; }
+
 .social-icons .fa-instagram, .social-icons .fa-linkedin, .social-icons .fa-twitter, .social-icons .fa-twitter-square { color: #000; }
 
 .search__toggle { color: #000; }
 
 .pagination li a.current, .pagination li a.current.disabled { background: #393e46; }
+
+.grid__item .archive__item-excerpt { font-size: 0.85em; }
+
+.grid__item .archive__item-title { font-size: 1.1em; }

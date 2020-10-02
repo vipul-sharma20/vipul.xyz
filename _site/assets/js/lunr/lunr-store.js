@@ -114,7 +114,7 @@ var store = [{
         "teaser": null
       },{
         "title": "made-in-x: Where in the world these products I own are manufactured in?",
-        "excerpt":"About I have plotted the country of origin of a few of the products I currently own. Why? One day, I noticed that my nail cutter is “made in Korea” (manufactured by Bell). I am sure a lot of you would’ve noticed that you have nail cutters that are made...","categories": [],
+        "excerpt":"About I have plotted the country of origin of a few of the products that I currently own. Why? One day, I noticed that my nail cutter is “made in Korea” (manufactured by Bell). I am sure a lot of you would’ve noticed that you have nail cutters that are...","categories": [],
         "tags": [],
         "url": "http://0.0.0.0:4000/2020/10/made-in-x",
         "teaser": null

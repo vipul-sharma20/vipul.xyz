@@ -16,7 +16,8 @@ $global-transition : none;
 }
 
 html {
-    background-color: #fff;
+    background-color: #ffffff;
+    // background-image: url("/assets/images/background.png");
 }
 
 body {
@@ -108,4 +109,15 @@ h2, h3, h4, h5, h6, .toc, .nav__title {
 
 .grid__item .archive__item-title {
     font-size: 1.1em;
+}
+
+/* Plotly */
+#plotly-custom {
+    margin-left: -160px;
+}
+
+@media only screen and (max-width: 600px) {
+    #plotly-custom {
+        margin-left: -40px;
+    }
 }

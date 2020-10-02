@@ -9,37 +9,37 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>nvim-jira: A Jira plugin for Neovim - Vipul Sharma</title>
-<meta name="description" content="I wrote a Jira plugin for Neovim in Lua ">
+<!-- begin _includes/seo.html --><title>Vipul Sharma - Page 4</title>
+<meta name="description" content="An amazing website. ">
 
 
   <meta name="author" content="Vipul Sharma">
 
 
-<meta property="og:type" content="article">
+<meta property="og:type" content="website">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Vipul Sharma">
-<meta property="og:title" content="nvim-jira: A Jira plugin for Neovim">
-<meta property="og:url" content="http://0.0.0.0:4000/2020/06/nvim-jira">
+<meta property="og:title" content="Vipul Sharma">
+<meta property="og:url" content="http://0.0.0.0:4000/page4/">
 
 
-  <meta property="og:description" content="I wrote a Jira plugin for Neovim in Lua ">
-
-
-
-
-
-
-
-  <meta property="article:published_time" content="2020-06-22T14:30:12+05:30">
+  <meta property="og:description" content="An amazing website. ">
 
 
 
 
 
 
-<link rel="canonical" href="http://0.0.0.0:4000/2020/06/nvim-jira">
 
+
+
+
+
+
+<link rel="canonical" href="http://0.0.0.0:4000/page4/">
+
+
+  <link rel="prev" href="http://0.0.0.0:4000/page3/">
 
 
 
@@ -96,7 +96,7 @@
 
   </head>
 
-  <body class="layout--single">
+  <body class="layout--home">
     <nav class="skip-links">
   <h2 class="screen-reader-text">Skip links</h2>
   <ul>
@@ -273,118 +273,96 @@
 
 
 
-  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="nvim-jira: A Jira plugin for Neovim">
-    <meta itemprop="description" content="I wrote a Jira plugin for Neovim in Lua">
-    <meta itemprop="datePublished" content="2020-06-22T14:30:12+05:30">
+  <div class="archive">
+    
+      <h1 id="page-title" class="page__title"></h1>
+    
     
 
-    <div class="page__inner-wrap">
+<h3 class="archive__subtitle">Recent Posts</h3>
+
+
+
+
+  
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
       
-        <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">nvim-jira: A Jira plugin for Neovim
-</h1>
-          
-        </header>
+        <a href="/2015/03/gesture-recognition-using-opencv-python.html" rel="permalink">Gesture Recognition using OpenCV + Python
+</a>
       
-
-      <section class="page__content" itemprop="text">
-        
-          <aside class="sidebar__right sticky">
-            <nav class="toc">
-              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> Contents</h4></header>
-              <ul class="toc__menu">
-  <li><a href="#what-is-it">What is it?</a></li>
-  <li><a href="#what-next">What Next?</a></li>
-  <li><a href="#first-thoughts-on-lua">First thoughts on Lua</a></li>
-</ul>
-
-            </nav>
-          </aside>
-        
-        <h2 id="what-is-it">What is it?</h2>
-
-<p>Neovim version 0.4 and above is now shipped with the Lua runtime built into the
-editor. This has provided a great alternative to Vimscript.</p>
-
-<p>I saw a really cool plugin:<a href="https://github.com/glacambre/firenvim">https://github.com/glacambre/firenvim</a> which is
-written Lua and I thought of trying it out myself. I don’t know Lua and I am
-not a very good plugin developer. I thought of learning a little bit of Lua and
-make a Neovim plugin over this last weekend.</p>
-
-<p>I had started working on creating a Jira plugin using Python but then I dropped
-that plan and used this opportunity to learn Lua and build the plugin.</p>
-
-<p>This is what I came up with: <a href="https://github.com/vipul-sharma20/nvim-jira">https://github.com/vipul-sharma20/nvim-jira</a>.
-Right now you can fetch all the Jira tickets which are assigned to you or the
-ones you are watching. You can check all the comments posted and you can post
-your own comments too. This is what it does for now.</p>
-
-<h2 id="what-next">What Next?</h2>
-
-<p>I have noticed a few bugs and minor issues which I would fix like the
-keybindings which I’ve created are pretty bad in terms of the design choices.
-Aesthetically too, it needs some improvements. Some features I would like to
-add are:</p>
-<ul>
-  <li>Ticket transitions</li>
-  <li>Ticket Reassignment</li>
-  <li>Tagging people in comments</li>
-  <li>Ticket searching</li>
-  <li>etc.</li>
-</ul>
-
-<p>This is still a work in progress. I would’ve preferred writing this post once I
-was done with the plugin but am not going to dedicatedly work only on this
-project, it will keep getting improved over time.</p>
-
-<h2 id="first-thoughts-on-lua">First thoughts on Lua</h2>
-
-<p>First I went through <a href="https://learnxinyminutes.com/docs/lua/">the lean x in y minutes page for Lua</a> to get a gist of
-the language constructs, syntax and stuff. Looked pretty simple and clean.
-Learning resources seems quite limited and I also struggled to send just a
-simple HTTP request at first. After reading through some docs, it was easy to
-work with it.  I felt Lua is a reasonable choice to be added in the stdlib of
-Neovim considering its low footprint, size, speed and its embeddable nature.
-It’s perfect for scripting where these constraints are important.</p>
-
-
-        
-      </section>
-
-      <footer class="page__meta">
-        
-        
-
-
-        
-          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-06-22T14:30:12+05:30">June 22, 2020</time></p>
-        
-      </footer>
-
-      
-
-      
-  <nav class="pagination">
+    </h2>
     
-      <a href="/2020/06/mrcp-server-load-balancer.html" class="pagination--pager" title="Load Balancing UniMRCP server with OpenSIPS
-">Previous</a>
-    
-    
-      <a href="/2020/10/made-in-x" class="pagination--pager" title="made-in-x: Where in the world these products I own are manufactured in?
-">Next</a>
-    
-  </nav>
-
-    </div>
-
-    
+    <p class="archive__item-excerpt" itemprop="description">
+  
+    This python script can be used to analyse hand gestures by contour detection and convex hull of palm region using OpenCV, a library used for computer...</p>
   </article>
-
-  
-  
 </div>
 
+
+
+
+<nav class="pagination">
+  
+  <ul>
+    
+    
+      
+        <li><a href="/page3/">Previous</a></li>
+      
+    
+
+    
+    
+      <li><a href="/">1</a></li>
+    
+
+    
+    
+
+    
+    
+    
+
+    
+      
+        
+        
+        
+        <li><a href="/page2/">2</a></li>
+      
+    
+      
+        
+        
+        
+        <li><a href="/page3/">3</a></li>
+      
+    
+
+    
+    
+
+    
+      <li><a href="#" class="disabled current">4</a></li>
+    
+
+    
+    
+      <li><a href="#" class="disabled"><span aria-hidden="true">Next</span></a></li>
+    
+  </ul>
+</nav>
+
+
+
+  </div>
+</div>
     </div>
 
     

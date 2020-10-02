@@ -34,7 +34,7 @@ search                   : true
 
 paginate: 5
 paginate_path: /page:num/
-include                  : ["_pages", "_portfolio", "_includes"]
+include                  : ["_pages", "_portfolio", "_includes", "_random"]
 
 author:
   name: "Vipul Sharma"
@@ -74,6 +74,9 @@ collections:
   portfolio:
     output: true
     permalink: /:collection/:path/
+  random:
+    output: true
+    permalink: /:collection/:path/
 
 defaults:
   # _posts
@@ -91,4 +94,11 @@ defaults:
       layout: single
       author_profile: true
       share: true
-
+  # _random
+  - scope:
+      path: ""
+      type: random
+    values:
+      layout: single
+      author_profile: true
+      share: true

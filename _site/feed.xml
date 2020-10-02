@@ -1,4 +1,59 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-07-05T19:48:56+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Vipul Sharma</title><subtitle>An amazing website.</subtitle><author><name>Vipul Sharma</name></author><entry><title type="html">nvim-jira: A Jira plugin for Neovim</title><link href="http://localhost:4000/2020/06/nvim-jira" rel="alternate" type="text/html" title="nvim-jira: A Jira plugin for Neovim" /><published>2020-06-22T14:30:12+05:30</published><updated>2020-06-22T14:30:12+05:30</updated><id>http://localhost:4000/2020/06/nvim-jira</id><content type="html" xml:base="http://localhost:4000/2020/06/nvim-jira">&lt;h2 id=&quot;what-is-it&quot;&gt;What is it?&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://0.0.0.0:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://0.0.0.0:4000/" rel="alternate" type="text/html" /><updated>2020-10-02T19:21:16+05:30</updated><id>http://0.0.0.0:4000/feed.xml</id><title type="html">Vipul Sharma</title><subtitle>An amazing website.</subtitle><author><name>Vipul Sharma</name></author><entry><title type="html">made-in-x: Where in the world these products I own are manufactured in?</title><link href="http://0.0.0.0:4000/2020/10/made-in-x" rel="alternate" type="text/html" title="made-in-x: Where in the world these products I own are manufactured in?" /><published>2020-10-02T14:30:12+05:30</published><updated>2020-10-02T14:30:12+05:30</updated><id>http://0.0.0.0:4000/2020/10/made-in-x</id><content type="html" xml:base="http://0.0.0.0:4000/2020/10/made-in-x">&lt;h2 id=&quot;about&quot;&gt;About&lt;/h2&gt;
+
+&lt;p&gt;I have plotted the country of origin of a few of the products I currently own.&lt;/p&gt;
+
+&lt;h2 id=&quot;why&quot;&gt;Why?&lt;/h2&gt;
+
+&lt;p&gt;One day, I noticed that my nail cutter is “made in Korea” (manufactured by
+Bell). I am sure a lot of you would’ve noticed that you have nail cutters that
+are made in Korea. I found an interesting article titled:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://steemit.com/life/@chapterclosed/every-thing-is-made-in-china-but-nail-clippers-cutters-are-from-s-korea-why-though&quot;&gt;Every thing is “Made in China” but nail clippers/cutters are from S.Korea, Why
+though ??&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;This gave me an idea to log the country of origin of the products I own. I
+couldn’t log the data for &lt;strong&gt;all&lt;/strong&gt; the products I own, but I have tried to cover
+a few categories.&lt;/p&gt;
+
+&lt;p&gt;Over the past few weeks, I’ve collected data for 80+ products across various
+categories (check the categories in the plots below).&lt;/p&gt;
+
+&lt;p&gt;To source the data, I looked for straight up &lt;em&gt;“made in x”&lt;/em&gt; label on the items,
+old boxes of the products, online order history and in some cases, looked up on
+the internet for the country of manufacturing for a brand.&lt;/p&gt;
+
+&lt;h2 id=&quot;made-in-x&quot;&gt;Made in X&lt;/h2&gt;
+
+&lt;p&gt;Here is a plot of the product categories and the countries they are
+manufactured in.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Note: Single click on legends to toggle categories and double click to isolate categories&lt;/em&gt;&lt;/p&gt;
+
+&lt;iframe id=&quot;plotly-custom&quot; width=&quot;1000&quot; height=&quot;700&quot; frameborder=&quot;0&quot; scrolling=&quot;yes&quot; src=&quot;//plotly.com/~vipul/51.embed&quot;&gt;&lt;/iframe&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Interesting to see that most of the electronics is manufactured in China
+whereas the electrical products are manufactured in India.&lt;/li&gt;
+  &lt;li&gt;Almost all the clothing items are made in India which includes some well
+known brands.&lt;/li&gt;
+  &lt;li&gt;Only USA made products are the music products like guitar strings and some
+accessories&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;where-i-got-these-products-from&quot;&gt;Where I got these products from?&lt;/h2&gt;
+
+&lt;p&gt;I also collected data of where I purchased these items from. Below is the plot
+which shows how I purchased/got these products.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Note: Single click on legends to toggle categories and double click to isolate categories&lt;/em&gt;&lt;/p&gt;
+
+&lt;iframe id=&quot;plotly-custom&quot; width=&quot;1000&quot; height=&quot;700&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot; src=&quot;//plotly.com/~vipul/53.embed&quot;&gt;&lt;/iframe&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Amazon.in seems to be the go to online shopping for me.&lt;/li&gt;
+  &lt;li&gt;The 2 purchases from Flipkart were made only because they were exclusively
+available on Flipkart.&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Vipul Sharma</name></author><summary type="html">An analysis on where the products I own are manufactured in</summary></entry><entry><title type="html">nvim-jira: A Jira plugin for Neovim</title><link href="http://0.0.0.0:4000/2020/06/nvim-jira" rel="alternate" type="text/html" title="nvim-jira: A Jira plugin for Neovim" /><published>2020-06-22T14:30:12+05:30</published><updated>2020-06-22T14:30:12+05:30</updated><id>http://0.0.0.0:4000/2020/06/nvim-jira</id><content type="html" xml:base="http://0.0.0.0:4000/2020/06/nvim-jira">&lt;h2 id=&quot;what-is-it&quot;&gt;What is it?&lt;/h2&gt;
 
 &lt;p&gt;Neovim version 0.4 and above is now shipped with the Lua runtime built into the
 editor. This has provided a great alternative to Vimscript.&lt;/p&gt;
@@ -42,7 +97,7 @@ Learning resources seems quite limited and I also struggled to send just a
 simple HTTP request at first. After reading through some docs, it was easy to
 work with it.  I felt Lua is a reasonable choice to be added in the stdlib of
 Neovim considering its low footprint, size, speed and its embeddable nature.
-It’s perfect for scripting where these constraints are important.&lt;/p&gt;</content><author><name>Vipul Sharma</name></author><summary type="html">I wrote a Jira plugin for Neovim in Lua</summary></entry><entry><title type="html">Load Balancing UniMRCP server with OpenSIPS</title><link href="http://localhost:4000/2020/06/mrcp-server-load-balancer.html" rel="alternate" type="text/html" title="Load Balancing UniMRCP server with OpenSIPS" /><published>2020-06-07T14:30:12+05:30</published><updated>2020-06-07T14:30:12+05:30</updated><id>http://localhost:4000/2020/06/mrcp-server-load-balancer</id><content type="html" xml:base="http://localhost:4000/2020/06/mrcp-server-load-balancer.html">&lt;h2 id=&quot;about&quot;&gt;About&lt;/h2&gt;
+It’s perfect for scripting where these constraints are important.&lt;/p&gt;</content><author><name>Vipul Sharma</name></author><summary type="html">I wrote a Jira plugin for Neovim in Lua</summary></entry><entry><title type="html">Load Balancing UniMRCP server with OpenSIPS</title><link href="http://0.0.0.0:4000/2020/06/mrcp-server-load-balancer.html" rel="alternate" type="text/html" title="Load Balancing UniMRCP server with OpenSIPS" /><published>2020-06-07T14:30:12+05:30</published><updated>2020-06-07T14:30:12+05:30</updated><id>http://0.0.0.0:4000/2020/06/mrcp-server-load-balancer</id><content type="html" xml:base="http://0.0.0.0:4000/2020/06/mrcp-server-load-balancer.html">&lt;h2 id=&quot;about&quot;&gt;About&lt;/h2&gt;
 
 &lt;p&gt;In this post I’ll explain how we use OpenSIPS 2.4.7 (LTS) for load balancing
 SIP traffic among multiple MRCP servers in &lt;a href=&quot;https://vernacular.ai&quot;&gt;Vernacular.ai&lt;/a&gt;
@@ -384,7 +439,7 @@ OpenSIPS Developer
 
 &lt;h2 id=&quot;contributing&quot;&gt;Contributing&lt;/h2&gt;
 
-&lt;p&gt;For contribution and reporting issues please checkout the repository &lt;a href=&quot;https://github.com/Vernacular-ai/mrcp-load-balancer&quot;&gt;here&lt;/a&gt;&lt;/p&gt;</content><author><name>Vipul Sharma</name></author><summary type="html">Walkthrough on how to use OpenSIPS to load balance thousands of concurrent calls among multiple UniMRCP servers</summary></entry><entry><title type="html">Performance Analysis: Goroutine &amp;amp; Python’s Coroutine</title><link href="http://localhost:4000/2017/09/performance-analysis-goroutine-pythons-coroutine.html" rel="alternate" type="text/html" title="Performance Analysis: Goroutine &amp; Python’s Coroutine" /><published>2017-09-03T14:30:12+05:30</published><updated>2017-09-03T14:30:12+05:30</updated><id>http://localhost:4000/2017/09/async-go-py</id><content type="html" xml:base="http://localhost:4000/2017/09/performance-analysis-goroutine-pythons-coroutine.html">&lt;p&gt;I made 1000 HTTP requests using Goroutines and Python’s Coroutines&lt;/p&gt;
+&lt;p&gt;For contribution and reporting issues please checkout the repository &lt;a href=&quot;https://github.com/Vernacular-ai/mrcp-load-balancer&quot;&gt;here&lt;/a&gt;&lt;/p&gt;</content><author><name>Vipul Sharma</name></author><summary type="html">Walkthrough on how to use OpenSIPS to load balance thousands of concurrent calls among multiple UniMRCP servers</summary></entry><entry><title type="html">Performance Analysis: Goroutine &amp;amp; Python’s Coroutine</title><link href="http://0.0.0.0:4000/2017/09/performance-analysis-goroutine-pythons-coroutine.html" rel="alternate" type="text/html" title="Performance Analysis: Goroutine &amp; Python’s Coroutine" /><published>2017-09-03T14:30:12+05:30</published><updated>2017-09-03T14:30:12+05:30</updated><id>http://0.0.0.0:4000/2017/09/async-go-py</id><content type="html" xml:base="http://0.0.0.0:4000/2017/09/performance-analysis-goroutine-pythons-coroutine.html">&lt;p&gt;I made 1000 HTTP requests using Goroutines and Python’s Coroutines&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;Used Go 1.6.2 and Python 3.6&lt;/li&gt;
@@ -526,7 +581,7 @@ OpenSIPS Developer
 
 &lt;iframe src=&quot;//plot.ly/~vipul/40.embed&quot; width=&quot;1000&quot; height=&quot;600&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot;&gt;&lt;/iframe&gt;
 
-&lt;p&gt;Code for both synchronous and asynchronous implementations are at: &lt;a href=&quot;https://github.com/vipul-sharma20/async-go-py&quot;&gt;https://github.com/vipul-sharma20/async-go-py&lt;/a&gt;&lt;/p&gt;</content><author><name>Vipul Sharma</name></author><summary type="html">I made 1000 HTTP requests using Goroutines and Python’s Coroutines</summary></entry><entry><title type="html">Sharingan: Newspaper text and context extractor</title><link href="http://localhost:4000/2017/03/sharingan-newspaper-text-and-context-extractor.html" rel="alternate" type="text/html" title="Sharingan: Newspaper text and context extractor" /><published>2017-03-13T14:30:12+05:30</published><updated>2017-03-13T14:30:12+05:30</updated><id>http://localhost:4000/2017/03/sharingan</id><content type="html" xml:base="http://localhost:4000/2017/03/sharingan-newspaper-text-and-context-extractor.html">&lt;p&gt;To all TL;DR folks, here is my elevator pitch:&lt;/p&gt;
+&lt;p&gt;Code for both synchronous and asynchronous implementations are at: &lt;a href=&quot;https://github.com/vipul-sharma20/async-go-py&quot;&gt;https://github.com/vipul-sharma20/async-go-py&lt;/a&gt;&lt;/p&gt;</content><author><name>Vipul Sharma</name></author><summary type="html">I made 1000 HTTP requests using Goroutines and Python’s Coroutines</summary></entry><entry><title type="html">Sharingan: Newspaper text and context extractor</title><link href="http://0.0.0.0:4000/2017/03/sharingan-newspaper-text-and-context-extractor.html" rel="alternate" type="text/html" title="Sharingan: Newspaper text and context extractor" /><published>2017-03-13T14:30:12+05:30</published><updated>2017-03-13T14:30:12+05:30</updated><id>http://0.0.0.0:4000/2017/03/sharingan</id><content type="html" xml:base="http://0.0.0.0:4000/2017/03/sharingan-newspaper-text-and-context-extractor.html">&lt;p&gt;To all TL;DR folks, here is my elevator pitch:&lt;/p&gt;
 &lt;ul&gt;
   &lt;li&gt;It’s a tool to extract news articles from newspaper and give the context about the news&lt;/li&gt;
   &lt;li&gt;link to code: &lt;a href=&quot;https://github.com/vipul-sharma20/sharingan&quot;&gt;https://github.com/vipul-sharma20/sharingan&lt;/a&gt;&lt;/li&gt;
@@ -660,7 +715,7 @@ I’ve used Brown Corpus in Natural Language Toolkit (NLTK) for Part Of Speech (
 
 &lt;p&gt;As said earlier, this project is still under development and requires more tuning to perform better and produce accurate results.&lt;/p&gt;
 
-&lt;p&gt;If anyone is kind enough to help me or suggestions for this project; I am typically online as vipul20 at freenode 🙂&lt;/p&gt;</content><author><name>Vipul Sharma</name></author><summary type="html">To all TL;DR folks, here is my elevator pitch: It’s a tool to extract news articles from newspaper and give the context about the news link to code: https://github.com/vipul-sharma20/sharingan</summary></entry><entry><title type="html">Introduction to decorators in Python</title><link href="http://localhost:4000/2016/03/introduction-to-decorators-in-python.html" rel="alternate" type="text/html" title="Introduction to decorators in Python" /><published>2016-03-26T14:30:12+05:30</published><updated>2016-03-26T14:30:12+05:30</updated><id>http://localhost:4000/2016/03/decorators</id><content type="html" xml:base="http://localhost:4000/2016/03/introduction-to-decorators-in-python.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;If anyone is kind enough to help me or suggestions for this project; I am typically online as vipul20 at freenode 🙂&lt;/p&gt;</content><author><name>Vipul Sharma</name></author><summary type="html">To all TL;DR folks, here is my elevator pitch: It’s a tool to extract news articles from newspaper and give the context about the news link to code: https://github.com/vipul-sharma20/sharingan</summary></entry><entry><title type="html">Introduction to decorators in Python</title><link href="http://0.0.0.0:4000/2016/03/introduction-to-decorators-in-python.html" rel="alternate" type="text/html" title="Introduction to decorators in Python" /><published>2016-03-26T14:30:12+05:30</published><updated>2016-03-26T14:30:12+05:30</updated><id>http://0.0.0.0:4000/2016/03/decorators</id><content type="html" xml:base="http://0.0.0.0:4000/2016/03/introduction-to-decorators-in-python.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
 &lt;p&gt;Understanding decorators in Python is one of the most trickiest thing and creating one is one of the most craftiest thing in Python. It requires understanding of few functional programming concepts, how functions work, namespace/scope/lifetime of data items and most importantly closure.&lt;/p&gt;
 
 &lt;h2 id=&quot;what-is-a-decorator-&quot;&gt;What is a decorator ?&lt;/h2&gt;
@@ -808,7 +863,7 @@ Here, the concept of function closure comes into play. A closure in Python is wh
 
 &lt;blockquote&gt;
   &lt;p&gt;Jim Gordon: Bruce Wayne?&lt;/p&gt;
-&lt;/blockquote&gt;</content><author><name>Vipul Sharma</name></author><summary type="html">Introduction Understanding decorators in Python is one of the most trickiest thing and creating one is one of the most craftiest thing in Python. It requires understanding of few functional programming concepts, how functions work, namespace/scope/lifetime of data items and most importantly closure.</summary></entry><entry><title type="html">Playing Pacman with gestures</title><link href="http://localhost:4000/2015/11/playing-pacman-with-gestures.html" rel="alternate" type="text/html" title="Playing Pacman with gestures" /><published>2015-11-09T14:30:12+05:30</published><updated>2015-11-09T14:30:12+05:30</updated><id>http://localhost:4000/2015/11/gesture_pacman</id><content type="html" xml:base="http://localhost:4000/2015/11/playing-pacman-with-gestures.html">&lt;p&gt;&lt;img src=&quot;/assets/images/hi.jpg&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
+&lt;/blockquote&gt;</content><author><name>Vipul Sharma</name></author><summary type="html">Introduction Understanding decorators in Python is one of the most trickiest thing and creating one is one of the most craftiest thing in Python. It requires understanding of few functional programming concepts, how functions work, namespace/scope/lifetime of data items and most importantly closure.</summary></entry><entry><title type="html">Playing Pacman with gestures</title><link href="http://0.0.0.0:4000/2015/11/playing-pacman-with-gestures.html" rel="alternate" type="text/html" title="Playing Pacman with gestures" /><published>2015-11-09T14:30:12+05:30</published><updated>2015-11-09T14:30:12+05:30</updated><id>http://0.0.0.0:4000/2015/11/gesture_pacman</id><content type="html" xml:base="http://0.0.0.0:4000/2015/11/playing-pacman-with-gestures.html">&lt;p&gt;&lt;img src=&quot;/assets/images/hi.jpg&quot; alt=&quot;alt text&quot; title=&quot;No Image&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Hello! Lately, I’ve been striking off some tasks from my long pending TODO list. First, I finished off with &lt;a href=&quot;https://github.com/vipul-sharma20/summrizer&quot;&gt;summrizer&lt;/a&gt; and now this, which has been in my list since quite a long time!&lt;/p&gt;
 
@@ -903,7 +958,7 @@ Here is the link to the code : &lt;a href=&quot;https://github.com/vipul-sharma2
 
 &lt;p&gt;In case you were wondering how the header image was captured…&lt;/p&gt;
 
-&lt;p&gt;![alt text][orig]&lt;/p&gt;</content><author><name>Vipul Sharma</name></author><summary type="html"></summary></entry><entry><title type="html">Summrizer: Text summarizer (Implementation) &amp;amp; Context Extractor</title><link href="http://localhost:4000/2015/10/summrizer-text-summarizer-implementation-context-extractor.html" rel="alternate" type="text/html" title="Summrizer: Text summarizer (Implementation) &amp; Context Extractor" /><published>2015-10-27T22:22:00+05:30</published><updated>2015-10-27T22:22:00+05:30</updated><id>http://localhost:4000/2015/10/summrizer-text-summarizer-implementation-context-extractor</id><content type="html" xml:base="http://localhost:4000/2015/10/summrizer-text-summarizer-implementation-context-extractor.html">&lt;p&gt;&lt;img src=&quot;/assets/images/screen.jpg&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;![alt text][orig]&lt;/p&gt;</content><author><name>Vipul Sharma</name></author><summary type="html"></summary></entry><entry><title type="html">Summrizer: Text summarizer (Implementation) &amp;amp; Context Extractor</title><link href="http://0.0.0.0:4000/2015/10/summrizer-text-summarizer-implementation-context-extractor.html" rel="alternate" type="text/html" title="Summrizer: Text summarizer (Implementation) &amp; Context Extractor" /><published>2015-10-27T22:22:00+05:30</published><updated>2015-10-27T22:22:00+05:30</updated><id>http://0.0.0.0:4000/2015/10/summrizer-text-summarizer-implementation-context-extractor</id><content type="html" xml:base="http://0.0.0.0:4000/2015/10/summrizer-text-summarizer-implementation-context-extractor.html">&lt;p&gt;&lt;img src=&quot;/assets/images/screen.jpg&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
 
 &lt;div dir=&quot;ltr&quot; style=&quot;text-align: left;&quot;&gt;
   &lt;p&gt;
@@ -1303,7 +1358,7 @@ Here is the link to the code : &lt;a href=&quot;https://github.com/vipul-sharma2
   &lt;div style=&quot;text-align: justify;&quot;&gt;
     &lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: large;&quot;&gt;Please suggest me some improvements 🙂 I would love to hear your views 😀&lt;/span&gt;
   &lt;/div&gt;
-&lt;/div&gt;</content><author><name>Vipul Sharma</name></author><summary type="html"></summary></entry><entry><title type="html">Summrizer: Text summarizer (Introduction)</title><link href="http://localhost:4000/2015/10/summrizer-text-summarizer-introduction.html" rel="alternate" type="text/html" title="Summrizer: Text summarizer (Introduction)" /><published>2015-10-20T01:56:00+05:30</published><updated>2015-10-20T01:56:00+05:30</updated><id>http://localhost:4000/2015/10/summrizer-text-summarizer-introduction</id><content type="html" xml:base="http://localhost:4000/2015/10/summrizer-text-summarizer-introduction.html">&lt;p&gt;&lt;img src=&quot;/assets/images/keyboard.jpg&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
+&lt;/div&gt;</content><author><name>Vipul Sharma</name></author><summary type="html"></summary></entry><entry><title type="html">Summrizer: Text summarizer (Introduction)</title><link href="http://0.0.0.0:4000/2015/10/summrizer-text-summarizer-introduction.html" rel="alternate" type="text/html" title="Summrizer: Text summarizer (Introduction)" /><published>2015-10-20T01:56:00+05:30</published><updated>2015-10-20T01:56:00+05:30</updated><id>http://0.0.0.0:4000/2015/10/summrizer-text-summarizer-introduction</id><content type="html" xml:base="http://0.0.0.0:4000/2015/10/summrizer-text-summarizer-introduction.html">&lt;p&gt;&lt;img src=&quot;/assets/images/keyboard.jpg&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;
     &lt;b&gt;EDIT: &lt;/b&gt;Completed the project 🙂 see &lt;a href=&quot;http://vipulsharma20.blogspot.in/2015/10/summrizer-text-summarizer_27.html&quot; rel=&quot;nofollow&quot; target=&quot;_blank&quot;&gt;&lt;span style=&quot;color: red;&quot;&gt;here&lt;/span&gt;&lt;/a&gt;
@@ -1343,7 +1398,7 @@ Here is the link to the code : &lt;a href=&quot;https://github.com/vipul-sharma2
 
 &lt;p&gt;
     I&amp;#8217;ve also created a separate branch and initialized it with a Django based web application. Once the script works fine, I&amp;#8217;ll try to host this script as a web application for text summarizing. But, my priority and focus is on creating a more efficient summarizing script 😀
-  &lt;/p&gt;</content><author><name>Vipul Sharma</name></author><summary type="html"></summary></entry><entry><title type="html">Writing training mission for Openhatch</title><link href="http://localhost:4000/2015/09/writing-training-mission-for-openhatch.html" rel="alternate" type="text/html" title="Writing training mission for Openhatch" /><published>2015-09-12T02:59:00+05:30</published><updated>2015-09-12T02:59:00+05:30</updated><id>http://localhost:4000/2015/09/writing-training-mission-for-openhatch</id><content type="html" xml:base="http://localhost:4000/2015/09/writing-training-mission-for-openhatch.html">&lt;div dir=&quot;ltr&quot; style=&quot;text-align: left;&quot;&gt;
+  &lt;/p&gt;</content><author><name>Vipul Sharma</name></author><summary type="html"></summary></entry><entry><title type="html">Writing training mission for Openhatch</title><link href="http://0.0.0.0:4000/2015/09/writing-training-mission-for-openhatch.html" rel="alternate" type="text/html" title="Writing training mission for Openhatch" /><published>2015-09-12T02:59:00+05:30</published><updated>2015-09-12T02:59:00+05:30</updated><id>http://0.0.0.0:4000/2015/09/writing-training-mission-for-openhatch</id><content type="html" xml:base="http://0.0.0.0:4000/2015/09/writing-training-mission-for-openhatch.html">&lt;div dir=&quot;ltr&quot; style=&quot;text-align: left;&quot;&gt;
   &lt;div style=&quot;clear: both; text-align: center;&quot;&gt;
     &lt;a href=&quot;http://138.68.252.233/wp-content/uploads/2015/09/openhatch.png&quot; style=&quot;margin-left: 1em; margin-right: 1em;&quot;&gt;&lt;img border=&quot;0&quot; height=&quot;300&quot; src=&quot;http://138.68.252.233/wp-content/uploads/2015/09/openhatch-300x225.png&quot; width=&quot;400&quot; /&gt;&lt;/a&gt;
   &lt;/div&gt;
@@ -1386,37 +1441,4 @@ Here is the link to the code : &lt;a href=&quot;https://github.com/vipul-sharma2
   
   &lt;div style=&quot;text-align: justify;&quot;&gt;
   &lt;/div&gt;
-&lt;/div&gt;</content><author><name>Vipul</name></author><summary type="html">I am grateful to this wonderful community who introduced me to the world of Open Source and I owe them a lot for my success in GSoC, 2015. I learned a lot of new things by interacting with this awesome community. In the beginning of my journey to Open Source, I learned about few concepts through the training missions of Openhatch (http://openhatch.org/missions/) and now I want to share what I learned in the past 3 months by writing a new training mission for Openhatch. I had written a training mission on &amp;#8220;Using the shell&amp;#8221; earlier in February this year (http://openhatch.org/missions/shell/about) and now I am looking forward to write a training mission on: using the version control system, mercurial (hg). I am myself a newbie to mercurial and have learned just a little bit during my GSoC project this year. But, still I&amp;#8217;ll try to write a good mission by discussing it with the community and will also take some inspiration from the existing missions on SVN and GIT which are quite exciting to follow.&amp;nbsp; I would love to hear if anyone has some cool ideas/suggestions for the training mission on mercurial, on how to make it more interactive and make a user more involved with the mission and checking their progress by defining some objectives or some small task which can test if they are learning right or not. It has been quite some time since I&amp;#8217;ve developed on Django, now I am very much excited to write some good stuff and contribute to Openhatch 😀 Will update the progress through blog posts. I almost forgot to thank Sufjan ! it always helps me to write code 😉 Say hi !</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/wp-content/uploads/2015/09/openhatch.png" /><media:content medium="image" url="http://localhost:4000/wp-content/uploads/2015/09/openhatch.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">GSoC 2015: Coding Period</title><link href="http://localhost:4000/2015/08/gsoc-2015-coding-period.html" rel="alternate" type="text/html" title="GSoC 2015: Coding Period" /><published>2015-08-04T18:56:00+05:30</published><updated>2015-08-04T18:56:00+05:30</updated><id>http://localhost:4000/2015/08/gsoc-2015-coding-period</id><content type="html" xml:base="http://localhost:4000/2015/08/gsoc-2015-coding-period.html">&lt;div dir=&quot;ltr&quot; style=&quot;text-align: left;&quot;&gt;
-  I&amp;#8217;ve been working on implementing advanced search feature to filter tickets based on its metadata like effort, severity, difficulty, priority, author, tags and assignee. In this way a user can filter tickets based on specific requirements by filling the advanced search form.&lt;br /&gt;For this I created a new view:&lt;i&gt; /+tickets/query &lt;/i&gt;which contains a form for searching tickets.&amp;lt;/p&amp;gt; 
-  
-  &lt;p&gt;
-    Screenshot:
-  &lt;/p&gt;
-  
-  &lt;div style=&quot;clear: both; text-align: center;&quot;&gt;
-    &lt;a href=&quot;http://138.68.252.233/wp-content/uploads/2015/08/advanced.png&quot; style=&quot;margin-left: 1em; margin-right: 1em;&quot;&gt;&lt;img border=&quot;0&quot; height=&quot;339&quot; src=&quot;http://138.68.252.233/wp-content/uploads/2015/08/advanced-300x160.png&quot; width=&quot;640&quot; /&gt;&lt;/a&gt;
-  &lt;/div&gt;
-  
-  &lt;p&gt;
-    CR: &lt;a href=&quot;https://codereview.appspot.com/256230043&quot;&gt;https://codereview.appspot.com/256230043&lt;/a&gt;
-  &lt;/p&gt;
-  
-  &lt;p&gt;
-    It still requires some UI improvements which I&amp;#8217;ll finish it soon.
-  &lt;/p&gt;
-  
-  &lt;p&gt;
-    I&amp;#8217;ve also been improving the implementation of comment mechanism in ticket modify view.&lt;br /&gt;The new implementation now supports markdown syntax. A user can reply to comments and also new comment is automatically posted if any metadata is updated.&lt;br /&gt;For eg: if effort field is changed from None to 3, a comment will be posted as &amp;#8220;Update: Effort changed from None to 3&amp;#8221; which will be like any other comment.
-  &lt;/p&gt;
-  
-  &lt;p&gt;
-    Screenshot:
-  &lt;/p&gt;
-  
-  &lt;div style=&quot;clear: both; text-align: center;&quot;&gt;
-    &lt;a href=&quot;http://138.68.252.233/wp-content/uploads/2015/08/comments.png&quot; style=&quot;margin-left: 1em; margin-right: 1em;&quot;&gt;&lt;img border=&quot;0&quot; height=&quot;340&quot; src=&quot;http://138.68.252.233/wp-content/uploads/2015/08/comments-300x160.png&quot; width=&quot;640&quot; /&gt;&lt;/a&gt;
-  &lt;/div&gt;
-  
-  &lt;p&gt;
-    CR: &lt;a href=&quot;https://codereview.appspot.com/256840043/&quot;&gt;https://codereview.appspot.com/256840043/&lt;/a&gt;&amp;lt;/div&amp;gt;
-&lt;/p&gt;&lt;/div&gt;</content><author><name>Vipul</name></author><summary type="html">I&amp;#8217;ve been working on implementing advanced search feature to filter tickets based on its metadata like effort, severity, difficulty, priority, author, tags and assignee. In this way a user can filter tickets based on specific requirements by filling the advanced search form.For this I created a new view: /+tickets/query which contains a form for searching tickets.&amp;lt;/p&amp;gt; Screenshot: CR: https://codereview.appspot.com/256230043 It still requires some UI improvements which I&amp;#8217;ll finish it soon. I&amp;#8217;ve also been improving the implementation of comment mechanism in ticket modify view.The new implementation now supports markdown syntax. A user can reply to comments and also new comment is automatically posted if any metadata is updated.For eg: if effort field is changed from None to 3, a comment will be posted as &amp;#8220;Update: Effort changed from None to 3&amp;#8221; which will be like any other comment. Screenshot: CR: https://codereview.appspot.com/256840043/&amp;lt;/div&amp;gt;</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/wp-content/uploads/2015/08/advanced.png" /><media:content medium="image" url="http://localhost:4000/wp-content/uploads/2015/08/advanced.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry></feed>
+&lt;/div&gt;</content><author><name>Vipul</name></author><summary type="html">I am grateful to this wonderful community who introduced me to the world of Open Source and I owe them a lot for my success in GSoC, 2015. I learned a lot of new things by interacting with this awesome community. In the beginning of my journey to Open Source, I learned about few concepts through the training missions of Openhatch (http://openhatch.org/missions/) and now I want to share what I learned in the past 3 months by writing a new training mission for Openhatch. I had written a training mission on &amp;#8220;Using the shell&amp;#8221; earlier in February this year (http://openhatch.org/missions/shell/about) and now I am looking forward to write a training mission on: using the version control system, mercurial (hg). I am myself a newbie to mercurial and have learned just a little bit during my GSoC project this year. But, still I&amp;#8217;ll try to write a good mission by discussing it with the community and will also take some inspiration from the existing missions on SVN and GIT which are quite exciting to follow.&amp;nbsp; I would love to hear if anyone has some cool ideas/suggestions for the training mission on mercurial, on how to make it more interactive and make a user more involved with the mission and checking their progress by defining some objectives or some small task which can test if they are learning right or not. It has been quite some time since I&amp;#8217;ve developed on Django, now I am very much excited to write some good stuff and contribute to Openhatch 😀 Will update the progress through blog posts. I almost forgot to thank Sufjan ! it always helps me to write code 😉 Say hi !</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://0.0.0.0:4000/wp-content/uploads/2015/09/openhatch.png" /><media:content medium="image" url="http://0.0.0.0:4000/wp-content/uploads/2015/09/openhatch.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry></feed>

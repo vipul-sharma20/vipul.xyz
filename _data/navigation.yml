@@ -1,4 +1,6 @@
 main:
+  - title: "Scribbles"
+    url: /scribbles/
   - title: "Music"
     url: /music/
   - title: "About"

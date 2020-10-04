@@ -124,4 +124,16 @@ var store = [{
         "tags": [],
         "url": "http://0.0.0.0:4000/random/struct-protocol-buffers-cpp/",
         "teaser": null
+      },{
+        "title": "slack-standup: Slack app to conduct daily standups",
+        "excerpt":"About I made an application for Slack based standups. This is a Flask server application to handle Slack callbacks, create/submit standups, report to a channel etc. Check usage and API in the README of the repository. Most of the Slack based standup applications are paid. The one which we used...","categories": [],
+        "tags": [],
+        "url": "http://0.0.0.0:4000/random/slack-standup/",
+        "teaser": null
+      },{
+        "title": "rpi-nfs-server: Network File System over Raspberry Pi",
+        "excerpt":"About I had a portable HDD and a raspberry pi lying around so I used them to create Netfork File System in my local home network. I use a Macbook Air as my dev machine which has served me well for 2.5+ years now. One big problem I have is...","categories": [],
+        "tags": [],
+        "url": "http://0.0.0.0:4000/random/rpi-nfs-server/",
+        "teaser": null
       }]

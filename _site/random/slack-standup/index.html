@@ -9,8 +9,8 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Using Protocol Buffer’s Struct Well Known Type in C++ - Vipul Sharma</title>
-<meta name="description" content="How to use Protocol Buffer’s Struct well known type? ">
+<!-- begin _includes/seo.html --><title>slack-standup: Slack app to conduct daily standups - Vipul Sharma</title>
+<meta name="description" content="An amazing website. ">
 
 
   <meta name="author" content="Vipul Sharma">
@@ -19,26 +19,26 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Vipul Sharma">
-<meta property="og:title" content="Using Protocol Buffer’s Struct Well Known Type in C++">
-<meta property="og:url" content="http://0.0.0.0:4000/random/struct-protocol-buffers-cpp/">
+<meta property="og:title" content="slack-standup: Slack app to conduct daily standups">
+<meta property="og:url" content="http://0.0.0.0:4000/random/slack-standup/">
 
 
-  <meta property="og:description" content="How to use Protocol Buffer’s Struct well known type? ">
-
-
-
-
-
-
-
-  <meta property="article:published_time" content="2020-08-05T17:57:00+05:30">
+  <meta property="og:description" content="An amazing website. ">
 
 
 
 
 
 
-<link rel="canonical" href="http://0.0.0.0:4000/random/struct-protocol-buffers-cpp/">
+
+  <meta property="article:published_time" content="2020-08-16T17:57:00+05:30">
+
+
+
+
+
+
+<link rel="canonical" href="http://0.0.0.0:4000/random/slack-standup/">
 
 
 
@@ -274,15 +274,15 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="Using Protocol Buffer’s Struct Well Known Type in C++">
-    <meta itemprop="description" content="How to use Protocol Buffer’s Struct well known type?">
-    <meta itemprop="datePublished" content="2020-08-05T17:57:00+05:30">
+    <meta itemprop="headline" content="slack-standup: Slack app to conduct daily standups">
+    <meta itemprop="description" content="">
+    <meta itemprop="datePublished" content="2020-08-16T17:57:00+05:30">
     
 
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">Using Protocol Buffer’s Struct Well Known Type in C++
+          <h1 id="page-title" class="page__title" itemprop="headline">slack-standup: Slack app to conduct daily standups
 </h1>
           
         </header>
@@ -290,32 +290,20 @@
 
       <section class="page__content" itemprop="text">
         
-        <blockquote>
-  <p><code class="language-plaintext highlighter-rouge">Struct</code> represents a structured data value, consisting of fields which map to
-dynamically typed values. In some languages, <code class="language-plaintext highlighter-rouge">Struct</code> might be supported by a
-native representation. For example, in scripting languages like JS a struct is
-represented as an object. The details of that representation are described
-together with the proto support for the language.</p>
-</blockquote>
+        <h2 id="about">About</h2>
 
-<p><code class="language-plaintext highlighter-rouge">Struct</code> type documentation at: <a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct">https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct</a></p>
+<p>I made an application for Slack based standups. This is a Flask server
+application to handle Slack callbacks, create/submit standups, report to a
+channel etc.</p>
 
-<p>Example proto file:</p>
-<div class="language-proto highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="s">"google/protobuf/struct.proto"</span><span class="p">;</span>
+<p>Check usage and API in the README of the <a href="https://github.com/vipul-sharma20/slack-standup">repository</a>.</p>
 
-<span class="kd">message</span> <span class="nc">Config</span> <span class="p">{</span>
-  <span class="n">google.protobuf.Struct</span> <span class="na">metadata</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
+<p>Most of the Slack based standup applications are paid. The one which we used in
+Vernacular.ai used to be free but then they converted into a per-user pricing.
+I wanted to make our own Slack standup application which we can host ourselves
+so I made this over a weekend.</p>
 
-<p>C++ implementation:</p>
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">::</span><span class="n">google</span><span class="o">::</span><span class="n">protobuf</span><span class="o">::</span><span class="n">Value</span> <span class="n">value</span><span class="p">;</span>
-<span class="n">value</span><span class="p">.</span><span class="n">set_string_value</span><span class="p">(</span><span class="s">"value"</span><span class="p">);</span>
-
-<span class="k">auto</span> <span class="n">fields</span> <span class="o">=</span> <span class="n">config</span><span class="o">-&gt;</span><span class="n">mutable_metadata</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">mutable_fields</span><span class="p">();</span>
-
-<span class="p">(</span><span class="o">*</span><span class="n">fields</span><span class="p">)[</span><span class="s">"key"</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="p">;</span>
-</code></pre></div></div>
+<p>Repository at: <a href="https://github.com/vipul-sharma20/slack-standup">https://github.com/vipul-sharma20/slack-standup</a></p>
 
 
         
@@ -327,28 +315,29 @@ together with the proto support for the language.</p>
 
 
         
-          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-08-05T17:57:00+05:30">August 5, 2020</time></p>
+          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-08-16T17:57:00+05:30">August 16, 2020</time></p>
         
       </footer>
 
       <section class="page__share">
   
 
-  <a href="https://twitter.com/intent/tweet?text=Using+Protocol+Buffer%27s+Struct+Well+Known+Type+in+C%2B%2B%20http%3A%2F%2F0.0.0.0%3A4000%2Frandom%2Fstruct-protocol-buffers-cpp%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?text=slack-standup%3A+Slack+app+to+conduct+daily+standups%20http%3A%2F%2F0.0.0.0%3A4000%2Frandom%2Fslack-standup%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2F0.0.0.0%3A4000%2Frandom%2Fstruct-protocol-buffers-cpp%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2F0.0.0.0%3A4000%2Frandom%2Fslack-standup%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2F0.0.0.0%3A4000%2Frandom%2Fstruct-protocol-buffers-cpp%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2F0.0.0.0%3A4000%2Frandom%2Fslack-standup%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
 </section>
 
 
       
   <nav class="pagination">
     
-      <a href="#" class="pagination--pager disabled">Previous</a>
+      <a href="/random/struct-protocol-buffers-cpp/" class="pagination--pager" title="Using Protocol Buffer’s Struct Well Known Type in C++
+">Previous</a>
     
     
-      <a href="/random/slack-standup/" class="pagination--pager" title="slack-standup: Slack app to conduct daily standups
+      <a href="/random/rpi-nfs-server/" class="pagination--pager" title="rpi-nfs-server: Network File System over Raspberry Pi
 ">Next</a>
     
   </nav>

@@ -76,7 +76,7 @@ h2, h3, h4, h5, h6, .toc, .nav__title {
 }
 
 .masthead {
-    border-bottom: none;
+    border-bottom: 1px solid #eaedf0;
 }
 
 .toc .nav__title {
@@ -121,3 +121,29 @@ h2, h3, h4, h5, h6, .toc, .nav__title {
         margin-left: -40px;
     }
 }
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+.site-logo {
+    margin-left: 1.4rem !important;
+}
+
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+.site-logo {
+    margin-left: 1.4rem !important;
+}
+}
+

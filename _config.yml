@@ -26,9 +26,9 @@ description              : "An amazing website."
 url                      : # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : "vipul-sharma20/blog"
-# logo                     : "/assets/images/vim.jpg"
+logo                     : "/assets/images/logo.png"
 # teaser                   : "/assets/images/vim.jpg"
-masthead_title           : "Vipul"
+masthead_title           : " "
 breadcrumbs              : false
 search                   : true
 

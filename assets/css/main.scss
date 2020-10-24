@@ -124,26 +124,35 @@ h2, h3, h4, h5, h6, .toc, .nav__title {
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
-
+.site-logo img {
+    max-height: 1.4rem !important;
+}
 }
 
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
-
+.site-logo img {
+    max-height: 1.4rem !important;
+}
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
 .site-logo {
-    margin-left: 1.4rem !important;
+    margin-left: 1.7rem !important;
 }
-
+.site-logo img {
+    max-height: 1.4rem !important;
+}
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
 .site-logo {
-    margin-left: 1.4rem !important;
+    margin-left: 1.7rem !important;
+}
+.site-logo img {
+    max-height: 1.4rem !important;
 }
 }
 

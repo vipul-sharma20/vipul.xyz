@@ -116,6 +116,38 @@ h2, h3, h4, h5, h6, .toc, .nav__title {
     margin-left: -160px;
 }
 
+
+/* Custom main page */
+.page__content .post_date {
+    font-size: 0.8em;
+    margin-top: -15px;
+}
+
+.posts__main .post__item-excerpt {
+    margin-top: 0;
+    font-size: .75em;
+}
+
+.posts__main .archive__subtitle {
+    font-size: 1.135em;
+    margin-top: 0;
+}
+
+.posts__main h2 {
+    font-size: 1.4em;
+}
+
+.posts__main .archive__item-title {
+    margin-top: 1.5em;
+}
+
+/* Scribble page */
+.posts__scribbles .archive__item-title{
+    margin-top: 1.5em;
+}
+
+
+/* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
     #plotly-custom {
         margin-left: -40px;

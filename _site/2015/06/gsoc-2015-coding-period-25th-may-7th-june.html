@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-  Minimal Mistakes Jekyll Theme 4.19.2 by Michael Rose
+  Minimal Mistakes Jekyll Theme 4.19.3 by Michael Rose
   Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
   Free for personal and commercial use under the MIT license
   https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
@@ -10,7 +10,7 @@
     <meta charset="utf-8">
 
 <!-- begin _includes/seo.html --><title>GSoC 2015: Coding Period (25th May – 7th June) - Vipul Sharma</title>
-<meta name="description" content="   The coding period started 2 weeks ago, from 25th May. In these two weeks I worked according to the timeline which I created during the community bonding period.&lt;/p&gt;            I worked on implementing Ajax based searching of duplicate tickets feature. Initially, I thought that it has to be created using Whoosh and JQuery from scratch but it turned out that something similar was implemented in /+search view. The /+search view has an Ajax based search form which displays content suggestions of various contenttypes, name term suggestions and content term suggestions along with informations like revision id, size, date of creation and file type. So, I used the code of /+search view for implementing duplicate ticket search. I made some changes in the existing code to allow it to search tickets and added few lines of code in ajaxsearch.html template to render duplicate ticket suggestions as the /+search view displayed some results which were not necessary as suggestions for duplicate tickets. Just a few lines of CSS were only required to keep the rendered result tidy.              Obviously, I was not able to code it in one go as I don&#8217;t have much experience in working on large codebase. But my mentors were very helpful. They guided me, reviewed my code and gave me suggestion on how to reduce few redundant code segments. Their advice was really helpful as I reduced a lot of redundant code and now it looks pretty.Codereview: https://codereview.appspot.com/236490043              This is how it looks:                            I am currently working on file upload feature so that a user can upload any patch file, media or screenshot. I&#8217;ve implemented it by creating a new item for every file uploaded. I&#8217;ve few issues regarding how to deal with item_name and itemids which I am discussing with my mentor and I hope that I&#8217;ll figure it out very soon 🙂&lt;/div&gt;  ">
+<meta name="description" content="The coding period started 2 weeks ago, from 25th May. In these two weeks I worked according to the timeline which I created during the community bonding period.&lt;/p&gt;            I worked on implementing Ajax based searching of duplicate tickets feature. Initially, I thought that it has to be created using Whoosh and JQuery from scratch but it turned out that something similar was implemented in /+search view. The /+search view has an Ajax based search form which displays content suggestions of various contenttypes, name term suggestions and content term suggestions along with informations like revision id, size, date of creation and file type. So, I used the code of /+search view for implementing duplicate ticket search. I made some changes in the existing code to allow it to search tickets and added few lines of code in ajaxsearch.html template to render duplicate ticket suggestions as the /+search view displayed some results which were not necessary as suggestions for duplicate tickets. Just a few lines of CSS were only required to keep the rendered result tidy.              Obviously, I was not able to code it in one go as I don&#8217;t have much experience in working on large codebase. But my mentors were very helpful. They guided me, reviewed my code and gave me suggestion on how to reduce few redundant code segments. Their advice was really helpful as I reduced a lot of redundant code and now it looks pretty.Codereview: https://codereview.appspot.com/236490043              This is how it looks:                            I am currently working on file upload feature so that a user can upload any patch file, media or screenshot. I&#8217;ve implemented it by creating a new item for every file uploaded. I&#8217;ve few issues regarding how to deal with item_name and itemids which I am discussing with my mentor and I hope that I&#8217;ll figure it out very soon 🙂&lt;/div&gt;">
 
 
 
@@ -21,7 +21,7 @@
 <meta property="og:url" content="http://0.0.0.0:4000/2015/06/gsoc-2015-coding-period-25th-may-7th-june.html">
 
 
-  <meta property="og:description" content="   The coding period started 2 weeks ago, from 25th May. In these two weeks I worked according to the timeline which I created during the community bonding period.&lt;/p&gt;            I worked on implementing Ajax based searching of duplicate tickets feature. Initially, I thought that it has to be created using Whoosh and JQuery from scratch but it turned out that something similar was implemented in /+search view. The /+search view has an Ajax based search form which displays content suggestions of various contenttypes, name term suggestions and content term suggestions along with informations like revision id, size, date of creation and file type. So, I used the code of /+search view for implementing duplicate ticket search. I made some changes in the existing code to allow it to search tickets and added few lines of code in ajaxsearch.html template to render duplicate ticket suggestions as the /+search view displayed some results which were not necessary as suggestions for duplicate tickets. Just a few lines of CSS were only required to keep the rendered result tidy.              Obviously, I was not able to code it in one go as I don&#8217;t have much experience in working on large codebase. But my mentors were very helpful. They guided me, reviewed my code and gave me suggestion on how to reduce few redundant code segments. Their advice was really helpful as I reduced a lot of redundant code and now it looks pretty.Codereview: https://codereview.appspot.com/236490043              This is how it looks:                            I am currently working on file upload feature so that a user can upload any patch file, media or screenshot. I&#8217;ve implemented it by creating a new item for every file uploaded. I&#8217;ve few issues regarding how to deal with item_name and itemids which I am discussing with my mentor and I hope that I&#8217;ll figure it out very soon 🙂&lt;/div&gt;  ">
+  <meta property="og:description" content="The coding period started 2 weeks ago, from 25th May. In these two weeks I worked according to the timeline which I created during the community bonding period.&lt;/p&gt;            I worked on implementing Ajax based searching of duplicate tickets feature. Initially, I thought that it has to be created using Whoosh and JQuery from scratch but it turned out that something similar was implemented in /+search view. The /+search view has an Ajax based search form which displays content suggestions of various contenttypes, name term suggestions and content term suggestions along with informations like revision id, size, date of creation and file type. So, I used the code of /+search view for implementing duplicate ticket search. I made some changes in the existing code to allow it to search tickets and added few lines of code in ajaxsearch.html template to render duplicate ticket suggestions as the /+search view displayed some results which were not necessary as suggestions for duplicate tickets. Just a few lines of CSS were only required to keep the rendered result tidy.              Obviously, I was not able to code it in one go as I don&#8217;t have much experience in working on large codebase. But my mentors were very helpful. They guided me, reviewed my code and gave me suggestion on how to reduce few redundant code segments. Their advice was really helpful as I reduced a lot of redundant code and now it looks pretty.Codereview: https://codereview.appspot.com/236490043              This is how it looks:                            I am currently working on file upload feature so that a user can upload any patch file, media or screenshot. I&#8217;ve implemented it by creating a new item for every file uploaded. I&#8217;ve few issues regarding how to deal with item_name and itemids which I am discussing with my mentor and I hope that I&#8217;ll figure it out very soon 🙂&lt;/div&gt;">
 
 
 
@@ -61,6 +61,7 @@
 
 
 <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Vipul Sharma Feed">
+<link href="https://fonts.googleapis.com/css2?family=Gentium+Basic:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet">
 
 <!-- https://t.co/dKP3o1e -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -89,8 +90,11 @@
 
 
 
-    <link href="https://fonts.googleapis.com/css2?family=Gentium+Basic:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- start custom head snippets -->
 
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
 
   </head>
 
@@ -115,14 +119,18 @@
     <div class="masthead__menu">
       <nav id="site-nav" class="greedy-nav">
         
+          <a class="site-logo" href="/"><img src="/assets/images/logo.png" alt=""></a>
+        
         <a class="site-title" href="/">
-          Vipul
+           
           
         </a>
         <ul class="visible-links"><li class="masthead__menu-item">
               <a href="/scribbles/">Scribbles</a>
             </li><li class="masthead__menu-item">
               <a href="/music/">Music</a>
+            </li><li class="masthead__menu-item">
+              <a href="/journal/">Journal</a>
             </li><li class="masthead__menu-item">
               <a href="/about/">About</a>
             </li></ul>
@@ -287,8 +295,9 @@
 
 
         
-          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2015-06-08T01:57:00+05:30">June 8, 2015</time></p>
-        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2015-06-08T01:57:00+05:30">June 8, 2015</time></p>
+
+
       </footer>
 
       
@@ -337,6 +346,8 @@
         <div class="page__footer-follow">
   <ul class="social-icons">
     
+      <li><strong>Follow:</strong></li>
+    
 
     
       
@@ -362,7 +373,7 @@
   </ul>
 </div>
 
-<div class="page__footer-copyright">&copy; 2020 Vipul Sharma. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+<div class="page__footer-copyright">&copy; 2021 Vipul Sharma. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
 
       </footer>
     </div>

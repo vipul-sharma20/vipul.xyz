@@ -3,5 +3,7 @@ main:
     url: /scribbles/
   - title: "Music"
     url: /music/
+  - title: "Journal"
+    url: /journal/
   - title: "About"
     url: /about/

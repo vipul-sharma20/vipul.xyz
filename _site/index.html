@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-  Minimal Mistakes Jekyll Theme 4.19.2 by Michael Rose
+  Minimal Mistakes Jekyll Theme 4.19.3 by Michael Rose
   Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
   Free for personal and commercial use under the MIT license
   https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
@@ -10,7 +10,7 @@
     <meta charset="utf-8">
 
 <!-- begin _includes/seo.html --><title>Vipul Sharma</title>
-<meta name="description" content="An amazing website. ">
+<meta name="description" content="Recent Posts">
 
 
   <meta name="author" content="Vipul Sharma">
@@ -23,7 +23,7 @@
 <meta property="og:url" content="http://0.0.0.0:4000/">
 
 
-  <meta property="og:description" content="An amazing website. ">
+  <meta property="og:description" content="Recent Posts">
 
 
 
@@ -63,6 +63,7 @@
 
 
 <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Vipul Sharma Feed">
+<link href="https://fonts.googleapis.com/css2?family=Gentium+Basic:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet">
 
 <!-- https://t.co/dKP3o1e -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -91,12 +92,15 @@
 
 
 
-    <link href="https://fonts.googleapis.com/css2?family=Gentium+Basic:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- start custom head snippets -->
 
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
 
   </head>
 
-  <body class="layout--home">
+  <body class="layout--single">
     <nav class="skip-links">
   <h2 class="screen-reader-text">Skip links</h2>
   <ul>
@@ -117,14 +121,18 @@
     <div class="masthead__menu">
       <nav id="site-nav" class="greedy-nav">
         
+          <a class="site-logo" href="/"><img src="/assets/images/logo.png" alt=""></a>
+        
         <a class="site-title" href="/">
-          Vipul
+           
           
         </a>
         <ul class="visible-links"><li class="masthead__menu-item">
               <a href="/scribbles/">Scribbles</a>
             </li><li class="masthead__menu-item">
               <a href="/music/">Music</a>
+            </li><li class="masthead__menu-item">
+              <a href="/journal/">Journal</a>
             </li><li class="masthead__menu-item">
               <a href="/about/">About</a>
             </li></ul>
@@ -273,176 +281,125 @@
 
 
 
-  <div class="archive">
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     
-      <h1 id="page-title" class="page__title"></h1>
+    <meta itemprop="description" content="    Recent Posts">
     
     
 
-<h3 class="archive__subtitle">Recent Posts</h3>
-
-
-
-
-  
-
-
-
-<div class="list__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title" itemprop="headline">
+    <div class="page__inner-wrap">
       
-        <a href="/2020/10/made-in-x" rel="permalink">made-in-x: Where in the world these products I own are manufactured in?
-</a>
+        <header>
+          
+          
+        </header>
       
-    </h2>
+
+      <section class="page__content" itemprop="text">
+        
+        <div class="posts__main">
+    <h3 class="archive__subtitle">Recent Posts</h3>
+
+   
+    <div class="list__item">
+      <article class="archive__item" itemscope="" itemtype="https://schema.org/CreativeWork">
+        <h2 class="archive__item-title" itemprop="headline">
+            <a href="/2020/10/made-in-x" rel="permalink">made-in-x: Where in the world these products I own are manufactured in?</a>
+        </h2>
+        <p class="post_date"><i class="fa fa-calendar-alt fa-w-14 fa-fw" aria-hidden="true"></i> Oct 02, 2020</p>
+        
+        
+            <p class="archive__item-excerpt" itemprop="description">An analysis on where the products I own are manufactured in</p>
+        
+        </article>
+    </div>
     
-    <p class="archive__item-excerpt" itemprop="description">An analysis on where the products I own are manufactured in
-</p>
-  </article>
-</div>
-
-
-  
-
-
-
-<div class="list__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    <div class="list__item">
+      <article class="archive__item" itemscope="" itemtype="https://schema.org/CreativeWork">
+        <h2 class="archive__item-title" itemprop="headline">
+            <a href="/2020/06/nvim-jira" rel="permalink">nvim-jira: A Jira plugin for Neovim</a>
+        </h2>
+        <p class="post_date"><i class="fa fa-calendar-alt fa-w-14 fa-fw" aria-hidden="true"></i> Jun 22, 2020</p>
+        
+        
+            <p class="archive__item-excerpt" itemprop="description">I wrote a Jira plugin for Neovim in Lua</p>
+        
+        </article>
+    </div>
     
-    <h2 class="archive__item-title" itemprop="headline">
-      
-        <a href="/2020/06/nvim-jira" rel="permalink">nvim-jira: A Jira plugin for Neovim
-</a>
-      
-    </h2>
+    <div class="list__item">
+      <article class="archive__item" itemscope="" itemtype="https://schema.org/CreativeWork">
+        <h2 class="archive__item-title" itemprop="headline">
+            <a href="/2020/06/mrcp-server-load-balancer.html" rel="permalink">Load Balancing UniMRCP server with OpenSIPS</a>
+        </h2>
+        <p class="post_date"><i class="fa fa-calendar-alt fa-w-14 fa-fw" aria-hidden="true"></i> Jun 07, 2020</p>
+        
+        
+            <p class="archive__item-excerpt" itemprop="description">Walkthrough on how to use OpenSIPS to load balance thousands of concurrent calls among multiple UniMRCP servers</p>
+        
+        </article>
+    </div>
     
-    <p class="archive__item-excerpt" itemprop="description">I wrote a Jira plugin for Neovim in Lua
-</p>
-  </article>
-</div>
-
-
-  
-
-
-
-<div class="list__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    <div class="list__item">
+      <article class="archive__item" itemscope="" itemtype="https://schema.org/CreativeWork">
+        <h2 class="archive__item-title" itemprop="headline">
+            <a href="/2017/09/performance-analysis-goroutine-pythons-coroutine.html" rel="permalink">Performance Analysis: Goroutine & Python’s Coroutine</a>
+        </h2>
+        <p class="post_date"><i class="fa fa-calendar-alt fa-w-14 fa-fw" aria-hidden="true"></i> Sep 03, 2017</p>
+        
+        
+        </article>
+    </div>
     
-    <h2 class="archive__item-title" itemprop="headline">
-      
-        <a href="/2020/06/mrcp-server-load-balancer.html" rel="permalink">Load Balancing UniMRCP server with OpenSIPS
-</a>
-      
-    </h2>
+    <div class="list__item">
+      <article class="archive__item" itemscope="" itemtype="https://schema.org/CreativeWork">
+        <h2 class="archive__item-title" itemprop="headline">
+            <a href="/2017/03/sharingan-newspaper-text-and-context-extractor.html" rel="permalink">Sharingan: Newspaper text and context extractor</a>
+        </h2>
+        <p class="post_date"><i class="fa fa-calendar-alt fa-w-14 fa-fw" aria-hidden="true"></i> Mar 13, 2017</p>
+        
+        
+        </article>
+    </div>
     
-    <p class="archive__item-excerpt" itemprop="description">Walkthrough on how to use OpenSIPS to load balance thousands of concurrent calls among multiple UniMRCP servers
-</p>
-  </article>
-</div>
-
-
-  
-
-
-
-<div class="list__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title" itemprop="headline">
-      
-        <a href="/2017/09/performance-analysis-goroutine-pythons-coroutine.html" rel="permalink">Performance Analysis: Goroutine &amp; Python’s Coroutine
-</a>
-      
-    </h2>
-    
-    <p class="archive__item-excerpt" itemprop="description">I made 1000 HTTP requests using Goroutines and Python’s Coroutines
-
-</p>
-  </article>
-</div>
-
-
-  
-
-
-
-<div class="list__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title" itemprop="headline">
-      
-        <a href="/2017/03/sharingan-newspaper-text-and-context-extractor.html" rel="permalink">Sharingan: Newspaper text and context extractor
-</a>
-      
-    </h2>
-    
-    <p class="archive__item-excerpt" itemprop="description">To all TL;DR folks, here is my elevator pitch:
-
-  It’s a tool to extract news articles from newspaper and give the context about the news
-  link to code: htt...</p>
-  </article>
-</div>
-
-
-
-
-<nav class="pagination">
-  
+    <nav class="pagination">
   <ul>
-    
-    
-    <li><a href="#" class="disabled"><span aria-hidden="true">Previous</span></a></li>
-    
-
-    
-    
-      <li><a href="#" class="disabled current">1</a></li>
-    
-
-    
-    
-
-    
-    
-    
-
-    
       
         
-        
-        
-        <li><a href="/page2/">2</a></li>
-      
-    
-      
-        
-        
-        
-        <li><a href="/page3/">3</a></li>
-      
-    
 
-    
-    
-
-    
-      <li><a href="/page4/">4</a></li>
-    
-
-    
-    
-      <li><a href="/page2/">Next</a></li>
-    
+        <li><a href="/page2/" class="next">Next</a></li>
+      
   </ul>
 </nav>
 
-
-
-  </div>
 </div>
+
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+      </footer>
+
+      
+
+      
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
     </div>
 
     
@@ -465,6 +422,8 @@
 <!-- end custom footer snippets -->
         <div class="page__footer-follow">
   <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
     
 
     
@@ -491,7 +450,7 @@
   </ul>
 </div>
 
-<div class="page__footer-copyright">&copy; 2020 Vipul Sharma. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+<div class="page__footer-copyright">&copy; 2021 Vipul Sharma. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
 
       </footer>
     </div>

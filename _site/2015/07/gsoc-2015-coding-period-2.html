@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-  Minimal Mistakes Jekyll Theme 4.19.2 by Michael Rose
+  Minimal Mistakes Jekyll Theme 4.19.3 by Michael Rose
   Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
   Free for personal and commercial use under the MIT license
   https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
@@ -10,7 +10,7 @@
     <meta charset="utf-8">
 
 <!-- begin _includes/seo.html --><title>GSoC 2015: Coding Period - Vipul Sharma</title>
-<meta name="description" content="   Passed my mid term evaluations 🙂 Thanks to my mentors for all their support and guidance.&lt;/p&gt;            I&#8217;ve been working on implementing threaded comments in ticket modify view. Earlier the comments were created by creating message markups of all the comments and then concatenating them in the content part of the ticket item. In this way, editing/reply to comments was not possible.              New implementation: Each comment is a new item which refers to the itemid of the ticket in which it is created. In this way, it is easy to query all the comments of a particular ticket.              Initially, I worked on non-threaded comments, then added a feature to reply to comments. It is similar to non-threaded comments but the difference is, there is a new field &#8220;reply_to&#8221; which stores the itemid of the comment to which a reply is made which is hence, stored in the &#8220;refers_to&#8221; field of the comment reply. After this, I tried to create a tree of all the comments in a ticket which included comments, replies of comments, replies of replies and so on.              Something like :&nbsp;[[&lt;MoinMoin.storage.middleware.protecting.ProtectedRevision object at 0x7f907596d550&gt;, [&lt;MoinMoin.storage.middleware.protecting.ProtectedRevision object at 0x7f9075963d50&gt;, []]]]              The list above, is the tree of 1 single comment which has 1 reply and 1 reply to reply.              Still more work has to be done to render the comments in threaded form in the UI. Also, there is some issues in the recursive function I wrote for parsing the comments/reply tree which I think can be fixed soon.              CR: https://codereview.appspot.com/256840043/     ">
+<meta name="description" content="Passed my mid term evaluations 🙂 Thanks to my mentors for all their support and guidance.&lt;/p&gt;            I&#8217;ve been working on implementing threaded comments in ticket modify view. Earlier the comments were created by creating message markups of all the comments and then concatenating them in the content part of the ticket item. In this way, editing/reply to comments was not possible.              New implementation: Each comment is a new item which refers to the itemid of the ticket in which it is created. In this way, it is easy to query all the comments of a particular ticket.              Initially, I worked on non-threaded comments, then added a feature to reply to comments. It is similar to non-threaded comments but the difference is, there is a new field &#8220;reply_to&#8221; which stores the itemid of the comment to which a reply is made which is hence, stored in the &#8220;refers_to&#8221; field of the comment reply. After this, I tried to create a tree of all the comments in a ticket which included comments, replies of comments, replies of replies and so on.              Something like :&nbsp;[[&lt;MoinMoin.storage.middleware.protecting.ProtectedRevision object at 0x7f907596d550&gt;, [&lt;MoinMoin.storage.middleware.protecting.ProtectedRevision object at 0x7f9075963d50&gt;, []]]]              The list above, is the tree of 1 single comment which has 1 reply and 1 reply to reply.              Still more work has to be done to render the comments in threaded form in the UI. Also, there is some issues in the recursive function I wrote for parsing the comments/reply tree which I think can be fixed soon.              CR: https://codereview.appspot.com/256840043/">
 
 
 
@@ -21,7 +21,7 @@
 <meta property="og:url" content="http://0.0.0.0:4000/2015/07/gsoc-2015-coding-period-2.html">
 
 
-  <meta property="og:description" content="   Passed my mid term evaluations 🙂 Thanks to my mentors for all their support and guidance.&lt;/p&gt;            I&#8217;ve been working on implementing threaded comments in ticket modify view. Earlier the comments were created by creating message markups of all the comments and then concatenating them in the content part of the ticket item. In this way, editing/reply to comments was not possible.              New implementation: Each comment is a new item which refers to the itemid of the ticket in which it is created. In this way, it is easy to query all the comments of a particular ticket.              Initially, I worked on non-threaded comments, then added a feature to reply to comments. It is similar to non-threaded comments but the difference is, there is a new field &#8220;reply_to&#8221; which stores the itemid of the comment to which a reply is made which is hence, stored in the &#8220;refers_to&#8221; field of the comment reply. After this, I tried to create a tree of all the comments in a ticket which included comments, replies of comments, replies of replies and so on.              Something like :&nbsp;[[&lt;MoinMoin.storage.middleware.protecting.ProtectedRevision object at 0x7f907596d550&gt;, [&lt;MoinMoin.storage.middleware.protecting.ProtectedRevision object at 0x7f9075963d50&gt;, []]]]              The list above, is the tree of 1 single comment which has 1 reply and 1 reply to reply.              Still more work has to be done to render the comments in threaded form in the UI. Also, there is some issues in the recursive function I wrote for parsing the comments/reply tree which I think can be fixed soon.              CR: https://codereview.appspot.com/256840043/     ">
+  <meta property="og:description" content="Passed my mid term evaluations 🙂 Thanks to my mentors for all their support and guidance.&lt;/p&gt;            I&#8217;ve been working on implementing threaded comments in ticket modify view. Earlier the comments were created by creating message markups of all the comments and then concatenating them in the content part of the ticket item. In this way, editing/reply to comments was not possible.              New implementation: Each comment is a new item which refers to the itemid of the ticket in which it is created. In this way, it is easy to query all the comments of a particular ticket.              Initially, I worked on non-threaded comments, then added a feature to reply to comments. It is similar to non-threaded comments but the difference is, there is a new field &#8220;reply_to&#8221; which stores the itemid of the comment to which a reply is made which is hence, stored in the &#8220;refers_to&#8221; field of the comment reply. After this, I tried to create a tree of all the comments in a ticket which included comments, replies of comments, replies of replies and so on.              Something like :&nbsp;[[&lt;MoinMoin.storage.middleware.protecting.ProtectedRevision object at 0x7f907596d550&gt;, [&lt;MoinMoin.storage.middleware.protecting.ProtectedRevision object at 0x7f9075963d50&gt;, []]]]              The list above, is the tree of 1 single comment which has 1 reply and 1 reply to reply.              Still more work has to be done to render the comments in threaded form in the UI. Also, there is some issues in the recursive function I wrote for parsing the comments/reply tree which I think can be fixed soon.              CR: https://codereview.appspot.com/256840043/">
 
 
 
@@ -61,6 +61,7 @@
 
 
 <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Vipul Sharma Feed">
+<link href="https://fonts.googleapis.com/css2?family=Gentium+Basic:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet">
 
 <!-- https://t.co/dKP3o1e -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -89,8 +90,11 @@
 
 
 
-    <link href="https://fonts.googleapis.com/css2?family=Gentium+Basic:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- start custom head snippets -->
 
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
 
   </head>
 
@@ -115,14 +119,18 @@
     <div class="masthead__menu">
       <nav id="site-nav" class="greedy-nav">
         
+          <a class="site-logo" href="/"><img src="/assets/images/logo.png" alt=""></a>
+        
         <a class="site-title" href="/">
-          Vipul
+           
           
         </a>
         <ul class="visible-links"><li class="masthead__menu-item">
               <a href="/scribbles/">Scribbles</a>
             </li><li class="masthead__menu-item">
               <a href="/music/">Music</a>
+            </li><li class="masthead__menu-item">
+              <a href="/journal/">Journal</a>
             </li><li class="masthead__menu-item">
               <a href="/about/">About</a>
             </li></ul>
@@ -296,8 +304,9 @@
 
 
         
-          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2015-07-14T21:13:00+05:30">July 14, 2015</time></p>
-        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2015-07-14T21:13:00+05:30">July 14, 2015</time></p>
+
+
       </footer>
 
       
@@ -346,6 +355,8 @@
         <div class="page__footer-follow">
   <ul class="social-icons">
     
+      <li><strong>Follow:</strong></li>
+    
 
     
       
@@ -371,7 +382,7 @@
   </ul>
 </div>
 
-<div class="page__footer-copyright">&copy; 2020 Vipul Sharma. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+<div class="page__footer-copyright">&copy; 2021 Vipul Sharma. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
 
       </footer>
     </div>

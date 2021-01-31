@@ -1,5 +1,37 @@
 ---
-layout: home
+layout: single
 author_profile: true
 ---
+
+<div class="posts__main">
+    <h3 class="archive__subtitle">Recent Posts</h3>
+
+   {% for item in paginator.posts %}
+    <div class="list__item">
+      <article class="archive__item" itemscope="" itemtype="https://schema.org/CreativeWork">
+        <h2 class="archive__item-title" itemprop="headline">
+            <a href="{{ item.url }}" rel="permalink">{{ item.title }}</a>
+        </h2>
+        <p class="post_date"><i class="fa fa-calendar-alt fa-w-14 fa-fw" aria-hidden="true"></i> {{ item.date | date: "%b %d, %Y" }}</p>
+        {% assign publish_year = item.date | date: '%Y' %}
+        {% if publish_year > '2018' %}
+            <p class="archive__item-excerpt" itemprop="description">{{ item.excerpt }}</p>
+        {% endif %}
+        </article>
+    </div>
+    {% endfor %}
+    <nav class="pagination">
+  <ul>
+      {% if paginator.previous_page %}
+      <li><a href="{{ paginator.previous_page_path | relative_url }}">Previous</a></li>
+      {% endif %}
+        {% if paginator.next_page %}
+
+        <li><a href="{{ paginator.next_page_path }}" class="next">Next</a></li>
+      {% endif %}
+  </ul>
+</nav>
+
+</div>
+
 

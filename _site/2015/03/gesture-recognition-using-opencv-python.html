@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-  Minimal Mistakes Jekyll Theme 4.19.2 by Michael Rose
+  Minimal Mistakes Jekyll Theme 4.19.3 by Michael Rose
   Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
   Free for personal and commercial use under the MIT license
   https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
@@ -10,7 +10,7 @@
     <meta charset="utf-8">
 
 <!-- begin _includes/seo.html --><title>Gesture Recognition using OpenCV + Python - Vipul Sharma</title>
-<meta name="description" content="        This python script can be used to analyse hand gestures by contour detection and convex hull of palm region using OpenCV, a library used for computer vision processes.              code: https://github.com/vipul-sharma20/gesture-opencv              The video below shows the working of the code:                                         How?              1. Capture frames and convert to grayscale                     Our ROI is the the hand region, so we capture the images of the hand and convert them to grayscale.                          Why grayscale ? We convert an image from RGB to grayscale and then to binary in order to find the ROI i.e. the portion of the image we are further interested for image processing. By doing this our decision becomes binary: &#8220;yes the pixel is of interest&#8221; or &#8220;no the pixel is not of interest&#8221;.                                  2. Blur image                     I&#8217;ve used Gaussian Blurring on the original image. We blur the image for smoothing and to reduce noise and details from the image. We are not interested in the details of the image but in the shape of the object to track.                          By blurring, we create smooth transition from one color to another and reduce the edge content. We use thresholding for image segmentation, to create binary images from grayscale images.                                 3. Thresholding                              In very basic terms, thresholding is like a Low Pass Filter by allowing only particular color ranges to be highlighted as white while the other colors are suppressed by showing them as black.                                          I&#8217;ve used Otsu&#8217;s Binarization method. In this method, OpenCV automatically calculates/approximates the threshold value of a bimodal image from its image histogram. But for optimal results, we may need a clear background in front of the webcam which sometimes may not be possible.                                        4. Draw contours                            5. Find convex hull and convexity defects                     We now find the convex points and the defect points. The convex points are generally, the tip of the fingers. But there are other convex point too. So, we find convexity defects, which is the deepest point of deviation on the contour. By this we can find the number of fingers extended and then we can perform different functions according to the number of fingers extended.                                          code: https://github.com/vipul-sharma20/gesture-opencv      ">
+<meta name="description" content="This python script can be used to analyse hand gestures by contour detection and convex hull of palm region using OpenCV, a library used for computer vision processes.              code: https://github.com/vipul-sharma20/gesture-opencv              The video below shows the working of the code:                                         How?              1. Capture frames and convert to grayscale                     Our ROI is the the hand region, so we capture the images of the hand and convert them to grayscale.                          Why grayscale ? We convert an image from RGB to grayscale and then to binary in order to find the ROI i.e. the portion of the image we are further interested for image processing. By doing this our decision becomes binary: &#8220;yes the pixel is of interest&#8221; or &#8220;no the pixel is not of interest&#8221;.                                  2. Blur image                     I&#8217;ve used Gaussian Blurring on the original image. We blur the image for smoothing and to reduce noise and details from the image. We are not interested in the details of the image but in the shape of the object to track.                          By blurring, we create smooth transition from one color to another and reduce the edge content. We use thresholding for image segmentation, to create binary images from grayscale images.                                 3. Thresholding                              In very basic terms, thresholding is like a Low Pass Filter by allowing only particular color ranges to be highlighted as white while the other colors are suppressed by showing them as black.                                          I&#8217;ve used Otsu&#8217;s Binarization method. In this method, OpenCV automatically calculates/approximates the threshold value of a bimodal image from its image histogram. But for optimal results, we may need a clear background in front of the webcam which sometimes may not be possible.                                        4. Draw contours                            5. Find convex hull and convexity defects                     We now find the convex points and the defect points. The convex points are generally, the tip of the fingers. But there are other convex point too. So, we find convexity defects, which is the deepest point of deviation on the contour. By this we can find the number of fingers extended and then we can perform different functions according to the number of fingers extended.                                          code: https://github.com/vipul-sharma20/gesture-opencv">
 
 
 
@@ -21,7 +21,7 @@
 <meta property="og:url" content="http://0.0.0.0:4000/2015/03/gesture-recognition-using-opencv-python.html">
 
 
-  <meta property="og:description" content="        This python script can be used to analyse hand gestures by contour detection and convex hull of palm region using OpenCV, a library used for computer vision processes.              code: https://github.com/vipul-sharma20/gesture-opencv              The video below shows the working of the code:                                         How?              1. Capture frames and convert to grayscale                     Our ROI is the the hand region, so we capture the images of the hand and convert them to grayscale.                          Why grayscale ? We convert an image from RGB to grayscale and then to binary in order to find the ROI i.e. the portion of the image we are further interested for image processing. By doing this our decision becomes binary: &#8220;yes the pixel is of interest&#8221; or &#8220;no the pixel is not of interest&#8221;.                                  2. Blur image                     I&#8217;ve used Gaussian Blurring on the original image. We blur the image for smoothing and to reduce noise and details from the image. We are not interested in the details of the image but in the shape of the object to track.                          By blurring, we create smooth transition from one color to another and reduce the edge content. We use thresholding for image segmentation, to create binary images from grayscale images.                                 3. Thresholding                              In very basic terms, thresholding is like a Low Pass Filter by allowing only particular color ranges to be highlighted as white while the other colors are suppressed by showing them as black.                                          I&#8217;ve used Otsu&#8217;s Binarization method. In this method, OpenCV automatically calculates/approximates the threshold value of a bimodal image from its image histogram. But for optimal results, we may need a clear background in front of the webcam which sometimes may not be possible.                                        4. Draw contours                            5. Find convex hull and convexity defects                     We now find the convex points and the defect points. The convex points are generally, the tip of the fingers. But there are other convex point too. So, we find convexity defects, which is the deepest point of deviation on the contour. By this we can find the number of fingers extended and then we can perform different functions according to the number of fingers extended.                                          code: https://github.com/vipul-sharma20/gesture-opencv      ">
+  <meta property="og:description" content="This python script can be used to analyse hand gestures by contour detection and convex hull of palm region using OpenCV, a library used for computer vision processes.              code: https://github.com/vipul-sharma20/gesture-opencv              The video below shows the working of the code:                                         How?              1. Capture frames and convert to grayscale                     Our ROI is the the hand region, so we capture the images of the hand and convert them to grayscale.                          Why grayscale ? We convert an image from RGB to grayscale and then to binary in order to find the ROI i.e. the portion of the image we are further interested for image processing. By doing this our decision becomes binary: &#8220;yes the pixel is of interest&#8221; or &#8220;no the pixel is not of interest&#8221;.                                  2. Blur image                     I&#8217;ve used Gaussian Blurring on the original image. We blur the image for smoothing and to reduce noise and details from the image. We are not interested in the details of the image but in the shape of the object to track.                          By blurring, we create smooth transition from one color to another and reduce the edge content. We use thresholding for image segmentation, to create binary images from grayscale images.                                 3. Thresholding                              In very basic terms, thresholding is like a Low Pass Filter by allowing only particular color ranges to be highlighted as white while the other colors are suppressed by showing them as black.                                          I&#8217;ve used Otsu&#8217;s Binarization method. In this method, OpenCV automatically calculates/approximates the threshold value of a bimodal image from its image histogram. But for optimal results, we may need a clear background in front of the webcam which sometimes may not be possible.                                        4. Draw contours                            5. Find convex hull and convexity defects                     We now find the convex points and the defect points. The convex points are generally, the tip of the fingers. But there are other convex point too. So, we find convexity defects, which is the deepest point of deviation on the contour. By this we can find the number of fingers extended and then we can perform different functions according to the number of fingers extended.                                          code: https://github.com/vipul-sharma20/gesture-opencv">
 
 
 
@@ -61,6 +61,7 @@
 
 
 <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Vipul Sharma Feed">
+<link href="https://fonts.googleapis.com/css2?family=Gentium+Basic:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet">
 
 <!-- https://t.co/dKP3o1e -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -89,8 +90,11 @@
 
 
 
-    <link href="https://fonts.googleapis.com/css2?family=Gentium+Basic:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- start custom head snippets -->
 
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
 
   </head>
 
@@ -115,14 +119,18 @@
     <div class="masthead__menu">
       <nav id="site-nav" class="greedy-nav">
         
+          <a class="site-logo" href="/"><img src="/assets/images/logo.png" alt=""></a>
+        
         <a class="site-title" href="/">
-          Vipul
+           
           
         </a>
         <ul class="visible-links"><li class="masthead__menu-item">
               <a href="/scribbles/">Scribbles</a>
             </li><li class="masthead__menu-item">
               <a href="/music/">Music</a>
+            </li><li class="masthead__menu-item">
+              <a href="/journal/">Journal</a>
             </li><li class="masthead__menu-item">
               <a href="/about/">About</a>
             </li></ul>
@@ -391,8 +399,9 @@
 
 
         
-          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2015-03-22T12:22:00+05:30">March 22, 2015</time></p>
-        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2015-03-22T12:22:00+05:30">March 22, 2015</time></p>
+
+
       </footer>
 
       
@@ -440,6 +449,8 @@
         <div class="page__footer-follow">
   <ul class="social-icons">
     
+      <li><strong>Follow:</strong></li>
+    
 
     
       
@@ -465,7 +476,7 @@
   </ul>
 </div>
 
-<div class="page__footer-copyright">&copy; 2020 Vipul Sharma. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+<div class="page__footer-copyright">&copy; 2021 Vipul Sharma. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
 
       </footer>
     </div>

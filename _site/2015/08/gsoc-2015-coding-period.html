@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-  Minimal Mistakes Jekyll Theme 4.19.3 by Michael Rose
+  Minimal Mistakes Jekyll Theme 4.19.2 by Michael Rose
   Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
   Free for personal and commercial use under the MIT license
   https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
@@ -10,7 +10,7 @@
     <meta charset="utf-8">
 
 <!-- begin _includes/seo.html --><title>GSoC 2015: Coding Period - Vipul Sharma</title>
-<meta name="description" content="I&#8217;ve been working on implementing advanced search feature to filter tickets based on its metadata like effort, severity, difficulty, priority, author, tags and assignee. In this way a user can filter tickets based on specific requirements by filling the advanced search form.For this I created a new view: /+tickets/query which contains a form for searching tickets.&lt;/p&gt;            Screenshot:                            CR: https://codereview.appspot.com/256230043              It still requires some UI improvements which I&#8217;ll finish it soon.              I&#8217;ve also been improving the implementation of comment mechanism in ticket modify view.The new implementation now supports markdown syntax. A user can reply to comments and also new comment is automatically posted if any metadata is updated.For eg: if effort field is changed from None to 3, a comment will be posted as &#8220;Update: Effort changed from None to 3&#8221; which will be like any other comment.              Screenshot:                            CR: https://codereview.appspot.com/256840043/&lt;/div&gt;">
+<meta name="description" content="   I&#8217;ve been working on implementing advanced search feature to filter tickets based on its metadata like effort, severity, difficulty, priority, author, tags and assignee. In this way a user can filter tickets based on specific requirements by filling the advanced search form.For this I created a new view: /+tickets/query which contains a form for searching tickets.&lt;/p&gt;            Screenshot:                            CR: https://codereview.appspot.com/256230043              It still requires some UI improvements which I&#8217;ll finish it soon.              I&#8217;ve also been improving the implementation of comment mechanism in ticket modify view.The new implementation now supports markdown syntax. A user can reply to comments and also new comment is automatically posted if any metadata is updated.For eg: if effort field is changed from None to 3, a comment will be posted as &#8220;Update: Effort changed from None to 3&#8221; which will be like any other comment.              Screenshot:                            CR: https://codereview.appspot.com/256840043/&lt;/div&gt;  ">
 
 
 
@@ -21,7 +21,7 @@
 <meta property="og:url" content="http://0.0.0.0:4000/2015/08/gsoc-2015-coding-period.html">
 
 
-  <meta property="og:description" content="I&#8217;ve been working on implementing advanced search feature to filter tickets based on its metadata like effort, severity, difficulty, priority, author, tags and assignee. In this way a user can filter tickets based on specific requirements by filling the advanced search form.For this I created a new view: /+tickets/query which contains a form for searching tickets.&lt;/p&gt;            Screenshot:                            CR: https://codereview.appspot.com/256230043              It still requires some UI improvements which I&#8217;ll finish it soon.              I&#8217;ve also been improving the implementation of comment mechanism in ticket modify view.The new implementation now supports markdown syntax. A user can reply to comments and also new comment is automatically posted if any metadata is updated.For eg: if effort field is changed from None to 3, a comment will be posted as &#8220;Update: Effort changed from None to 3&#8221; which will be like any other comment.              Screenshot:                            CR: https://codereview.appspot.com/256840043/&lt;/div&gt;">
+  <meta property="og:description" content="   I&#8217;ve been working on implementing advanced search feature to filter tickets based on its metadata like effort, severity, difficulty, priority, author, tags and assignee. In this way a user can filter tickets based on specific requirements by filling the advanced search form.For this I created a new view: /+tickets/query which contains a form for searching tickets.&lt;/p&gt;            Screenshot:                            CR: https://codereview.appspot.com/256230043              It still requires some UI improvements which I&#8217;ll finish it soon.              I&#8217;ve also been improving the implementation of comment mechanism in ticket modify view.The new implementation now supports markdown syntax. A user can reply to comments and also new comment is automatically posted if any metadata is updated.For eg: if effort field is changed from None to 3, a comment will be posted as &#8220;Update: Effort changed from None to 3&#8221; which will be like any other comment.              Screenshot:                            CR: https://codereview.appspot.com/256840043/&lt;/div&gt;  ">
 
 
 
@@ -61,7 +61,6 @@
 
 
 <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Vipul Sharma Feed">
-<link href="https://fonts.googleapis.com/css2?family=Gentium+Basic:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet">
 
 <!-- https://t.co/dKP3o1e -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -90,11 +89,8 @@
 
 
 
-    <!-- start custom head snippets -->
+    <link href="https://fonts.googleapis.com/css2?family=Gentium+Basic:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
-<!-- insert favicons. use https://realfavicongenerator.net/ -->
-
-<!-- end custom head snippets -->
 
   </head>
 
@@ -119,18 +115,14 @@
     <div class="masthead__menu">
       <nav id="site-nav" class="greedy-nav">
         
-          <a class="site-logo" href="/"><img src="/assets/images/logo.png" alt=""></a>
-        
         <a class="site-title" href="/">
-           
+          Vipul
           
         </a>
         <ul class="visible-links"><li class="masthead__menu-item">
               <a href="/scribbles/">Scribbles</a>
             </li><li class="masthead__menu-item">
               <a href="/music/">Music</a>
-            </li><li class="masthead__menu-item">
-              <a href="/journal/">Journal</a>
             </li><li class="masthead__menu-item">
               <a href="/about/">About</a>
             </li></ul>
@@ -307,9 +299,8 @@
 
 
         
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2015-08-04T18:56:00+05:30">August 4, 2015</time></p>
-
-
+          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2015-08-04T18:56:00+05:30">August 4, 2015</time></p>
+        
       </footer>
 
       
@@ -358,8 +349,6 @@
         <div class="page__footer-follow">
   <ul class="social-icons">
     
-      <li><strong>Follow:</strong></li>
-    
 
     
       
@@ -385,7 +374,7 @@
   </ul>
 </div>
 
-<div class="page__footer-copyright">&copy; 2021 Vipul Sharma. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+<div class="page__footer-copyright">&copy; 2020 Vipul Sharma. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
 
       </footer>
     </div>

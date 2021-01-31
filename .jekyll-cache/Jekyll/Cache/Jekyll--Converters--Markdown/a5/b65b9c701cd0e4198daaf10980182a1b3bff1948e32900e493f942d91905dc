@@ -1,0 +1,141 @@
+I"µ(<p>I made 1000 HTTP requests using Goroutines and Pythonâ€™s Coroutines</p>
+
+<p>Used Go 1.6.2 and Python 3.6
+Implemented in Go using net/http package
+Implemented in Python using aiohttp, requests and urllib3 libraries
+Ran it over $10 DigitalOcean droplet
+Scroll to bottom of this post to see results.</p>
+
+<h1 id="go">Go</h1>
+
+<p>Go implementation using goroutines:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+
+<span class="k">import</span> <span class="p">(</span>
+    <span class="s">"fmt"</span>
+    <span class="s">"net/http"</span>
+<span class="p">)</span>
+
+
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">url</span> <span class="o">:=</span> <span class="s">"http://example.com"</span>
+    <span class="n">resc</span><span class="p">,</span> <span class="n">errc</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">chan</span> <span class="kt">bool</span><span class="p">),</span> <span class="nb">make</span><span class="p">(</span><span class="k">chan</span> <span class="kt">error</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="m">1000</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="k">go</span> <span class="k">func</span><span class="p">(</span><span class="n">url</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">http</span><span class="o">.</span><span class="n">Head</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+                <span class="n">errc</span> <span class="o">&lt;-</span> <span class="n">err</span>
+                <span class="k">return</span>
+            <span class="p">}</span>
+            <span class="n">resc</span> <span class="o">&lt;-</span> <span class="no">true</span>
+        <span class="p">}(</span><span class="n">url</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="m">1000</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="k">select</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="o">&lt;-</span><span class="n">resc</span><span class="o">:</span>
+        <span class="k">case</span> <span class="n">err</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="n">errc</span><span class="o">:</span>
+            <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="python">Python</h1>
+
+<p>Python implementation using asyncio with aiohttp, requests and urllib3</p>
+
+<h2 id="1-aiohttp">1. aiohttp</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="kn">import</span> <span class="nn">aiohttp</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">aiohttp</span><span class="p">.</span><span class="n">ClientSession</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+            <span class="k">await</span> <span class="n">session</span><span class="p">.</span><span class="n">head</span><span class="p">(</span><span class="s">'http://example.com'</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+    <span class="n">loop</span><span class="p">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<h2 id="2-requests">2. requests</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="kn">import</span> <span class="nn">requests</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">futures</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">loop</span><span class="p">.</span><span class="n">run_in_executor</span><span class="p">(</span>
+            <span class="bp">None</span><span class="p">,</span>
+            <span class="n">requests</span><span class="p">.</span><span class="n">get</span><span class="p">,</span>
+            <span class="s">'http://example.com'</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">futures</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">loop</span><span class="p">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<h2 id="3-urllib3">3. urllib3</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">urllib3</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">http</span><span class="p">):</span>
+    <span class="n">futures</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">loop</span><span class="p">.</span><span class="n">run_in_executor</span><span class="p">(</span>
+            <span class="bp">None</span><span class="p">,</span>
+            <span class="n">http</span><span class="p">.</span><span class="n">request</span><span class="p">,</span>
+            <span class="s">'HEAD'</span><span class="p">,</span> <span class="s">'http://example.com'</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">futures</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+    <span class="n">http</span> <span class="o">=</span> <span class="n">urllib3</span><span class="p">.</span><span class="n">PoolManager</span><span class="p">()</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">loop</span><span class="p">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">main</span><span class="p">(</span><span class="n">http</span><span class="p">))</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="analysis-time">Analysis (Time)</h1>
+
+<h2 id="1-syncasync-head-requests-time-in-seconds">1. Sync/Async HEAD requests (time in seconds)</h2>
+
+<iframe src="//plot.ly/~vipul/38.embed" width="1000" height="600" frameborder="0" scrolling="no"></iframe>
+
+<h2 id="2-syncasync-get-requests-time-in-seconds">2. Sync/Async GET requests (time in seconds)</h2>
+<iframe src="//plot.ly/~vipul/36.embed" width="1000" height="600" frameborder="0" scrolling="no"></iframe>
+
+<hr />
+
+<h1 id="analysis-memory">Analysis (Memory)</h1>
+
+<h2 id="1-syncasync-head-requests-memory-in-mb">1. Sync/Async HEAD requests (memory in MB)</h2>
+
+<iframe src="//plot.ly/~vipul/42.embed" width="1000" height="600" frameborder="0" scrolling="no"></iframe>
+
+<h2 id="2-asyncsync-get-requests-memory-in-mb">2. Async/Sync GET requests (memory in MB)</h2>
+
+<iframe src="//plot.ly/~vipul/40.embed" width="1000" height="600" frameborder="0" scrolling="no"></iframe>
+
+<p>Code for both synchronous and asynchronous implementations are at: <a href="https://github.com/vipul-sharma20/async-go-py">https://github.com/vipul-sharma20/async-go-py</a></p>
+:ET

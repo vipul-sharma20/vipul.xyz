@@ -7,9 +7,7 @@ url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: vipul_sharma
 github_username: vipul-sharma20
 
-# remote_theme: "mmistakes/minimal-mistakes@4.19.2"
-theme: minimal-mistakes-jekyll
-
+remote_theme: "mmistakes/minimal-mistakes@4.19.2"
 # Build settings
 minimal_mistakes_skin: "air"
 
@@ -17,8 +15,6 @@ minimal_mistakes_skin: "air"
 plugins:
   - jekyll-feed
   - jekyll-include-cache
-  - jekyll-paginate
-
 
 locale                   : "en-US"
 title                    : "Vipul Sharma"
@@ -38,7 +34,7 @@ search                   : true
 
 paginate: 5
 paginate_path: /page:num/
-include                  : ["_pages", "_portfolio", "_includes", "_random", "_journal"]
+include                  : ["_pages", "_portfolio", "_includes", "_random"]
 
 author:
   name: "Vipul Sharma"
@@ -81,9 +77,6 @@ collections:
   random:
     output: true
     permalink: /:collection/:path/
-  journal:
-    output: true
-    permalink: /:collection/:path/
 
 defaults:
   # _posts
@@ -105,14 +98,6 @@ defaults:
   - scope:
       path: ""
       type: random
-    values:
-      layout: single
-      author_profile: true
-      share: true
-  # _journal
-  - scope:
-      path: ""
-      type: journal
     values:
       layout: single
       author_profile: true

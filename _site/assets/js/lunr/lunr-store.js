@@ -1,10 +1,4 @@
 var store = [{
-        "title": "2021-01-31",
-        "excerpt":"Initiating bi-weekly journal. I have been reading “Introducing MLOps” by Mark Treveil, the Dataiku team. ISBN: 978-1-49208-329-0. I have not completed it yet. Till now the author has talked about why MLOps has been developed as a discipline and the kind of people involved to execute MLOps successfully. They have...","categories": [],
-        "tags": [],
-        "url": "http://0.0.0.0:4000/journal/2021-01-31/",
-        "teaser": null
-      },{
         "title": "Swat Kats 2",
         "excerpt":"View this post on Instagram SWAT Kats Season 2 (1994) intro #electricguitar #guitar #epiphone #cartoonnetwork #swatkats #guitarcover Had to record it quickly. Therefore, not so good tone, playing and editing 🤷‍♂️ A post shared by विपुल शर्मा (Vipul Sharma) (@vipul.py) on Dec 15, 2019 at 4:33am PST Apparently there were...","categories": [],
         "tags": [],
@@ -28,12 +22,6 @@ var store = [{
         "tags": [],
         "url": "http://0.0.0.0:4000/music/sadness-and-sorrow",
         "teaser": "http://0.0.0.0:4000/assets/images/sadness-and-sorrow-cover.jpg"
-      },{
-        "title": "Black Dog",
-        "excerpt":"View this post on Instagram A post shared by Vipul Sharma (@vipul.py) If you listen to the original song, you can notice that their is a chase going around between the drum beats and the guitar/bass progression. This is because of the time signatures of drums vs guitar/bass. The drums...","categories": [],
-        "tags": [],
-        "url": "http://0.0.0.0:4000/music/black-dog",
-        "teaser": "http://0.0.0.0:4000/assets/images/black-dog-cover.png"
       },{
         "title": "Gesture Recognition using OpenCV + Python",
         "excerpt":"This python script can be used to analyse hand gestures by contour detection and convex hull of palm region using OpenCV, a library used for computer vision processes. code: https://github.com/vipul-sharma20/gesture-opencv The video below shows the working of the code: How? 1. Capture frames and convert to grayscale Our ROI is...","categories": ["Uncategorized"],

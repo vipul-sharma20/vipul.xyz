@@ -7,3 +7,5 @@ main:
     url: /journal/
   - title: "About"
     url: /about/
+  - title: "Posts"
+    url: /

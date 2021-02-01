@@ -86,12 +86,13 @@ The repo: [https://github.com/pixeltris/GK6X][gk61_repo]
 
 <br>
 
-### Final Build
-
+<p style="text-align: center">Final Build</p>
 ![alt text][final_build]
 
 In the end, another contribution of China to the list of products I own. More on it at: [made-in-x][made-in-x].
 
+
+[final_build]: /assets/images/final_build.jpg
 [lily58]: https://github.com/kata0510/Lily58
 [barebone_kit]: https://www.meckeys.com/shop/keyboard/60-keyboard/gk61-barebone-kit/
 [keycaps]: https://www.meckeys.com/shop/accessories/keyboard-accessories/keycaps/ducky-blue-and-red-pudding-keycaps/

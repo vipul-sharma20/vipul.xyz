@@ -1,4 +1,6 @@
 main:
+  - title: "Posts"
+    url: /
   - title: "Scribbles"
     url: /scribbles/
   - title: "Music"
@@ -7,5 +9,3 @@ main:
     url: /journal/
   - title: "About"
     url: /about/
-  - title: "Posts"
-    url: /

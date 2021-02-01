@@ -50,8 +50,8 @@ The Ducky pudding keycaps are pretty good quality, they are double shot PBT.
 ABS ones are usually cheaper than these. The pudding style keycaps look really
 good with this RGB board.
 
-I would've bought a Ducky keyboard only if I had not done this custom
-build. I have heard good reviews about it.
+I would've bought a Ducky keyboard if I had not done this custom build. I have
+heard good reviews about it.
 
 #### Key Switches Review
 

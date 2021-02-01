@@ -117,3 +117,8 @@ defaults:
       layout: single
       author_profile: true
       share: true
+
+# Sass/SCSS
+sass:
+  sass_dir: _sass
+  style: compressed # https://sass-lang.com/documentation/file.SASS_REFERENCE.html#output_style

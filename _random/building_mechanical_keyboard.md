@@ -12,7 +12,7 @@ keyboard because of various reasons. I did a custom build of a 61 keys standard
 style keyboard (image and build montage below).
 
 Disclaimer: I am still a beginner in the world of mechanical keyboards. You
-might getter better info/opinions on a random reddit thread (that's how I got
+might get better info/opinions on a random reddit thread (that's how I got
 it)
 
 I can see that building and buying mechanical keyboards is an expensive hobby.
@@ -20,7 +20,7 @@ Also, I could see that it's a little difficult to procure parts or even
 completely manufactured keyboards in India. To be honest, I didn't do any
 legwork to see if I can get parts and stuff from local vendors.
 
-Only options I could see for lazy me were:
+Only options I could see for the lazy me were:
 - Import some manufactured keyboard which I like. This option is too expensive
   because shipping, high import duty in India etc.
 - Choose among the limited set of non-out-of-stock keyboards from online

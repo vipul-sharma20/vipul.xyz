@@ -24,9 +24,9 @@ Only options I could see for the lazy me were:
 - Import some manufactured keyboard which I like. This option is too expensive
   because shipping, high import duty in India etc.
 - Choose among the limited set of non-out-of-stock keyboards from online
-  shopping websites. The ones in stock are usually because they are non RGB,
-  not really good value for money etc. You could either be patient and wait for
-  re stocking, pre-order etc. I didn't do this.
+  shopping websites. The ones in stock are still in stock because they are non
+  RGB, not really good value for money etc. You could either be patient and
+  wait for re stocking, pre-order etc. I didn't do this.
 - Import or find individual components. I didn't find much online in India.
   However, you could import them but again not a very cost efficient option
   because of reasons stated previously. [meckeys.com][meckeys] proved to be the

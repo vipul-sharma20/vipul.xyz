@@ -3,7 +3,7 @@ title: "On writing an original composition: Part 1/n"
 permalink: "/random/on-writing-an-oc/"
 excerpt: ""
 author_profile: true
-date: 2021-02-31T12:27:00+00:00
+date: 2021-02-21T12:27:00+00:00
 ---
 
 I usually never have New Year's resolutions but, one of my goal for 2021 is to

@@ -26,7 +26,7 @@ email                    : vipul.sharma20@gmail.com
 title_separator          : "-"
 # subtitle                 : ""
 name                     : "Vipul Sharma"
-description              : "An amazing website."
+description              : "Vipul Sharma's Blog"
 url                      : # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : "vipul-sharma20/blog"
@@ -43,7 +43,7 @@ include                  : ["_pages", "_portfolio", "_includes", "_random", "_jo
 author:
   name: "Vipul Sharma"
   avatar: "/assets/images/me.jpg"
-  bio: "Engineer at Vernacular.ai" # Note: Markdown is allowed
+  bio: "Engineer at Skit" # Note: Markdown is allowed
   location: "India"
   links:
     - label: "GitHub"

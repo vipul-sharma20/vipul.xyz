@@ -5,6 +5,6 @@ permalink: /about/
 author_profile: true
 ---
 
-Engineer at [Vernacular.ai][0]
+Engineer at [Skit][0] (previously Vernacular.ai)
 
-[0]: https://vernacular.ai
+[0]: https://skit.ai

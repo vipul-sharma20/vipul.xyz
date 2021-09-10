@@ -16,7 +16,7 @@ $global-transition : none;
 }
 
 html {
-    background-color: #ffffff;
+    background-color: #f1f1f1;
     // background-image: url("/assets/images/background.png");
 }
 
@@ -52,7 +52,7 @@ h2, h3, h4, h5, h6, .toc, .nav__title {
 }
 
 .archive__subtitle {
-    color: #000
+    color: #181818
 }
 
 .sidebar p, .sidebar li {
@@ -64,15 +64,15 @@ h2, h3, h4, h5, h6, .toc, .nav__title {
 }
 
 .archive__item a:visited {
-    color: #000;
+    color: #181818;
 }
 
 .greedy-nav {
-    background: #FFF;
+    background: #f1f1f1;
 }
 
 .greedy-nav .visible-links a:before {
-    background: #000;
+    background: #181818;
 }
 
 .masthead {
@@ -80,11 +80,11 @@ h2, h3, h4, h5, h6, .toc, .nav__title {
 }
 
 .toc .nav__title {
-    background: #000;
+    background: #181818;
 }
 
 .page__footer {
-    background: #000;
+    background: #181818;
 }
 
 .page__content {
@@ -96,15 +96,15 @@ h2, h3, h4, h5, h6, .toc, .nav__title {
 }
 
 .social-icons .fa-instagram, .social-icons .fa-linkedin, .social-icons .fa-twitter, .social-icons .fa-twitter-square {
-    color: #000;
+    color: #181818;
 }
 
 .search__toggle {
-    color: #000;
+    color: #181818;
 }
 
 .pagination li a.current, .pagination li a.current.disabled {
-    background: #393e46;
+    background: #e6e6e6;
 }
 
 .grid__item .archive__item-excerpt {

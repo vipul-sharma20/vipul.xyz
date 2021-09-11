@@ -3,9 +3,9 @@ main:
     url: /
   - title: "Scribbles"
     url: /scribbles/
-  - title: "Music"
-    url: /music/
   - title: "Journal"
     url: /journal/
+  - title: "Music"
+    url: /music/
   - title: "About"
     url: /about/

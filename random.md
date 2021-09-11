@@ -3,7 +3,6 @@ layout: single
 title: "Scribbles"
 collection: random
 permalink: /scribbles/
-author_profile: true
 ---
 
 Random scribbles, anything not so refined stuff I want to write and share.

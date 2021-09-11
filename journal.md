@@ -3,7 +3,6 @@ layout: single
 title: "Journal"
 collection: journal
 permalink: /journal/
-author_profile: true
 ---
 
 My public work journal.

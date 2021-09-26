@@ -46,9 +46,6 @@ author:
   bio: "Engineer at Skit" # Note: Markdown is allowed
   location: "India"
   links:
-    - label: "Email"
-      icon: "fas fa-fw fa-envelope-square"
-      url: "mailto:vipul.sharma20@gmail.com"
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
       url: "https://github.com/vipul-sharma20"

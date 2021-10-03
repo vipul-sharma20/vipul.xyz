@@ -5,7 +5,7 @@ collection: journal
 permalink: /journal/
 ---
 
-My public work journal.
+My public journal. I post here every week.
 
 ---
 

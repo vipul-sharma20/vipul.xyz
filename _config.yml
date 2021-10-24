@@ -15,7 +15,6 @@ minimal_mistakes_skin: "air"
 
 # theme: minima
 plugins:
-  - jekyll-feed
   - jekyll-include-cache
   - jekyll-paginate
 

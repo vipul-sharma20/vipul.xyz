@@ -34,7 +34,7 @@ manufactured in.
 
 *Note: Single click on legends to toggle categories and double click to isolate categories*
 
-<iframe id="plotly-custom" width="1000" height="700" frameborder="0" scrolling="yes" src="//plotly.com/~vipul/108.embed"></iframe>
+<iframe id="plotly-custom" width="1000" height="700" frameborder="0" scrolling="yes" src="//plotly.com/~vipul/106.embed"></iframe>
 
 
 ## Where I got these products from?

@@ -202,3 +202,22 @@ div.highlighter-rouge {
 }
 }
 
+/* Post tags */
+.tag {
+    margin: 0 2px;
+    padding: 2px 8px;
+    color: #181818;
+    background: #d3d3d3;
+    font-size: 80%;
+    font-family: 'Alegreya Sans';
+    text-transform: lowercase;
+    text-decoration: none !important;
+    font-size: 0.6em !important;
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.tag a:hover {
+    color: #000;
+}

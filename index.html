@@ -16,6 +16,11 @@ layout: single
         {% if publish_year > '2018' %}
             <p class="archive__item-excerpt" itemprop="description">{{ item.excerpt }}</p>
         {% endif %}
+        <div class="tag-container">
+            {% for tag in item.tags %}
+                <a href="{{ tag.url }}/tags/{{ tag }}/" class="tag">{{ tag }}</a>
+            {% endfor %}
+        </div>
         </article>
     </div>
     {% endfor %}

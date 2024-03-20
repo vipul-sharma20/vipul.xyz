@@ -168,6 +168,13 @@ div.highlighter-rouge {
     }
 }
 
+
+.site-logo {
+    border: solid 0.3px;
+    padding: 0.4em;
+    box-shadow: 3px 3px;
+}
+
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
 .site-logo img {

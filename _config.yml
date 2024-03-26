@@ -8,7 +8,7 @@ twitter_username: vipul_sharma
 github_username: vipul-sharma20
 
 remote_theme: "mmistakes/minimal-mistakes"
-# theme: minimal-mistakes-jekyll
+theme: minimal-mistakes-jekyll
 
 # Build settings
 minimal_mistakes_skin: "air"

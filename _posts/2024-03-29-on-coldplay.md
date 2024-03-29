@@ -90,7 +90,12 @@ once in my lifetime:
 3. [**Red Hot Chilli Peppers**][rhcp]: One of the reason for me to buy a
    [strat][strat] was John Fruciante (their guitarist), who in turn was heavily
    inspired by Jimi Hendrix, another strat player (with insane set up).
-4. [~~**Greenday**~~][greenday]: Singapore, 2022.
+4. [**Linkin Park**][linkin-park]: This is the first rock band I ever remember
+   listening (like a lot 90s kids in India). I don't remember how exactly I got
+   the songs transferred to my computer but I do remember that I got *In the
+   end*, *Numb* and *Crawling* on my computer and loved them so much on my
+   baseless speakers. 
+5. [~~**Greenday**~~][greenday]: Singapore, 2022.
 
 Most of my music preference is 70s & 80s rock music. Unfortunately, I cannot
 watch them live now so as much as I would've wanted to listen to the classics,
@@ -114,3 +119,4 @@ India independently.
 [foo-fighters]: https://en.wikipedia.org/wiki/Foo_Fighters
 [rhcp]: https://en.wikipedia.org/wiki/Red_Hot_Chili_Peppers
 [strat]: https://en.wikipedia.org/wiki/Fender_Stratocaster
+[linkin-park]: https://en.wikipedia.org/wiki/Linkin_Park

@@ -20,6 +20,12 @@ Random scribbles, anything not so refined stuff I want to write and share.
     </h2>
     </article>
     <p class="post_date"><i class="fa fa-calendar-alt fa-w-14 fa-fw" aria-hidden="true"></i> {{ item.date | date: "%b %d, %Y" }}</p>
+    <div class="tag-container">
+        {% for tag in item.tags %}
+            <a href="{{ tag.url }}/tags/{{ tag }}/" class="tag">{{ tag }}</a>
+        {% endfor %}
+    </div>
 </div>
 {% endfor %}
 </div>
+

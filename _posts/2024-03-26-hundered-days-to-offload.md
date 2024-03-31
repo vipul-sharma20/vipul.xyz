@@ -3,7 +3,7 @@ layout: single
 title:  "100DaysToOffload"
 excerpt: "I'll write 100 posts in 2024"
 date:   2024-03-26 01:55:12 +0530
-permalink: "/2023/07/100-days-to-offload"
+permalink: "/2024/03/100-days-to-offload"
 author_profile: false
 tags: [100DaysToOffload]
 type: post

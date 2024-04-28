@@ -4,6 +4,7 @@ title:  "Moving from Vimscript to Lua"
 excerpt: ""
 date:   2022-01-16 00:30:12 +0530
 permalink: "/2022/01/vimscript-to-lua"
+tags: [vim, neovim, productivity]
 author_profile: false
 ---
 

@@ -5,7 +5,8 @@ layout: single
 <div class="posts__main">
    <!-- <h3 class="archive__subtitle">Recent Posts</h3> -->
 
-   {% for item in paginator.posts %}
+   {% for item in site.posts %}
+   {% unless item.tags contains 'scribbles' %}
     <div class="list__item">
       <article class="archive__item" itemscope="" itemtype="https://schema.org/CreativeWork">
         <h2 class="archive__item-title" itemprop="headline">
@@ -23,19 +24,7 @@ layout: single
         </div>
         </article>
     </div>
+    {% endunless %}
     {% endfor %}
-    <nav class="pagination">
-  <ul>
-      {% if paginator.previous_page %}
-      <li><a href="{{ paginator.previous_page_path | relative_url }}">Previous</a></li>
-      {% endif %}
-        {% if paginator.next_page %}
-
-        <li><a href="{{ paginator.next_page_path }}" class="next">Next</a></li>
-      {% endif %}
-  </ul>
-</nav>
-
 </div>
-
 

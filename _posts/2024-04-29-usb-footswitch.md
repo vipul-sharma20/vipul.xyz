@@ -4,7 +4,7 @@ title: "USB Footswitch"
 permalink: "/2024/04/usb-footswitch"
 excerpt: ""
 author_profile: false
-tags: [100DaysToOffload, productivity, footswitch]
+tags: [100daystooffload, productivity, footswitch]
 date: 2024-03-29T00:27:00+00:00
 type: post
 ---

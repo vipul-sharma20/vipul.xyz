@@ -77,9 +77,6 @@ collections:
   portfolio:
     output: true
     permalink: /:collection/:path/
-  random:
-    output: true
-    permalink: /:collection/:path/
   journal:
     output: true
     permalink: /:collection/:path/

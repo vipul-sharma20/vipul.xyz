@@ -7,6 +7,7 @@ subtitle: "You're going to love this."
 toc: true
 toc_sticky: true
 toc_label: "Contents"
+tags: [MRCP, SIP]
 permalink: "/2020/06/mrcp-server-load-balancer.html"
 ---
 

@@ -4,6 +4,7 @@ title:  "made-in-x (Part 2): Where in the world these products I own are manufac
 excerpt: "Revisit on the analysis on where the products I own are manufactured in"
 date:   2021-11-28 14:30:12 +0530
 permalink: "/2021/11/made-in-x-part2"
+tags: [made-in-x]
 author_profile: false
 ---
 

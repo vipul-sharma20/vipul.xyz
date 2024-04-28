@@ -1,10 +1,12 @@
 ---
+layout: single
 title: "Fixing this blog"
-permalink: "/random/fixing-this-blog/"
 excerpt: ""
+permalink: "/random/fixing-this-blog/"
 author_profile: true
-tags: [100daystooffload, scribbles]
+tags: [100daystooffload]
 date: 2024-03-27T01:00:00+00:00
+type: post
 ---
 
 After posting about taking up the [100DaysToOffload][100DaysToOffload] I want

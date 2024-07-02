@@ -20,8 +20,13 @@ author_profile: true
         <a href="{{ item.url}}" rel="permalink">{{ item.title }}
 </a>
     </h2>
-    <p class="archive__item-excerpt" itemprop="description">{{ item.excerpt }}
-</p>
+    <p class="archive__item-excerpt" itemprop="description">{{ item.excerpt }}</p>
+    <p class="portfolio_date"><i class="fa fa-calendar-alt fa-w-14 fa-fw" aria-hidden="true"></i> {{ item.date | date: "%b %d, %Y" }}</p>
+    <div class="tag-container">
+        {% for tag in item.tags %}
+            <a href="{{ tag.url }}/tags/{{ tag }}/" class="tag">{{ tag }}</a>
+        {% endfor %}
+    </div>
   </article>
 </div>
 {% endfor %}

@@ -22,8 +22,15 @@ author_profile: false
     {% unless page.header.overlay_color or page.header.overlay_image %}
       <h1 id="page-title" class="page__title">{{ page.title }}</h1>
     {% endunless %}
-    {% for post in page.posts %}
-      {% include archive-single.html %}
+
+    <!-- Merge and sort posts and portfolio items by date -->
+    {% assign combined_items = page.posts | concat: site.portfolio %}
+    {% assign sorted_items = combined_items | where_exp:"item", "item.tags contains page.title" | sort: 'date' | reverse %}
+
+    <!-- Display merged and sorted items -->
+    {% for post in sorted_items %}
+        {% include archive-single.html %}
     {% endfor %}
   </div>
 </div>
+

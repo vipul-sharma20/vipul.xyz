@@ -24,7 +24,7 @@ author_profile: false
     {% endunless %}
 
     <!-- Merge and sort posts and portfolio items by date -->
-    {% assign combined_items = page.posts | concat: site.portfolio %}
+    {% assign combined_items = page.posts | concat: site.portfolio | concat: site.printing %}
     {% assign sorted_items = combined_items | where_exp:"item", "item.tags contains page.title" | sort: 'date' | reverse %}
 
     <!-- Display merged and sorted items -->

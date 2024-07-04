@@ -1,7 +1,7 @@
 ---
 order: 1
 title: "Minecraft Sword"
-date: 2024-06-03T20:27:00+00:00
+date: 2024-07-03T20:27:00+00:00
 permalink: "/threedee/minecraft-sword"
 excerpt: "My first 3D Print from February 2023"
 header:

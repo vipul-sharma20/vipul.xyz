@@ -2,7 +2,7 @@
 title: "GitHub Skyline 2022"
 date: 2024-07-04T20:27:00+00:00
 permalink: "/threedee/github-skyline-2022"
-excerpt: "My first 3D Print from February 2023"
+excerpt: "I printed my 2022 GitHub skyline"
 header:
   teaser: https://i.imgur.com/hw18Clj.jpeg
 tags: ["3dprinting", "100daystooffload"]

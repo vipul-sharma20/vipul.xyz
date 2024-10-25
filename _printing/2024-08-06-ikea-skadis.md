@@ -14,3 +14,14 @@ I 3D printed [Ikea Skådis Pegboard][skadis]. The print bed of my printer is
 {% include image.html url="https://i.imgur.com/XDTm6gO.jpeg" alt="skadis" size="500" caption="10x11 column pegboard. I'll be connecting a few of these together" %}
 
 [skadis]: https://www.ikea.com/in/en/p/skadis-pegboard-white-30320806/
+
+### Timelapse
+
+<div style="text-align: center; margin: 20px 0;">
+  <video width="560" height="315" controls>
+    <source src="https://i.imgur.com/DKtfJ73.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+  <p style="text-align:center;padding:5px;font-size:0.7em;margin-top:5px">Timelapse of the clamp print</p>
+</div>
+

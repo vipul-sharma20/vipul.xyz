@@ -231,7 +231,7 @@ the build.
 | Key Sockets      | ₹500       | $6.00      |<img src="https://i.imgur.com/jBs0E3F.jpeg" alt="{{ include.alt }}" style="width:200px;border:1px solid #000"/>       |
 | 1N4148W diodes   | ₹100       | $1.20      | <img src="https://i.imgur.com/zFNHsR2.jpeg" alt="{{ include.alt }}" style="width:200px;border:1px solid #000"/>      |
 | Key Switch       | ₹1900      | $22.80     | <img src="https://i.imgur.com/BUiqlJ6.jpeg" alt="{{ include.alt }}" style="width:200px;border:1px solid #000"/> |
-| Key Caps         | ₹2500      | $30.00     |<img src="https://i.imgur.com/NWXOVjR.jpeg" alt="{{ include.alt }}" style="width:200px;border:1px solid #000"/> |
+| Keycaps          | ₹2500      | $30.00     |<img src="https://i.imgur.com/NWXOVjR.jpeg" alt="{{ include.alt }}" style="width:200px;border:1px solid #000"/> |
 | TRRS Jack        | ₹100       | $1.20      | see Arduino image |
 | TRRS Cable       | ₹300       | $3.60      | see connecting cable in the [final build](#10-final-build) |
 | Tact Switch      | ₹20        | $0.24      | see Arduino image (Reset Switch) |

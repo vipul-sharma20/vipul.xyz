@@ -193,6 +193,8 @@ I didn’t spend much time choosing the keycaps. I just ordered the first
 ortholinear profile keycaps I came across since there weren’t many options
 available anyway. They look clean and simple, which works for me.
 
+{% include image.html url="https://i.imgur.com/NWXOVjR.jpeg" alt="lily58" size="500" caption="Left half with keycaps" %}
+
 ### 9. The case
 
 I came across a few designs on [Maker World][maker-world], but the widest

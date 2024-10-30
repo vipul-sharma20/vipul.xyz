@@ -10,6 +10,7 @@ type: post
 toc: true
 toc_sticky: false
 toc_label: "Contents"
+image: "https://i.imgur.com/tbCRgtI.jpeg"
 ---
 
 ## Introduction

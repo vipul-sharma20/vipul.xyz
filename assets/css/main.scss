@@ -25,28 +25,25 @@ body {
     font-family: 'Alegreya Sans';
 }
 
+th, td {
+  border: 1px solid black;
+}
+
+.notice--info, .notice {
+    font-size: 0.8em !important;
+    font-family: 'Alegreya Sans';
+}
+
 .sidebar {
     opacity: 1;
 }
 
-h1 {
-    font-family: 'Gentium Basic', serif;
-}
-
-h2, h3, h4, h5, h6, .nav__title {
+h1, h2, h3, h4, h5, h6, .nav__title, .archive__item-title, .archive__subtitle, .masthead__inner-wrap, .sidebar .author__name {
     font-family: 'Gentium Basic', serif;
 }
 
 .archive {
     margin-top: 0;
-}
-
-.archive__item-title {
-    font-family: 'Gentium Basic', serif;
-}
-
-.archive__subtitle, .masthead__inner-wrap, .sidebar .author__name {
-    font-family: 'Gentium Basic', serif;
 }
 
 .archive__subtitle {
@@ -171,14 +168,38 @@ div.highlighter-rouge {
     font-size: 0.65em;
 }
 
+.caption-wrapper {
+  position: relative;
+}
+
+/* Side caption */
+.caption-wrapper .caption {
+    font-style: italic;
+    font-size: medium;
+    color: dimgrey;
+    border: solid 0.2px;
+    padding: 0.6em;
+    box-shadow: 2px 2px;
+    position: absolute;
+    left: 104%;
+    width: 300px;
+    margin: 0;
+    font-size: 14px;
+}
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
     #plotly-custom {
         margin-left: -40px;
     }
+    .caption-wrapper .caption {
+        position: static; /* Moves it below the content */
+        width: 100%; /* Full width for readability */
+        margin-top: 1em; /* Add space between content and caption */
+        left: 0; /* Reset any left positioning */
+        box-shadow: none; /* Optional: Remove shadow for a cleaner mobile look */
+    }
 }
-
 
 .site-logo {
     border: solid 0.3px;
@@ -238,4 +259,11 @@ div.highlighter-rouge {
 
 .tag a:hover {
     color: #000;
+}
+
+.caption img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
 }

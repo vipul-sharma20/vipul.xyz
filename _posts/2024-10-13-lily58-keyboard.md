@@ -32,7 +32,7 @@ missed ordering some essential components—build plates, a case, and a TRRS
 jack.
 
 <div style="text-align: center">
-<video width="450" height="350" controls>
+<video controls>
   <source src="/assets/videos/diode-solder.mp4" type="video/mp4">
 </video>
 <p style="text-align:center;padding:5px;font-size:0.7em;margin-top:5px;margin-left:25px;margin-right:15px">
@@ -63,7 +63,7 @@ This costed me around 6k INR (around 70 USD) for 6 plates. I can make 3
 keyboards using these. I could've reduced the cost by half here by using the
 default green solder mask. The black one costed me more.
 
-{% include image.html url="https://raw.githubusercontent.com/vipul-sharma20/keebs/refs/heads/main/lily58/PCB/pcb.png" alt="pcb" size="400" caption="Render of the gerber" %}
+{% include image.html url="https://raw.githubusercontent.com/vipul-sharma20/keebs/refs/heads/main/lily58/PCB/pcb.png" alt="pcb" size="500" caption="Render of the gerber" %}
 
 You can see the printed PCB through some other images later in the post.
 
@@ -142,7 +142,7 @@ switches, I used Cherry MX brown switches. I wanted to try some linear switches
 but I already had these with me.
 
 <div style="text-align: center">
-<video width="450" height="350" controls>
+<video controls>
   <source src="https://i.imgur.com/jtvo7nH.mp4" type="video/mp4">
 </video>
 <p style="text-align:center;padding:5px;font-size:0.7em;margin-top:5px;margin-left:25px;margin-right:15px">
@@ -201,7 +201,7 @@ available with the [Manta58][manta58]. I decided to print one of the
 low-profile designs on my 3D printer, and here’s a timelapse of the process.
 
 <div style="text-align: center">
-<video width="450" height="350" controls>
+<video controls>
   <source src="https://i.imgur.com/rO64wVa.mp4" type="video/mp4">
 </video>
 <p style="text-align:center;padding:5px;font-size:0.7em;margin-top:5px;margin-left:25px;margin-right:15px">

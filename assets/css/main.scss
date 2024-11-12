@@ -192,12 +192,24 @@ div.highlighter-rouge {
     font-size: 14px;
 }
 
+.caption-wrapper .caption-borderless {
+    font-style: italic;
+    font-size: medium;
+    color: dimgrey;
+    padding: 0.6em;
+    position: absolute;
+    left: 104%;
+    width: 300px;
+    margin: 0;
+    font-size: 14px;
+}
+
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
     #plotly-custom {
         margin-left: -40px;
     }
-    .caption-wrapper .caption {
+    .caption-wrapper .caption, .caption-wrapper .caption-borderless {
         position: static; /* Moves it below the content */
         width: 100%; /* Full width for readability */
         margin-top: 1em; /* Add space between content and caption */

@@ -43,7 +43,7 @@ author:
   name: "Vipul Sharma"
   avatar: "/assets/images/me.jpg"
   bio: "Engineer at Skit.ai" # Note: Markdown is allowed
-  location: "India"
+  # location: "India"
   links:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"

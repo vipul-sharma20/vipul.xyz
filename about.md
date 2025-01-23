@@ -38,8 +38,13 @@ I'll share whatever feels worth writing about, whenever motivation strikes.
 
 E-mail: *vipul.sharma20 [AT] gmail [DOT] com*
 
+If you have received a 3D printed business card like thing from me, please
+check [this][business-card] post for the assembly guide
+{: .notice--info}
+
 [skit-ai]: https://tech.skit.ai/
 [github]: https://github.com/vipul-sharma20/
 [self-hosting]: https://vipul.xyz/tags/self-hosting/
 [threedee]: https://vipul.xyz/tags/3dprinting/
 [keyboard]: https://vipul.xyz/tags/keyboard/
+[business-card]: https://vipul.xyz/2025/01/business-card-assembly/

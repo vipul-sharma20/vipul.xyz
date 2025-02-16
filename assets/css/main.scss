@@ -272,10 +272,16 @@ div.highlighter-rouge {
     display: inline-block;
     cursor: pointer;
     border-radius: 4px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tag:hover {
+    transform: scale(1); /* Slightly enlarges the button */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Adds shadow for depth */
 }
 
 .tag a:hover {
-    color: #000;
+    color: #000; /* Ensures link text also changes color on hover */
 }
 
 .caption img {
@@ -283,4 +289,8 @@ div.highlighter-rouge {
     margin-left: auto;
     margin-right: auto;
     width: 50%;
+}
+
+.post-tag-container {
+    margin-bottom: 15px;
 }

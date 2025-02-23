@@ -4,7 +4,7 @@ title: "Trying out new note taking setup with Obsidian & Vimwiki"
 permalink: "/2025/02/note-taking-obsidian/"
 excerpt: "Exploring my new note-taking workflow using Obsidian and Vimwiki for better organization and productivity"
 author_profile: false
-tags: [scribbles, self-hosting, llm, note-taking] 
+tags: [scribbles, self-hosting, llm, note-taking, productivity, vimwiki] 
 date: 2025-02-23T14:42:15+00:00
 type: post
 ---

@@ -5,7 +5,7 @@ excerpt: "I have followed the same workflow for note taking for the past 3 years
 date:   2022-04-17 00:30:12 +0530
 permalink: "/2022/04/note-taking"
 author_profile: false
-tags: [neovim, vim, vimwiki, productivity]
+tags: [neovim, vim, vimwiki, productivity, note-taking]
 type: post
 ---
 

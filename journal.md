@@ -7,6 +7,11 @@ permalink: /journal/
 
 My public journal. I post here every week.
 
+I have stopped, weekly journals and started writing small, rough notes / posts
+about my day-to-day work, learnings etc. at [https://til.vipul.xyz][til]. This
+should act as a journal or a way to catchup on the latest stuff I am doing.
+{:.notice--info}
+
 ---
 
 {% assign sorted = (site.journal | sort: 'date') | reverse %}
@@ -22,3 +27,5 @@ My public journal. I post here every week.
 </div>
 {% endfor %}
 </div>
+
+[til]: https://til.vipul.xyz

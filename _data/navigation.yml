@@ -11,3 +11,5 @@ main:
     url: /threedee/
   - title: "About"
     url: /about/
+  - title: "TIL"
+    url: "https://til.vipul.xyz"

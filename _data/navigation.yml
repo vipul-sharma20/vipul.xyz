@@ -9,7 +9,7 @@ main:
     url: /music/
   - title: "3D Printing"
     url: /threedee/
-  - title: "About"
-    url: /about/
   - title: "TIL"
     url: "https://til.vipul.xyz"
+  - title: "About"
+    url: /about/

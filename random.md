@@ -8,7 +8,7 @@ Random scribbles, anything not so refined stuff I want to write and share.
 
 ---
 
-<div class="posts__main">
+<div class="posts__scribbles">
    <!-- <h3 class="archive__subtitle">Recent Posts</h3> -->
 
    {% for item in site.posts %}

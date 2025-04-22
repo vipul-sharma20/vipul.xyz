@@ -4,7 +4,7 @@ title: Self-hosting Downtime
 draft: false
 date: 2025-04-05
 excerpt: "My Raspberry Pi 5 went offline due to an incorrect fstab configuration, causing a multi-day downtime."
-toc: true
+toc: false
 tags:
   - self-hosted
   - debugging-story
@@ -50,10 +50,10 @@ the tools came back up automatically.
 
 ![uptime-plot](https://i.imgur.com/IVpRgSP.png)
 
-> [!NOTE]
-> I couldn't get the time for 3 days to look at the problems properly so the
-> total downtime was huge. Until then, I deployed some things on my local
-> machine or other Raspberry Pi / cloud server
+I couldn't get the time for 3 days to look at the problems properly so the
+total downtime was huge. Until then, I deployed some things on my local machine
+or other Raspberry Pi / cloud server
+{:.notice--info}
 
 ## Learnings / Realizations
 

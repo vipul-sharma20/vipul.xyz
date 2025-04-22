@@ -169,3 +169,4 @@ tags:
         except Exception as e:
             await event_emitter.emit_status(f"❌ Error: {e}", True, True)
             return json.dumps({"status": "error", "message": str(e)}, indent=2)
+```

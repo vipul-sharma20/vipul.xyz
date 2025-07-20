@@ -6,6 +6,7 @@ excerpt: ""
 author_profile: true
 tags: [100daystooffload, coldplay]
 date: 2024-03-29T00:27:00+00:00
+updated_at: 2024-04-29T00:27:00+00:00
 type: post
 ---
 
@@ -83,6 +84,13 @@ I have / had a few bigger bands in my list that I really wish to watch live
 once in my lifetime:
 
 1. [~~**Coldplay**~~][coldplay]: Bangkok, 2024.
+
+<div class="caption-wrapper">
+    <p class="caption-borderless">
+    <i>Update: Planned to watch live on 4th October, 2025 in Singapore</i>
+    </p>
+</div>
+
 2. [**Foo Fighters**][foo-fighters]: I really wish to watch them live after
    Coldplay. I stopped listening to a lot of recent Coldplay albums/songs as it
    was not the kind of music that I would enjoy. But, Foo Fighters is the one
@@ -90,7 +98,14 @@ once in my lifetime:
 3. [**Red Hot Chilli Peppers**][rhcp]: One of the reason for me to buy a
    [strat][strat] was John Fruciante (their guitarist), who in turn was heavily
    inspired by Jimi Hendrix, another strat player (with insane set up).
-4. [**Linkin Park**][linkin-park]: This is the first rock band I ever remember
+
+<div class="caption-wrapper">
+    <p class="caption-borderless">
+    <i>Update: Watched them live on 28th June, 2025 at Wembley, London</i>
+    </p>
+</div>
+
+4. [~~**Linkin Park**~~][linkin-park]: This is the first rock band I ever remember
    listening (like a lot 90s kids in India). I don't remember how exactly I got
    the songs transferred to my computer but I do remember that I got *In the
    end*, *Numb* and *Crawling* on my computer and loved them so much on my

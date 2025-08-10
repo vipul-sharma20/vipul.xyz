@@ -1,0 +1,129 @@
+---
+layout: default
+---
+
+<link rel="stylesheet" href="{{ '/assets/css/gallery.css' | relative_url }}">
+
+{% if page.header.overlay_color or page.header.overlay_image or page.header.image %}
+  {% include page__hero.html %}
+{% elsif page.header.video.id and page.header.video.provider %}
+  {% include page__hero_video.html %}
+{% endif %}
+
+{% if page.url != "/" and site.breadcrumbs %}
+  {% unless paginator %}
+    {% include breadcrumbs.html %}
+  {% endunless %}
+{% endif %}
+
+<div id="main" role="main">
+  <article class="page photo-detail-page photo-detail-full-width" itemscope itemtype="https://schema.org/CreativeWork">
+    {% if page.title %}<meta itemprop="headline" content="{{ page.title | markdownify | strip_html | strip_newlines | escape_once }}">{% endif %}
+    {% if page.excerpt %}<meta itemprop="description" content="{{ page.excerpt | markdownify | strip_html | strip_newlines | escape_once }}">{% endif %}
+    {% if page.date %}<meta itemprop="datePublished" content="{{ page.date | date_to_xmlschema }}">{% endif %}
+
+    <div class="page__inner-wrap">
+      <!-- Back to Gallery Link -->
+      <nav class="photo-navigation">
+        <a href="{{ '/gallery/' | relative_url }}" class="back-to-gallery">← Back to Gallery</a>
+      </nav>
+
+      <div class="photo-detail-content">
+        <!-- Photo Display -->
+        <div class="photo-display">
+          <div class="photo-container">
+            <img src="{{ page.image | relative_url }}" 
+                 alt="{{ page.title }}" 
+                 class="photo-main-image">
+            {% if page.excerpt %}
+            <div class="photo-caption">
+              {{ page.excerpt }}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Photo Content -->
+        <div class="photo-content">
+          <header class="photo-header">
+            {% if page.title %}<h1 class="photo-title" itemprop="headline">{{ page.title | markdownify | remove: "<p>" | remove: "</p>" }}</h1>{% endif %}
+            
+            {% if page.date %}
+              <p class="photo-date">
+                <i class="far fa-calendar" aria-hidden="true"></i> 
+                <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %d, %Y" }}</time>
+              </p>
+            {% endif %}
+
+            {% if page.tags %}
+              <div class="photo-tags">
+                {% for tag in page.tags %}
+                  <a href="{{ '/gallery/#' | relative_url }}{{ tag | slugify }}" class="photo-tag">{{ tag }}</a>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </header>
+
+          <section class="photo-story photo-story-sidebar" itemprop="text">
+            {% assign content_paragraphs = content | split: "</p>" %}
+            {% for paragraph in content_paragraphs limit: 2 %}
+              {{ paragraph }}{% unless forloop.last %}</p>{% endunless %}
+            {% endfor %}
+          </section>
+        </div>
+      </div>
+
+      <!-- Extended Content (remaining content below) -->
+      {% assign remaining_paragraphs = content_paragraphs.size | minus: 2 %}
+      {% if remaining_paragraphs > 0 %}
+      <div class="photo-content-extended">
+        <section class="photo-story" itemprop="text">
+          {% for paragraph in content_paragraphs offset: 2 %}
+            {{ paragraph }}{% unless forloop.last %}</p>{% endunless %}
+          {% endfor %}
+        </section>
+      </div>
+      {% endif %}
+
+      <!-- Photo Navigation -->
+      <nav class="photo-pagination">
+        {% assign photos = site.photos | sort: 'date' | reverse %}
+        {% for photo in photos %}
+          {% if photo.url == page.url %}
+            {% assign current_index = forloop.index0 %}
+            {% break %}
+          {% endif %}
+        {% endfor %}
+
+        <div class="pagination-links">
+          {% if current_index > 0 %}
+            {% assign prev_photo = photos[current_index-1] %}
+            <a href="{{ prev_photo.url | relative_url }}" class="pagination-link prev-photo">
+              <div class="pagination-thumbnail">
+                <img src="{{ prev_photo.image | relative_url }}" alt="{{ prev_photo.title }}">
+              </div>
+              <div class="pagination-text">
+                <span class="pagination-label">Previous</span>
+                <span class="pagination-title">{{ prev_photo.title }}</span>
+              </div>
+            </a>
+          {% endif %}
+
+          {% assign next_index = current_index | plus: 1 %}
+          {% if next_index < photos.size %}
+            {% assign next_photo = photos[next_index] %}
+            <a href="{{ next_photo.url | relative_url }}" class="pagination-link next-photo">
+              <div class="pagination-text">
+                <span class="pagination-label">Next</span>
+                <span class="pagination-title">{{ next_photo.title }}</span>
+              </div>
+              <div class="pagination-thumbnail">
+                <img src="{{ next_photo.image | relative_url }}" alt="{{ next_photo.title }}">
+              </div>
+            </a>
+          {% endif %}
+        </div>
+      </nav>
+    </div>
+  </article>
+</div>

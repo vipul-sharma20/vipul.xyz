@@ -37,7 +37,7 @@ search                   : true
 
 paginate: 5
 paginate_path: /page:num/
-include                  : ["_pages", "_portfolio", "_includes", "_journal", "_printing"]
+include                  : ["_pages", "_portfolio", "_includes", "_journal", "_printing", "_photos"]
 
 author:
   name: "Vipul Sharma"
@@ -83,6 +83,9 @@ collections:
   printing:
     output: true
     permalink: /:collection/:path/
+  photos:
+    output: true
+    permalink: /:collection/:path/
 
 defaults:
   # _posts
@@ -117,6 +120,15 @@ defaults:
     values:
       layout: single
       author_profile: true
+      share: true
+
+  # _photos
+  - scope:
+      path: ""
+      type: photos
+    values:
+      layout: photo-detail
+      author_profile: false
       share: true
 
 # Sass/SCSS

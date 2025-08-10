@@ -7,6 +7,8 @@ main:
     url: /journal/
   - title: "Music"
     url: /music/
+  - title: "Gallery"
+    url: /gallery/
   - title: "3D Printing"
     url: /threedee/
   - title: "About"

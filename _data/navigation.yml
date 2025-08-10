@@ -9,7 +9,7 @@ main:
     url: /music/
   - title: "3D Printing"
     url: /threedee/
-  - title: "TIL"
-    url: "https://til.vipul.xyz"
   - title: "About"
     url: /about/
+  - title: '<i class="fas fa-rss" aria-hidden="true"></i>'
+    url: /feed.xml

@@ -597,8 +597,9 @@
   position: relative;
   overflow: hidden;
   background: #f8f8f8;
-  border: 2px solid #e5e5e5;
+  border: 2px solid #888;
   aspect-ratio: 4/3;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease-in-out;
   
   img {
@@ -646,16 +647,15 @@
   background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
   color: #fff;
   padding: 1.5em 1em 1em 1em;
-  transform: translateY(100%);
-  transition: transform 0.3s ease-in-out;
 }
 
 /* Album overlay - no special handling needed now */
 
 
-.photo-thumbnail:hover .photo-overlay {
-  transform: translateY(0);
+.photo-thumbnail:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
+
 
 .photo-excerpt {
   margin: 0;

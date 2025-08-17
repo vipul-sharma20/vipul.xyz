@@ -1,0 +1,198 @@
+---
+layout: default
+---
+
+<link rel="stylesheet" href="{{ '/assets/css/gallery.css' | relative_url }}">
+
+{% if page.header.overlay_color or page.header.overlay_image or page.header.image %}
+  {% include page__hero.html %}
+{% elsif page.header.video.id and page.header.video.provider %}
+  {% include page__hero_video.html %}
+{% endif %}
+
+{% if page.url != "/" and site.breadcrumbs %}
+  {% unless paginator %}
+    {% include breadcrumbs.html %}
+  {% endunless %}
+{% endif %}
+
+<div id="main" role="main">
+  <article class="page album-detail-page gallery-full-width" itemscope itemtype="https://schema.org/CreativeWork">
+    {% if page.title %}<meta itemprop="headline" content="{{ page.title | markdownify | strip_html | strip_newlines | escape_once }}">{% endif %}
+    {% if page.excerpt %}<meta itemprop="description" content="{{ page.excerpt | markdownify | strip_html | strip_newlines | escape_once }}">{% endif %}
+
+    <div class="page__inner-wrap">
+      <!-- Album Header -->
+      <header class="album-detail-header">
+        <h1 class="album-detail-title">{{ page.title }}</h1>
+        {% if page.excerpt %}
+        <div class="album-excerpt">
+          {{ page.excerpt }}
+        </div>
+        {% endif %}
+        {% if page.date %}
+          <p class="album-date">
+            <i class="far fa-calendar" aria-hidden="true"></i> 
+            <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %d, %Y" }}</time>
+          </p>
+        {% endif %}
+        {% if page.location %}
+          <p class="album-location">
+            <i class="fas fa-map-marker-alt" aria-hidden="true"></i> 
+            {{ page.location }}
+          </p>
+        {% endif %}
+      </header>
+
+      <!-- Album Photo Gallery - Top Section -->
+      {% if page.photos %}
+      <section class="album-photos-section">
+        <div class="album-photos-grid">
+          {% for photo in page.photos %}
+            {% if photo.image %}
+              {% assign photo_path = photo.image %}
+              {% assign photo_caption = photo.caption %}
+            {% else %}
+              {% assign photo_path = photo %}
+              {% assign photo_caption = "Photo " | append: forloop.index | append: " of " | append: page.photos.size %}
+            {% endif %}
+            <div class="album-photo-item">
+              <div class="album-photo-container lightbox-trigger" 
+                   data-image="{{ photo_path | relative_url }}"
+                   data-title="{{ page.title }}"
+                   data-caption="{{ photo_caption }}">
+                <img src="{{ photo_path | relative_url }}" 
+                     alt="{{ page.title }} - Photo {{ forloop.index }}" 
+                     loading="lazy">
+                {% if photo_caption and photo.image %}
+                <div class="album-photo-caption">
+                  <p>{{ photo_caption }}</p>
+                </div>
+                {% endif %}
+                <div class="photo-zoom-indicator">
+                  <i class="fas fa-search-plus"></i>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        
+      </section>
+      {% endif %}
+
+      <!-- Album Story Content -->
+      <section class="album-story" itemprop="text">
+        {{ content }}
+      </section>
+
+      <!-- Album Meta Information -->
+      {% if page.tags %}
+      <section class="album-meta">
+        <div class="album-tags">
+          <h3>Tags</h3>
+          {% for tag in page.tags %}
+            <span class="album-tag">{{ tag }}</span>
+          {% endfor %}
+        </div>
+      </section>
+      {% endif %}
+    </div>
+  </article>
+</div>
+
+<!-- Lightbox -->
+<div id="lightbox" class="lightbox" style="display: none;">
+  <div class="lightbox-content">
+    <span class="lightbox-close">&times;</span>
+    <img class="lightbox-image" src="" alt="">
+    <div class="lightbox-nav">
+      <button class="lightbox-prev"><i class="fas fa-chevron-left"></i></button>
+      <button class="lightbox-next"><i class="fas fa-chevron-right"></i></button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImage = document.querySelector('.lightbox-image');
+  const lightboxClose = document.querySelector('.lightbox-close');
+  const lightboxPrev = document.querySelector('.lightbox-prev');
+  const lightboxNext = document.querySelector('.lightbox-next');
+  const lightboxTriggers = document.querySelectorAll('.lightbox-trigger');
+  
+  let currentImageIndex = 0;
+  let images = [];
+
+  // Collect all images
+  lightboxTriggers.forEach((trigger, index) => {
+    images.push({
+      src: trigger.dataset.image
+    });
+    
+    trigger.addEventListener('click', function() {
+      currentImageIndex = index;
+      openLightbox();
+    });
+  });
+
+  function openLightbox() {
+    const image = images[currentImageIndex];
+    lightboxImage.src = image.src;
+    lightbox.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    
+    // Update navigation buttons
+    lightboxPrev.style.display = currentImageIndex > 0 ? 'block' : 'none';
+    lightboxNext.style.display = currentImageIndex < images.length - 1 ? 'block' : 'none';
+  }
+
+  function closeLightbox() {
+    lightbox.style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+
+  function showPrevImage() {
+    if (currentImageIndex > 0) {
+      currentImageIndex--;
+      openLightbox();
+    }
+  }
+
+  function showNextImage() {
+    if (currentImageIndex < images.length - 1) {
+      currentImageIndex++;
+      openLightbox();
+    }
+  }
+
+  // Event listeners
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightboxPrev.addEventListener('click', showPrevImage);
+  lightboxNext.addEventListener('click', showNextImage);
+  
+  lightbox.addEventListener('click', function(e) {
+    if (e.target === lightbox) {
+      closeLightbox();
+    }
+  });
+
+  // Keyboard navigation
+  document.addEventListener('keydown', function(e) {
+    if (lightbox.style.display === 'flex') {
+      switch(e.key) {
+        case 'Escape':
+          closeLightbox();
+          break;
+        case 'ArrowLeft':
+          showPrevImage();
+          break;
+        case 'ArrowRight':
+          showNextImage();
+          break;
+      }
+    }
+  });
+});
+</script>
+

@@ -86,6 +86,9 @@ collections:
   photos:
     output: true
     permalink: /:collection/:path/
+  albums:
+    output: true
+    permalink: /gallery/:path/
 
 defaults:
   # _posts
@@ -128,6 +131,15 @@ defaults:
       type: photos
     values:
       layout: photo-detail
+      author_profile: false
+      share: true
+
+  # _albums
+  - scope:
+      path: ""
+      type: albums
+    values:
+      layout: album-detail
       author_profile: false
       share: true
 

@@ -34,7 +34,10 @@ layout: default
         <!-- Tag Filter Controls -->
         <div class="gallery-filter-controls">
           <div class="filter-tags">
-            {% assign all_tags = site.photos | map: "tags" | join: "," | split: "," | uniq | sort %}
+            {% comment %} Collect tags from both albums and photos {% endcomment %}
+            {% assign photo_tags = site.photos | map: "tags" | join: "," | split: "," %}
+            {% assign album_tags = site.albums | map: "tags" | join: "," | split: "," %}
+            {% assign all_tags = photo_tags | concat: album_tags | uniq | compact | sort %}
             {% for tag in all_tags %}
               {% unless tag == "" %}
                 <span class="tag-pill" data-filter="{{ tag }}">
@@ -45,43 +48,81 @@ layout: default
           </div>
         </div>
 
-        <!-- Photo Gallery Grid -->
+        <!-- Photo Gallery Grid - Albums + Individual Photos -->
         <div class="photo-gallery-grid">
-          {% assign photos_by_date = site.photos | sort: 'date' | reverse %}
+          {% comment %} Combine albums and individual photos, then sort by date {% endcomment %}
+          {% assign all_items = '' | split: '' %}
+          
+          {% comment %} Add albums to the array {% endcomment %}
+          {% for album in site.albums %}
+            {% assign all_items = all_items | push: album %}
+          {% endfor %}
+          
+          {% comment %} Add individual photos to the array {% endcomment %}
+          {% for photo in site.photos %}
+            {% assign all_items = all_items | push: photo %}
+          {% endfor %}
+          
+          {% comment %} Sort all items by date (newest first) {% endcomment %}
+          {% assign all_items_sorted = all_items | sort: 'date' | reverse %}
+          
           {% assign current_year = '' %}
           {% assign current_month = '' %}
           
-          {% for photo in photos_by_date %}
-            {% assign photo_year = photo.date | date: '%Y' %}
-            {% assign photo_month = photo.date | date: '%B %Y' %}
+          {% for item in all_items_sorted %}
+            {% assign item_year = item.date | date: '%Y' %}
+            {% assign item_month = item.date | date: '%B %Y' %}
             
-            {% if current_month != photo_month %}
+            {% if current_month != item_month %}
               {% unless current_month == '' %}
                 </div> <!-- Close previous month section -->
               {% endunless %}
               <div class="gallery-month-section">
-                <h3 class="gallery-month-divider">{{ photo_month }}</h3>
+                <h3 class="gallery-month-divider">{{ item_month }}</h3>
                 <div class="gallery-month-photos">
             {% endif %}
             
             <div class="photo-grid-item" 
-                 data-tags="{{ photo.tags | join: ' ' }}"
-                 data-date="{{ photo.date | date: '%Y-%m-%d' }}">
-              <a href="{{ photo.url | relative_url }}" class="photo-link">
+                 data-tags="{{ item.tags | join: ' ' }}"
+                 data-date="{{ item.date | date: '%Y-%m-%d' }}"
+                 data-type="{% if item.photos %}album{% else %}photo{% endif %}">
+              <a href="{{ item.url | relative_url }}" class="photo-link">
                 <div class="photo-thumbnail">
-                  <img src="{{ photo.image | relative_url }}" 
-                       alt="{{ photo.title }}" 
-                       loading="lazy">
-                  {% if photo.excerpt %}
-                  <div class="photo-overlay">
-                    <p class="photo-excerpt">{{ photo.excerpt }}</p>
-                  </div>
+                  {% if item.photos %}
+                    {% comment %} This is an album {% endcomment %}
+                    <div class="album-stack-indicator">
+                      <i class="fas fa-layer-group"></i>
+                    </div>
+                    {% if item.cover_image %}
+                      {% assign album_cover = item.cover_image %}
+                    {% else %}
+                      {% assign album_cover = item.photos.first.image %}
+                    {% endif %}
+                    <img src="{{ album_cover | relative_url }}" 
+                         alt="{{ item.title }}" 
+                         loading="lazy">
+                    <div class="photo-overlay">
+                      <h4 class="album-title">{{ item.title }}</h4>
+                      {% if item.excerpt %}
+                        <p class="photo-excerpt">{{ item.excerpt }}</p>
+                      {% endif %}
+                    </div>
+                  {% else %}
+                    {% comment %} This is an individual photo {% endcomment %}
+                    <img src="{{ item.image | relative_url }}" 
+                         alt="{{ item.title }}" 
+                         loading="lazy">
+                    {% if item.excerpt %}
+                    <div class="photo-overlay">
+                      <p class="photo-excerpt">{{ item.excerpt }}</p>
+                    </div>
+                    {% endif %}
                   {% endif %}
                 </div>
               </a>
             </div>
             
-            {% assign current_month = photo_month %}
+            {% assign current_month = item_month %}
             {% if forloop.last %}
               </div> <!-- Close month photos -->
               </div> <!-- Close month section -->
@@ -163,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function() {
       section.style.display = visiblePhotos.length === 0 ? 'none' : 'block';
     });
   }
-
-  // Initialize - no filter state needed
 });
 </script>
+
+

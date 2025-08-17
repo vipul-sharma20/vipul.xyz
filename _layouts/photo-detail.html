@@ -23,15 +23,12 @@ layout: default
     {% if page.date %}<meta itemprop="datePublished" content="{{ page.date | date_to_xmlschema }}">{% endif %}
 
     <div class="page__inner-wrap">
-      <!-- Back to Gallery Link -->
-      <nav class="photo-navigation">
-        <a href="{{ '/gallery/' | relative_url }}" class="back-to-gallery">← Back to Gallery</a>
-      </nav>
-
       <div class="photo-detail-content">
         <!-- Photo Display -->
         <div class="photo-display">
-          <div class="photo-container">
+          <div class="photo-container lightbox-trigger" 
+               data-image="{{ page.image | relative_url }}"
+               style="cursor: pointer;">
             <img src="{{ page.image | relative_url }}" 
                  alt="{{ page.title }}" 
                  class="photo-main-image">
@@ -40,6 +37,9 @@ layout: default
               {{ page.excerpt }}
             </div>
             {% endif %}
+            <div class="photo-zoom-indicator">
+              <i class="fas fa-search-plus"></i>
+            </div>
           </div>
         </div>
 
@@ -54,14 +54,13 @@ layout: default
                 <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %d, %Y" }}</time>
               </p>
             {% endif %}
-
-            {% if page.tags %}
-              <div class="photo-tags">
-                {% for tag in page.tags %}
-                  <a href="{{ '/gallery/#' | relative_url }}{{ tag | slugify }}" class="photo-tag">{{ tag }}</a>
-                {% endfor %}
-              </div>
+            {% if page.location %}
+              <p class="photo-location">
+                <i class="fas fa-map-marker-alt" aria-hidden="true"></i> 
+                {{ page.location }}
+              </p>
             {% endif %}
+
           </header>
 
           <section class="photo-story photo-story-sidebar" itemprop="text">
@@ -84,6 +83,7 @@ layout: default
         </section>
       </div>
       {% endif %}
+
 
       <!-- Photo Navigation -->
       <nav class="photo-pagination">
@@ -127,3 +127,56 @@ layout: default
     </div>
   </article>
 </div>
+
+<!-- Lightbox for individual photos -->
+<div id="lightbox" class="lightbox" style="display: none;">
+  <div class="lightbox-content">
+    <span class="lightbox-close">&times;</span>
+    <img class="lightbox-image" src="" alt="">
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImage = document.querySelector('.lightbox-image');
+  const lightboxClose = document.querySelector('.lightbox-close');
+  const lightboxTrigger = document.querySelector('.lightbox-trigger');
+  
+  if (lightboxTrigger) {
+    lightboxTrigger.addEventListener('click', function() {
+      const imageSrc = this.dataset.image;
+      lightboxImage.src = imageSrc;
+      lightbox.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    });
+  }
+
+  function closeLightbox() {
+    lightbox.style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+
+  // Event listeners
+  if (lightboxClose) {
+    lightboxClose.addEventListener('click', closeLightbox);
+  }
+  
+  if (lightbox) {
+    lightbox.addEventListener('click', function(e) {
+      if (e.target === lightbox) {
+        closeLightbox();
+      }
+    });
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', function(e) {
+    if (lightbox && lightbox.style.display === 'flex') {
+      if (e.key === 'Escape') {
+        closeLightbox();
+      }
+    }
+  });
+});
+</script>

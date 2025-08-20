@@ -1,0 +1,5 @@
+assets/images/printing/** filter=lfs diff=lfs merge=lfs -text
+assets/videos/printing/** filter=lfs diff=lfs merge=lfs -text
+*.gif filter=lfs diff=lfs merge=lfs -text
+*.mp4 filter=lfs diff=lfs merge=lfs -text
+*_original.jpg filter=lfs diff=lfs merge=lfs -text

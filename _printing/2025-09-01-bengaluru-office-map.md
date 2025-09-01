@@ -15,7 +15,7 @@ workplace in Bengaluru.
 
 Thanks to [Smoggy3D][smoggy3d] for building [https://map2model.com/](https://map2model.com/).
 
-Choice of colors is not the best but I wanted to try our the filaments that I
+Choice of colors is not the best but I wanted to try out the filaments that I
 got from Bambu Lab when I had purchased my printer. Those free/complimentary
 ones are I think around 150-200gms and this print was small enough to try one
 of those (the orange one) out.

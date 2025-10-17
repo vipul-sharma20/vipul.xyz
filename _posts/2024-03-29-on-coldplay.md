@@ -87,11 +87,11 @@ once in my lifetime:
 
 <div class="caption-wrapper">
     <p class="caption-borderless">
-    <i>Update: Planned to watch live on 4th October, 2025 in Singapore</i>
+    <i>Update: Watched them live on 4th October, 2025 in Singapore during the F1 Singapore GP</i>
     </p>
 </div>
 
-2. [**Foo Fighters**][foo-fighters]: I really wish to watch them live after
+2. [~~**Foo Fighters**~~][foo-fighters]: I really wish to watch them live after
    Coldplay. I stopped listening to a lot of recent Coldplay albums/songs as it
    was not the kind of music that I would enjoy. But, Foo Fighters is the one
    that I have been following for ever.

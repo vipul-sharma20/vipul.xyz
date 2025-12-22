@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diwali Flight Booking Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gentium+Basic:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f1f1f1;
+            padding: 15px 15px;
+            color: #333;
+        }
+
+        #chart {
+            background: #f1f1f1;
+        }
+
+        .chart-header {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .chart-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #1a1a1a;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 10px;
+            font-family: 'Gentium Basic', serif;
+        }
+
+        .subtitle {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 5px;
+            line-height: 1.4;
+        }
+
+        .view-toggle {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: flex;
+            gap: 0;
+        }
+
+        @media (max-width: 768px) {
+            .view-toggle {
+                position: static;
+                margin-top: 15px;
+                justify-content: flex-start;
+            }
+        }
+
+        .toggle-btn {
+            background: #e0e0e0;
+            border: 1px solid #ccc;
+            padding: 8px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .toggle-btn:first-child {
+            border-radius: 4px 0 0 4px;
+        }
+
+        .toggle-btn:last-child {
+            border-radius: 0 4px 4px 0;
+            border-left: none;
+        }
+
+        .toggle-btn:hover {
+            background: #d5d5d5;
+        }
+
+        .toggle-btn.active {
+            background: #B38F75;
+            color: white;
+            border-color: #A37F65;
+        }
+
+        @media (max-width: 768px) {
+            .toggle-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+        }
+
+        .tooltip {
+            position: fixed;
+            background: rgba(30, 30, 30, 0.95);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 3px;
+            font-size: 13px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            max-width: 250px;
+        }
+
+        .axis text {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .axis path,
+        .axis line {
+            stroke: #d0d0d0;
+        }
+
+        .grid line {
+            stroke: #e8e8e8;
+            stroke-dasharray: 2,2;
+        }
+
+        .grid path {
+            stroke-width: 0;
+        }
+
+        .data-point {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .data-point:hover {
+            stroke: #333;
+            stroke-width: 2px;
+        }
+
+        .trend-line {
+            stroke: #B38F75;
+            stroke-width: 2;
+            fill: none;
+            stroke-dasharray: 5,5;
+            opacity: 0.7;
+        }
+
+        .year-label {
+            font-size: 10px;
+            fill: #333;
+            font-weight: 500;
+            pointer-events: none;
+        }
+
+        .legend {
+            font-size: 11px;
+        }
+
+        .legend-title {
+            font-size: 11px;
+            font-weight: 600;
+            fill: #333;
+        }
+
+        @media (max-width: 768px) {
+            .chart-title {
+                font-size: 1.1em;
+            }
+
+            .subtitle {
+                font-size: 0.8em;
+            }
+
+            .axis text {
+                font-size: 9px;
+            }
+
+            .year-label {
+                font-size: 8px;
+            }
+
+            .legend {
+                font-size: 10px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 15px 10px;
+            }
+
+            .chart-title {
+                font-size: 0.95em;
+            }
+
+            .subtitle {
+                font-size: 0.75em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="chart">
+        <div class="chart-header">
+            <div class="chart-title">Does Booking Early Save Money on Diwali Flights?</div>
+            <div class="subtitle">Relationship between booking advance time and round-trip cost</div>
+            <div class="view-toggle">
+                <button class="toggle-btn active" data-view="nominal" title="Absolute costs">
+                    Absolute
+                </button>
+                <button class="toggle-btn" data-view="adjusted" title="Inflation-adjusted costs">
+                    Inflation-Adjusted
+                </button>
+            </div>
+        </div>
+        <div id="viz"></div>
+    </div>
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        // Process Diwali flight data
+        const rawData = [
+            { year: 2016, cost: 14200, adjusted_cost: 20979.08, airlines: "IndiGo", days_advance: 47 },
+            { year: 2017, cost: 11200, adjusted_cost: 15766.24, airlines: "IndiGo", days_advance: 58 },
+            { year: 2018, cost: 10469, adjusted_cost: 14261.92, airlines: "Air India, SpiceJet", days_advance: 34 },
+            { year: 2019, cost: 13243, adjusted_cost: 17357.60, airlines: "Air India, IndiGo", days_advance: 36 },
+            { year: 2021, cost: 10058, adjusted_cost: 11919.74, airlines: "IndiGo", days_advance: 40 },
+            { year: 2022, cost: 18190, adjusted_cost: 20505.59, airlines: "Air India, AirAsia India", days_advance: 18 },
+            { year: 2023, cost: 10010, adjusted_cost: 10575.57, airlines: "IndiGo", days_advance: 44 },
+            { year: 2024, cost: 18320, adjusted_cost: 18320.0, airlines: "Air India", days_advance: 62 },
+            { year: 2025, cost: 23919, adjusted_cost: 23919.0, airlines: "IndiGo, Starlight Airlines", days_advance: 65 }
+        ];
+
+        let currentView = 'nominal';
+
+        // Toggle buttons
+        document.querySelectorAll('.toggle-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const view = this.dataset.view;
+                if (view === currentView) return;
+
+                currentView = view;
+                document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                d3.select('#viz').selectAll('*').remove();
+                renderChart(view);
+            });
+        });
+
+        function renderChart(view = 'nominal') {
+            const isMobile = window.innerWidth <= 600;
+            const margin = isMobile
+                ? {top: 20, right: 20, bottom: 70, left: 60}
+                : {top: 20, right: 40, bottom: 80, left: 80};
+            const width = document.getElementById('viz').offsetWidth - margin.left - margin.right;
+            const height = 450 - margin.top - margin.bottom;
+
+            const svg = d3.select('#viz')
+                .append('svg')
+                .attr('width', width + margin.left + margin.right)
+                .attr('height', height + margin.top + margin.bottom)
+                .append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
+
+            // Value accessor based on view
+            const valueAccessor = view === 'adjusted' ? d => d.adjusted_cost : d => d.cost;
+
+            // Scales
+            const x = d3.scaleLinear()
+                .domain([0, d3.max(rawData, d => d.days_advance) + 10])
+                .range([0, width]);
+
+            const y = d3.scaleLinear()
+                .domain([0, d3.max(rawData, valueAccessor) * 1.15])
+                .nice()
+                .range([height, 0]);
+
+            // Color scale by year - all distinctly different muted tones
+            const yearColors = {
+                2016: '#6B8A9B',  // Slate blue
+                2017: '#D4926E',  // Terracotta orange
+                2018: '#A8657B',  // Rose pink
+                2019: '#5A7A5A',  // Forest green
+                2021: '#E0C070',  // Golden yellow
+                2022: '#9B5555',  // Brick red
+                2023: '#5B8B8B',  // Teal
+                2024: '#8B7B5B',  // Olive brown
+                2025: '#7B5B8B'   // Deep purple
+            };
+
+            const colorScale = d => yearColors[d.year] || '#999';
+
+            // Grid lines
+            svg.append('g')
+                .attr('class', 'grid')
+                .attr('opacity', 0.3)
+                .call(d3.axisLeft(y)
+                    .tickSize(-width)
+                    .tickFormat(''));
+
+            svg.append('g')
+                .attr('class', 'grid')
+                .attr('opacity', 0.3)
+                .attr('transform', `translate(0,${height})`)
+                .call(d3.axisBottom(x)
+                    .tickSize(-height)
+                    .tickFormat(''));
+
+
+            // Draw data points
+            svg.selectAll('.data-point')
+                .data(rawData)
+                .enter()
+                .append('circle')
+                .attr('class', 'data-point')
+                .attr('cx', d => x(d.days_advance))
+                .attr('cy', d => y(valueAccessor(d)))
+                .attr('r', isMobile ? 6 : 8)
+                .attr('fill', d => colorScale(d))
+                .attr('opacity', 0.85)
+                .on('mouseover', function(event, d) {
+                    const tooltip = d3.select('#tooltip');
+                    const tooltipContent = view === 'adjusted'
+                        ? `<strong>${d.year}</strong><br>
+                           Airlines: ${d.airlines}<br>
+                           Booked: ${d.days_advance} days in advance<br>
+                           Nominal: ₹${d.cost.toLocaleString()}<br>
+                           <span style="color: #90EE90;">Adjusted (2024): ₹${Math.round(d.adjusted_cost).toLocaleString()}</span>`
+                        : `<strong>${d.year}</strong><br>
+                           Airlines: ${d.airlines}<br>
+                           Booked: ${d.days_advance} days in advance<br>
+                           Total Cost: ₹${d.cost.toLocaleString()}`;
+
+                    tooltip.html(tooltipContent)
+                        .style('opacity', 1);
+
+                    const tooltipNode = tooltip.node();
+                    const tooltipWidth = tooltipNode.offsetWidth;
+                    const tooltipHeight = tooltipNode.offsetHeight;
+
+                    let left = event.clientX + 10;
+                    let top = event.clientY - 10;
+
+                    if (left + tooltipWidth > window.innerWidth) {
+                        left = event.clientX - tooltipWidth - 10;
+                    }
+                    if (top + tooltipHeight > window.innerHeight) {
+                        top = event.clientY - tooltipHeight - 10;
+                    }
+                    if (top < 0) {
+                        top = event.clientY + 10;
+                    }
+
+                    tooltip.style('left', left + 'px').style('top', top + 'px');
+                })
+                .on('mouseout', function() {
+                    d3.select('#tooltip').style('opacity', 0);
+                });
+
+            // Add year labels below points (desktop only)
+            if (!isMobile) {
+                svg.selectAll('.year-label')
+                    .data(rawData)
+                    .enter()
+                    .append('text')
+                    .attr('class', 'year-label')
+                    .attr('x', d => x(d.days_advance))
+                    .attr('y', d => y(valueAccessor(d)) + 18)
+                    .attr('text-anchor', 'middle')
+                    .text(d => d.year);
+            }
+
+            // X-axis
+            svg.append('g')
+                .attr('class', 'axis')
+                .attr('transform', `translate(0,${height})`)
+                .call(d3.axisBottom(x).ticks(isMobile ? 5 : 8));
+
+            // Y-axis
+            svg.append('g')
+                .attr('class', 'axis')
+                .call(d3.axisLeft(y).tickFormat(d => '₹' + (d/1000).toFixed(0) + 'k'));
+
+            // X-axis label
+            svg.append('text')
+                .attr('text-anchor', 'middle')
+                .attr('x', width / 2)
+                .attr('y', height + (isMobile ? 45 : 50))
+                .attr('font-size', isMobile ? '11px' : '12px')
+                .attr('fill', '#666')
+                .text('Days Booked in Advance');
+
+            // Y-axis label
+            const yLabel = view === 'adjusted'
+                ? 'Round-Trip Cost (2024 Prices)'
+                : 'Round-Trip Cost';
+
+            svg.append('text')
+                .attr('text-anchor', 'middle')
+                .attr('transform', 'rotate(-90)')
+                .attr('y', -margin.left + (isMobile ? 18 : 20))
+                .attr('x', -height / 2)
+                .attr('font-size', isMobile ? '11px' : '12px')
+                .attr('fill', '#666')
+                .text(yLabel);
+
+        }
+
+        renderChart('nominal');
+
+        // Re-render on window resize
+        window.addEventListener('resize', () => {
+            d3.select('#viz').selectAll('*').remove();
+            renderChart(currentView);
+        });
+    </script>
+</body>
+</html>

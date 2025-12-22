@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flights Per Weekday</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gentium+Basic:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f1f1f1;
+            color: #333;
+        }
+
+        body {
+            padding: 15px 15px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #chart {
+            background: #f1f1f1;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        #viz {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            flex: 1;
+            min-height: 0;
+        }
+
+        #viz svg {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+        }
+
+        .chart-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 25px;
+            color: #1a1a1a;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 10px;
+            font-family: 'Gentium Basic', serif;
+        }
+
+        .tooltip {
+            position: fixed;
+            background: rgba(30, 30, 30, 0.95);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 3px;
+            font-size: 13px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            max-width: 250px;
+        }
+
+        .bar:hover {
+            opacity: 0.7;
+            cursor: pointer;
+        }
+
+        .day-label {
+            font-size: 12px;
+            font-weight: 600;
+            fill: #666;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px 15px;
+            }
+
+            .chart-title {
+                font-size: 1.2em;
+                margin-bottom: 15px;
+            }
+
+            .day-label {
+                font-size: 10px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .chart-title {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="chart">
+        <div class="chart-title">Weekly Flight Distribution</div>
+        <div id="viz"></div>
+    </div>
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        // Aggregated data (no raw dates)
+        const weekdayData = [
+            {"day":"Sunday","dayNum":0,"count":14},
+            {"day":"Monday","dayNum":1,"count":23},
+            {"day":"Tuesday","dayNum":2,"count":11},
+            {"day":"Wednesday","dayNum":3,"count":19},
+            {"day":"Thursday","dayNum":4,"count":16},
+            {"day":"Friday","dayNum":5,"count":9},
+            {"day":"Saturday","dayNum":6,"count":22}
+        ];
+
+        function drawChart() {
+            // Clear existing chart
+            d3.select('#viz').selectAll('*').remove();
+
+            const size = 520;
+        const radius = size / 2 - 60;
+
+        const svg = d3.select('#viz')
+            .append('svg')
+            .attr('viewBox', `0 0 ${size} ${size}`)
+            .attr('preserveAspectRatio', 'xMidYMid meet')
+            .append('g')
+            .attr('transform', `translate(${size/2},${size/2})`);
+
+        // Scales
+        const angleScale = d3.scaleBand()
+            .domain(weekdayData.map(d => d.day))
+            .range([0, 2 * Math.PI])
+            .padding(0.1);
+
+        const radiusScale = d3.scaleLinear()
+            .domain([0, d3.max(weekdayData, d => d.count)])
+            .range([0, radius]);
+
+        // Color scale - distinct weekend vs weekday colors
+        const colorScale = d => {
+            if (d.dayNum === 0 || d.dayNum === 6) return '#B38F75'; // Weekend - terracotta
+            return '#6B8A9B'; // Weekday - slate
+        };
+
+        // Draw bars
+        svg.selectAll('.bar')
+            .data(weekdayData)
+            .enter().append('path')
+            .attr('class', 'bar')
+            .attr('d', d3.arc()
+                .innerRadius(0)
+                .outerRadius(d => radiusScale(d.count))
+                .startAngle(d => angleScale(d.day))
+                .endAngle(d => angleScale(d.day) + angleScale.bandwidth())
+                .padAngle(0.01)
+                .padRadius(radius)
+            )
+            .attr('fill', d => colorScale(d))
+            .on('mouseover', function(event, d) {
+                const tooltip = d3.select('#tooltip');
+                const type = (d.dayNum === 0 || d.dayNum === 6) ? 'Weekend' : 'Weekday';
+                tooltip.html(`${d.day}<br>Flights: ${d.count}<br>${type}`)
+                    .style('opacity', 1);
+
+                // Smart positioning to keep tooltip in view
+                const tooltipNode = tooltip.node();
+                const tooltipWidth = tooltipNode.offsetWidth;
+                const tooltipHeight = tooltipNode.offsetHeight;
+
+                let left = event.clientX + 10;
+                let top = event.clientY - 10;
+
+                // Adjust if tooltip goes off right edge
+                if (left + tooltipWidth > window.innerWidth) {
+                    left = event.clientX - tooltipWidth - 10;
+                }
+
+                // Adjust if tooltip goes off bottom edge
+                if (top + tooltipHeight > window.innerHeight) {
+                    top = event.clientY - tooltipHeight - 10;
+                }
+
+                // Adjust if tooltip goes off top edge
+                if (top < 0) {
+                    top = event.clientY + 10;
+                }
+
+                tooltip.style('left', left + 'px').style('top', top + 'px');
+            })
+            .on('mouseout', function() {
+                d3.select('#tooltip').style('opacity', 0);
+            });
+
+        // Add day labels
+        svg.selectAll('.day-label')
+            .data(weekdayData)
+            .enter().append('text')
+            .attr('class', 'day-label')
+            .attr('text-anchor', 'middle')
+            .attr('x', d => {
+                const angle = angleScale(d.day) + angleScale.bandwidth() / 2;
+                return Math.sin(angle) * (radius + 35);
+            })
+            .attr('y', d => {
+                const angle = angleScale(d.day) + angleScale.bandwidth() / 2;
+                return -Math.cos(angle) * (radius + 35);
+            })
+            .text(d => d.day.substring(0, 3));
+
+        // Add circular gridlines
+        const gridValues = [5, 10, 15, 20, 25];
+        svg.selectAll('.grid-circle')
+            .data(gridValues)
+            .enter().append('circle')
+            .attr('class', 'grid-circle')
+            .attr('r', d => radiusScale(d))
+            .attr('fill', 'none')
+            .attr('stroke', '#bbb')
+            .attr('stroke-width', 1)
+            .attr('stroke-dasharray', '2,2');
+
+        // Add grid labels (rotated slightly to the left)
+        const labelRotation = -Math.PI / 72; // Slight counter-clockwise rotation
+        svg.selectAll('.grid-label')
+            .data(gridValues)
+            .enter().append('text')
+            .attr('class', 'grid-label')
+            .attr('transform', d => {
+                const r = radiusScale(d);
+                const x = Math.sin(labelRotation) * r;
+                const y = -Math.cos(labelRotation) * r;
+                return `translate(${x + 5},${y})`;
+            })
+            .attr('font-size', '9px')
+            .attr('fill', '#999')
+            .text(d => d);
+        }
+
+        // Draw chart (viewBox handles scaling automatically)
+        drawChart();
+    </script>
+</body>
+</html>

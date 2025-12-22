@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Booking Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gentium+Basic:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f1f1f1;
+            padding: 15px 15px;
+            color: #333;
+        }
+
+        #chart {
+            background: #f1f1f1;
+        }
+
+        .chart-header {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .chart-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 10px;
+            font-family: 'Gentium Basic', serif;
+        }
+
+        .subtitle {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .controls-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .filter-toggle {
+            display: flex;
+            gap: 8px;
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 0;
+        }
+
+        @media (max-width: 768px) {
+            .controls-container {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+
+        .toggle-btn {
+            background: #e0e0e0;
+            border: 1px solid #ccc;
+            padding: 8px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .view-toggle .toggle-btn:first-child {
+            border-radius: 4px 0 0 4px;
+        }
+
+        .view-toggle .toggle-btn:last-child {
+            border-radius: 0 4px 4px 0;
+            border-left: none;
+        }
+
+        .toggle-btn:hover {
+            background: #d5d5d5;
+        }
+
+        .toggle-btn.active {
+            background: #B38F75;
+            color: white;
+            border-color: #A37F65;
+        }
+
+        .filter-btn {
+            background: #666;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background-color 0.2s;
+        }
+
+        .filter-btn:hover {
+            background: #555;
+        }
+
+        .filter-btn.active {
+            background: #B38F75;
+        }
+
+        @media (max-width: 768px) {
+            .toggle-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .filter-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+        }
+
+        .tooltip {
+            position: fixed;
+            background: rgba(30, 30, 30, 0.95);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 3px;
+            font-size: 13px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            max-width: 280px;
+        }
+
+        .axis text {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .axis path,
+        .axis line {
+            stroke: #d0d0d0;
+        }
+
+        .grid line {
+            stroke: #e8e8e8;
+            stroke-dasharray: 2,2;
+        }
+
+        .grid path {
+            stroke-width: 0;
+        }
+
+        .data-point {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .data-point:hover {
+            stroke: #333;
+            stroke-width: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .chart-title {
+                font-size: 1.1em;
+            }
+
+            .subtitle {
+                font-size: 0.8em;
+            }
+
+            .axis text {
+                font-size: 9px;
+            }
+
+            .toggle-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 15px 10px;
+            }
+
+            .chart-title {
+                font-size: 0.95em;
+            }
+
+            .subtitle {
+                font-size: 0.75em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="chart">
+        <div class="chart-header">
+            <div class="chart-title">Does Booking Early Save Money on Flights?</div>
+            <div class="subtitle">Relationship between booking advance time and cost</div>
+            <div class="controls-container">
+                <div class="filter-toggle">
+                    <button class="filter-btn" data-filter="all">All Flights</button>
+                    <button class="filter-btn active" data-filter="domestic">Domestic</button>
+                    <button class="filter-btn" data-filter="international">International</button>
+                </div>
+                <div class="view-toggle">
+                    <button class="toggle-btn active" data-view="nominal" title="Absolute costs">
+                        Absolute
+                    </button>
+                    <button class="toggle-btn" data-view="adjusted" title="Inflation-adjusted costs">
+                        Inflation-Adjusted
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="viz"></div>
+    </div>
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        let flightData = [];
+        let currentView = 'nominal';
+        let currentFilter = 'domestic';
+
+        // Define international destinations
+        const internationalDestinations = new Set([
+            'Singapore', 'Changi', 'Male', 'Maldives', 'Hanoi', 'Noibai',
+            'London', 'Heathrow', 'Bangkok', 'Phuket', 'Kuala Lumpur',
+            'Hochiminh', 'Danang', 'Suvarnabhumi', 'Don Mueang', 'Tan Son Nhat'
+        ]);
+
+        // Function to check if flight is international
+        function isInternational(route) {
+            return route === 'International';
+        }
+
+        // Flight data (sanitized - no dates or specific routes)
+        flightData = [{"cost":5283,"adjusted_cost":7805.1,"days_advance":12,"year":2016,"airline":"AirAsia India","route":"Domestic"},{"cost":7100,"adjusted_cost":10489.54,"days_advance":41,"year":2016,"airline":"IndiGo","route":"Domestic"},{"cost":7100,"adjusted_cost":10489.54,"days_advance":53,"year":2016,"airline":"IndiGo","route":"Domestic"},{"cost":5500,"adjusted_cost":7745.1,"days_advance":34,"year":2017,"airline":"AirAsia India","route":"Domestic"},{"cost":5500,"adjusted_cost":7745.1,"days_advance":43,"year":2017,"airline":"SpiceJet","route":"Domestic"},{"cost":4100,"adjusted_cost":5773.62,"days_advance":29,"year":2017,"airline":"IndiGo","route":"Domestic"},{"cost":4100,"adjusted_cost":5773.62,"days_advance":35,"year":2017,"airline":"IndiGo","route":"Domestic"},{"cost":2050,"adjusted_cost":2886.81,"days_advance":65,"year":2017,"airline":"IndiGo","route":"Domestic"},{"cost":2050,"adjusted_cost":2886.81,"days_advance":26,"year":2017,"airline":"IndiGo","route":"Domestic"},{"cost":5600,"adjusted_cost":7885.92,"days_advance":55,"year":2017,"airline":"IndiGo","route":"Domestic"},{"cost":5600,"adjusted_cost":7885.92,"days_advance":65,"year":2017,"airline":"IndiGo","route":"Domestic"},{"cost":10100,"adjusted_cost":13758.22,"days_advance":0,"year":2018,"airline":"Jet Airways","route":"Domestic"},{"cost":4097,"adjusted_cost":5580.93,"days_advance":28,"year":2018,"airline":"IndiGo","route":"Domestic"},{"cost":6654,"adjusted_cost":9064.08,"days_advance":2,"year":2018,"airline":"AirAsia India","route":"Domestic"},{"cost":5556,"adjusted_cost":7568.38,"days_advance":45,"year":2018,"airline":"Air India","route":"Domestic"},{"cost":4913,"adjusted_cost":6692.49,"days_advance":22,"year":2018,"airline":"SpiceJet","route":"Domestic"},{"cost":5000,"adjusted_cost":6553.0,"days_advance":24,"year":2019,"airline":"Vistara","route":"Domestic"},{"cost":5000,"adjusted_cost":6553.0,"days_advance":33,"year":2019,"airline":"IndiGo","route":"Domestic"},{"cost":1904,"adjusted_cost":2495.38,"days_advance":26,"year":2019,"airline":"IndiGo","route":"Domestic"},{"cost":3301,"adjusted_cost":4326.29,"days_advance":28,"year":2019,"airline":"AirAsia India","route":"Domestic"},{"cost":5910,"adjusted_cost":7745.65,"days_advance":45,"year":2019,"airline":"Air India","route":"Domestic"},{"cost":7333,"adjusted_cost":9610.63,"days_advance":26,"year":2019,"airline":"IndiGo","route":"Domestic"},{"cost":7050,"adjusted_cost":8849.16,"days_advance":6,"year":2020,"airline":"IndiGo","route":"Domestic"},{"cost":7050,"adjusted_cost":8849.16,"days_advance":8,"year":2020,"airline":"IndiGo","route":"Domestic"},{"cost":5325,"adjusted_cost":6683.94,"days_advance":3,"year":2020,"airline":"IndiGo","route":"Domestic"},{"cost":6233,"adjusted_cost":7823.66,"days_advance":11,"year":2020,"airline":"IndiGo","route":"Domestic"},{"cost":3871,"adjusted_cost":4587.14,"days_advance":20,"year":2021,"airline":"IndiGo","route":"Domestic"},{"cost":5023,"adjusted_cost":5952.26,"days_advance":13,"year":2021,"airline":"IndiGo","route":"Domestic"},{"cost":5100,"adjusted_cost":6043.5,"days_advance":67,"year":2021,"airline":"IndiGo","route":"Domestic"},{"cost":8600,"adjusted_cost":10191.0,"days_advance":29,"year":2021,"airline":"GoAir","route":"Domestic"},{"cost":3676,"adjusted_cost":4356.06,"days_advance":72,"year":2021,"airline":"IndiGo","route":"Domestic"},{"cost":6382,"adjusted_cost":7562.67,"days_advance":8,"year":2021,"airline":"IndiGo","route":"Domestic"},{"cost":6795,"adjusted_cost":7659.32,"days_advance":2,"year":2022,"airline":"GoAir","route":"Domestic"},{"cost":7583,"adjusted_cost":8547.56,"days_advance":3,"year":2022,"airline":"IndiGo","route":"Domestic"},{"cost":4012,"adjusted_cost":4522.33,"days_advance":15,"year":2022,"airline":"AirAsia India","route":"Domestic"},{"cost":5684,"adjusted_cost":6407.0,"days_advance":11,"year":2022,"airline":"IndiGo","route":"Domestic"},{"cost":7435,"adjusted_cost":8380.73,"days_advance":9,"year":2022,"airline":"IndiGo","route":"Domestic"},{"cost":6852,"adjusted_cost":7723.57,"days_advance":10,"year":2022,"airline":"SpiceJet","route":"Domestic"},{"cost":7246,"adjusted_cost":8167.69,"days_advance":14,"year":2022,"airline":"SpiceJet","route":"Domestic"},{"cost":14050,"adjusted_cost":15837.16,"days_advance":127,"year":2022,"airline":"IndiGo","route":"International"},{"cost":9600,"adjusted_cost":10821.12,"days_advance":134,"year":2022,"airline":"AirAsia X","route":"International"},{"cost":8522,"adjusted_cost":9606.0,"days_advance":18,"year":2022,"airline":"AirAsia India","route":"Domestic"},{"cost":9668,"adjusted_cost":10897.77,"days_advance":17,"year":2022,"airline":"Air India","route":"Domestic"},{"cost":3407,"adjusted_cost":3599.5,"days_advance":66,"year":2023,"airline":"Vistara","route":"Domestic"},{"cost":4650,"adjusted_cost":4912.73,"days_advance":54,"year":2023,"airline":"Vistara","route":"Domestic"},{"cost":12587,"adjusted_cost":13298.17,"days_advance":36,"year":2023,"airline":"AirAsia India","route":"Domestic"},{"cost":9209,"adjusted_cost":9729.31,"days_advance":10,"year":2023,"airline":"AirAsia India","route":"Domestic"},{"cost":5629,"adjusted_cost":5947.04,"days_advance":41,"year":2023,"airline":"IndiGo","route":"Domestic"},{"cost":5691,"adjusted_cost":6012.54,"days_advance":44,"year":2023,"airline":"IndiGo","route":"Domestic"},{"cost":4944,"adjusted_cost":5223.34,"days_advance":1,"year":2023,"airline":"Vistara","route":"Domestic"},{"cost":6693,"adjusted_cost":7071.15,"days_advance":4,"year":2023,"airline":"Air India","route":"Domestic"},{"cost":17100,"adjusted_cost":18066.15,"days_advance":56,"year":2023,"airline":"Singapore Airlines","route":"International"},{"cost":17100,"adjusted_cost":18066.15,"days_advance":60,"year":2023,"airline":"Singapore Airlines","route":"International"},{"cost":8000,"adjusted_cost":8452.0,"days_advance":20,"year":2023,"airline":"Akasa Air","route":"Domestic"},{"cost":12078,"adjusted_cost":12760.41,"days_advance":6,"year":2023,"airline":"AirAsia India","route":"Domestic"},{"cost":5005,"adjusted_cost":5287.78,"days_advance":42,"year":2023,"airline":"IndiGo","route":"Domestic"},{"cost":5005,"adjusted_cost":5287.78,"days_advance":47,"year":2023,"airline":"IndiGo","route":"Domestic"},{"cost":5000,"adjusted_cost":5282.5,"days_advance":24,"year":2023,"airline":"IndiGo","route":"Domestic"},{"cost":5722,"adjusted_cost":6045.29,"days_advance":29,"year":2023,"airline":"IndiGo","route":"Domestic"},{"cost":15503,"adjusted_cost":15503.0,"days_advance":113,"year":2024,"airline":"Thai Airways","route":"International"},{"cost":3164,"adjusted_cost":3164.0,"days_advance":29,"year":2024,"airline":"Thai AirAsia","route":"International"},{"cost":16530,"adjusted_cost":16530.0,"days_advance":89,"year":2024,"airline":"Thai Airways","route":"International"},{"cost":4000,"adjusted_cost":4000.0,"days_advance":27,"year":2024,"airline":"Thai AirAsia","route":"International"},{"cost":7600,"adjusted_cost":7600.0,"days_advance":12,"year":2024,"airline":"IndiGo","route":"Domestic"},{"cost":7000,"adjusted_cost":7000.0,"days_advance":10,"year":2024,"airline":"IndiGo","route":"Domestic"},{"cost":7000,"adjusted_cost":7000.0,"days_advance":2,"year":2024,"airline":"Air India","route":"Domestic"},{"cost":11284,"adjusted_cost":11284.0,"days_advance":3,"year":2024,"airline":"Vistara","route":"Domestic"},{"cost":18733,"adjusted_cost":18733.0,"days_advance":29,"year":2024,"airline":"Thai AirAsia","route":"International"},{"cost":19500,"adjusted_cost":19500.0,"days_advance":35,"year":2024,"airline":"Thai AirAsia","route":"International"},{"cost":9160,"adjusted_cost":9160.0,"days_advance":43,"year":2024,"airline":"Air India","route":"Domestic"},{"cost":9160,"adjusted_cost":9160.0,"days_advance":49,"year":2024,"airline":"Air India","route":"Domestic"},{"cost":7800,"adjusted_cost":7800.0,"days_advance":5,"year":2024,"airline":"Air India","route":"Domestic"},{"cost":6348,"adjusted_cost":6348.0,"days_advance":14,"year":2024,"airline":"SpiceJet","route":"Domestic"},{"cost":5762,"adjusted_cost":5762.0,"days_advance":15,"year":2024,"airline":"IndiGo","route":"Domestic"},{"cost":15949,"adjusted_cost":15949.0,"days_advance":0,"year":2024,"airline":"IndiGo","route":"International"},{"cost":16234,"adjusted_cost":16234.0,"days_advance":4,"year":2024,"airline":"IndiGo","route":"International"},{"cost":7500,"adjusted_cost":7500.0,"days_advance":19,"year":2025,"airline":"Air India","route":"Domestic"},{"cost":9230,"adjusted_cost":9230.0,"days_advance":20,"year":2025,"airline":"Starlight Airlines","route":"Domestic"},{"cost":6626,"adjusted_cost":6626.0,"days_advance":21,"year":2025,"airline":"Starlight Airlines","route":"Domestic"},{"cost":7617,"adjusted_cost":7617.0,"days_advance":23,"year":2025,"airline":"Air India","route":"Domestic"},{"cost":4885,"adjusted_cost":4885.0,"days_advance":58,"year":2025,"airline":"IndiGo","route":"Domestic"},{"cost":4466,"adjusted_cost":4466.0,"days_advance":59,"year":2025,"airline":"IndiGo","route":"Domestic"},{"cost":14100,"adjusted_cost":14100.0,"days_advance":42,"year":2025,"airline":"Etihad Airways","route":"International"},{"cost":14100,"adjusted_cost":14100.0,"days_advance":46,"year":2025,"airline":"Etihad Airways","route":"International"},{"cost":32500,"adjusted_cost":32500.0,"days_advance":32,"year":2025,"airline":"Air India","route":"International"},{"cost":32500,"adjusted_cost":32500.0,"days_advance":43,"year":2025,"airline":"Air India","route":"International"},{"cost":12000,"adjusted_cost":12000.0,"days_advance":116,"year":2025,"airline":"IndiGo","route":"International"},{"cost":12000,"adjusted_cost":12000.0,"days_advance":118,"year":2025,"airline":"IndiGo","route":"International"},{"cost":14054,"adjusted_cost":14054.0,"days_advance":67,"year":2025,"airline":"IndiGo","route":"Domestic"},{"cost":9865,"adjusted_cost":9865.0,"days_advance":63,"year":2025,"airline":"Starlight Airlines","route":"Domestic"},{"cost":12411,"adjusted_cost":12411.0,"days_advance":68,"year":2025,"airline":"Air Asia","route":"International"},{"cost":5500,"adjusted_cost":5500.0,"days_advance":48,"year":2025,"airline":"VietJet Air","route":"International"},{"cost":3800,"adjusted_cost":3800.0,"days_advance":50,"year":2025,"airline":"VietJet Air","route":"International"},{"cost":15840,"adjusted_cost":15840.0,"days_advance":76,"year":2025,"airline":"IndiGo","route":"International"}];
+
+        // Initialize visualization
+        (function() {
+            // Filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const filter = this.dataset.filter;
+                    if (filter === currentFilter) return;
+
+                    currentFilter = filter;
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    d3.select('#viz').selectAll('*').remove();
+                    renderChart(currentView, currentFilter);
+                });
+            });
+
+            // View toggle buttons
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const view = this.dataset.view;
+                    if (view === currentView) return;
+
+                    currentView = view;
+                    document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    d3.select('#viz').selectAll('*').remove();
+                    renderChart(view, currentFilter);
+                });
+            });
+
+            renderChart('nominal', 'domestic');
+
+            // Re-render on window resize
+            window.addEventListener('resize', () => {
+                d3.select('#viz').selectAll('*').remove();
+                renderChart(currentView, currentFilter);
+            });
+        })();
+
+        function renderChart(view = 'nominal', filter = 'all') {
+            const isMobile = window.innerWidth <= 600;
+            const margin = isMobile
+                ? {top: 20, right: 20, bottom: 70, left: 60}
+                : {top: 20, right: 40, bottom: 80, left: 80};
+            const width = document.getElementById('viz').offsetWidth - margin.left - margin.right;
+            const height = 500 - margin.top - margin.bottom;
+
+            const svg = d3.select('#viz')
+                .append('svg')
+                .attr('width', width + margin.left + margin.right)
+                .attr('height', height + margin.top + margin.bottom)
+                .append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
+
+            // Value accessor based on view
+            const valueAccessor = view === 'adjusted' ? d => d.adjusted_cost : d => d.cost;
+
+            // Filter data based on filter selection
+            let validData = flightData.filter(d => d.days_advance >= 0);
+
+            if (filter === 'domestic') {
+                validData = validData.filter(d => !isInternational(d.route));
+            } else if (filter === 'international') {
+                validData = validData.filter(d => isInternational(d.route));
+            }
+
+            // Handle empty data
+            if (validData.length === 0) {
+                svg.append('text')
+                    .attr('x', width / 2)
+                    .attr('y', height / 2)
+                    .attr('text-anchor', 'middle')
+                    .attr('font-size', '16px')
+                    .attr('fill', '#666')
+                    .text('No flights found for this filter');
+                return;
+            }
+
+            // Scales
+            const maxDays = d3.max(validData, d => d.days_advance) || 100;
+            const maxCost = d3.max(validData, valueAccessor) || 10000;
+
+            // Adjust padding based on filter - less padding for domestic
+            const xPadding = filter === 'domestic' ? 5 : 20;
+
+            const x = d3.scaleLinear()
+                .domain([0, maxDays + xPadding])
+                .range([0, width]);
+
+            const y = d3.scaleLinear()
+                .domain([0, maxCost * 1.1])
+                .nice()
+                .range([height, 0]);
+
+            // Color scale by year - all distinctly different muted tones
+            const yearColors = {
+                2016: '#6B8A9B',  // Slate blue
+                2017: '#D4926E',  // Terracotta orange
+                2018: '#A8657B',  // Rose pink
+                2019: '#5A7A5A',  // Forest green
+                2020: '#9B8B7B',  // Warm taupe
+                2021: '#E0C070',  // Golden yellow
+                2022: '#9B5555',  // Brick red
+                2023: '#5B8B8B',  // Teal
+                2024: '#8B7B5B',  // Olive brown
+                2025: '#7B5B8B'   // Deep purple
+            };
+
+            const colorScale = d => yearColors[d.year] || '#999';
+
+            // Grid lines
+            svg.append('g')
+                .attr('class', 'grid')
+                .attr('opacity', 0.3)
+                .call(d3.axisLeft(y)
+                    .tickSize(-width)
+                    .tickFormat(''));
+
+            svg.append('g')
+                .attr('class', 'grid')
+                .attr('opacity', 0.3)
+                .attr('transform', `translate(0,${height})`)
+                .call(d3.axisBottom(x)
+                    .tickSize(-height)
+                    .tickFormat(''));
+
+            // Draw data points
+            svg.selectAll('.data-point')
+                .data(validData)
+                .enter()
+                .append('circle')
+                .attr('class', 'data-point')
+                .attr('cx', d => x(d.days_advance))
+                .attr('cy', d => y(valueAccessor(d)))
+                .attr('r', isMobile ? 4 : 5)
+                .attr('fill', d => colorScale(d))
+                .attr('opacity', 0.7)
+                .on('mouseover', function(event, d) {
+                    const tooltip = d3.select('#tooltip');
+                    const flightType = isInternational(d.route) ? 'International' : 'Domestic';
+                    const tooltipContent = view === 'adjusted'
+                        ? `Flight Type: ${flightType}<br>
+                           Airline: ${d.airline}<br>
+                           Booked: ${d.days_advance} days in advance<br>
+                           Nominal: ₹${d.cost.toLocaleString()}<br>
+                           <span style="color: #90EE90;">Adjusted (2024): ₹${Math.round(d.adjusted_cost).toLocaleString()}</span>`
+                        : `Flight Type: ${flightType}<br>
+                           Airline: ${d.airline}<br>
+                           Booked: ${d.days_advance} days in advance<br>
+                           Cost: ₹${d.cost.toLocaleString()}`;
+
+                    tooltip.html(tooltipContent)
+                        .style('opacity', 1);
+
+                    const tooltipNode = tooltip.node();
+                    const tooltipWidth = tooltipNode.offsetWidth;
+                    const tooltipHeight = tooltipNode.offsetHeight;
+
+                    let left = event.clientX + 10;
+                    let top = event.clientY - 10;
+
+                    if (left + tooltipWidth > window.innerWidth) {
+                        left = event.clientX - tooltipWidth - 10;
+                    }
+                    if (top + tooltipHeight > window.innerHeight) {
+                        top = event.clientY - tooltipHeight - 10;
+                    }
+                    if (top < 0) {
+                        top = event.clientY + 10;
+                    }
+
+                    tooltip.style('left', left + 'px').style('top', top + 'px');
+                })
+                .on('mouseout', function() {
+                    d3.select('#tooltip').style('opacity', 0);
+                });
+
+            // X-axis
+            svg.append('g')
+                .attr('class', 'axis')
+                .attr('transform', `translate(0,${height})`)
+                .call(d3.axisBottom(x).ticks(isMobile ? 5 : 10));
+
+            // Y-axis
+            svg.append('g')
+                .attr('class', 'axis')
+                .call(d3.axisLeft(y).tickFormat(d => '₹' + (d/1000).toFixed(0) + 'k'));
+
+            // X-axis label
+            svg.append('text')
+                .attr('text-anchor', 'middle')
+                .attr('x', width / 2)
+                .attr('y', height + (isMobile ? 45 : 55))
+                .attr('font-size', isMobile ? '11px' : '12px')
+                .attr('fill', '#666')
+                .text('Days Booked in Advance');
+
+            // Y-axis label
+            const yLabel = view === 'adjusted'
+                ? 'Flight Cost (2024 Prices)'
+                : 'Flight Cost';
+
+            svg.append('text')
+                .attr('text-anchor', 'middle')
+                .attr('transform', 'rotate(-90)')
+                .attr('y', -margin.left + (isMobile ? 18 : 20))
+                .attr('x', -height / 2)
+                .attr('font-size', isMobile ? '11px' : '12px')
+                .attr('fill', '#666')
+                .text(yLabel);
+        }
+    </script>
+</body>
+</html>

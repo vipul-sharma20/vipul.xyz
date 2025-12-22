@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flights Per Year</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gentium+Basic:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f1f1f1;
+            padding: 15px 15px;
+            color: #333;
+        }
+
+        #chart {
+            background: #f1f1f1;
+        }
+
+        .chart-header {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .chart-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #1a1a1a;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 10px;
+            font-family: 'Gentium Basic', serif;
+        }
+
+        .view-toggle {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: flex;
+            gap: 0;
+        }
+
+        @media (max-width: 768px) {
+            .view-toggle {
+                position: static;
+                margin-top: 15px;
+                justify-content: flex-start;
+            }
+        }
+
+        .toggle-btn {
+            background: #e0e0e0;
+            border: 1px solid #ccc;
+            padding: 8px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .toggle-btn:first-child {
+            border-radius: 4px 0 0 4px;
+        }
+
+        .toggle-btn:last-child {
+            border-radius: 0 4px 4px 0;
+            border-left: none;
+        }
+
+        .toggle-btn:not(:first-child):not(:last-child) {
+            border-left: none;
+        }
+
+        .toggle-btn:hover {
+            background: #d5d5d5;
+        }
+
+        .toggle-btn.active {
+            background: #B38F75;
+            color: white;
+            border-color: #A37F65;
+        }
+
+        @media (max-width: 768px) {
+            .toggle-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+        }
+
+        .tooltip {
+            position: fixed;
+            background: rgba(30, 30, 30, 0.95);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 3px;
+            font-size: 13px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            max-width: 250px;
+        }
+
+        .bar:hover {
+            opacity: 0.7;
+            cursor: pointer;
+        }
+
+        .axis text {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .axis path,
+        .axis line {
+            stroke: #d0d0d0;
+        }
+
+        @media (max-width: 768px) {
+            .chart-title {
+                font-size: 1.2em;
+                margin-bottom: 15px;
+            }
+
+            .axis text {
+                font-size: 9px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 15px 10px;
+            }
+
+            .chart-title {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="chart">
+        <div class="chart-header">
+            <div class="chart-title">Flights Per Year</div>
+            <div class="view-toggle">
+                <button class="toggle-btn active" data-view="all" title="All flights">
+                    All Flights
+                </button>
+                <button class="toggle-btn" data-view="domestic" title="Domestic flights only">
+                    Domestic
+                </button>
+                <button class="toggle-btn" data-view="international" title="International flights only">
+                    International
+                </button>
+            </div>
+        </div>
+        <div id="viz"></div>
+    </div>
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        // Data with domestic and international breakdown
+        const yearData = [
+            {"year": 2016, "total": 3, "domestic": 3, "international": 0},
+            {"year": 2017, "total": 9, "domestic": 9, "international": 0},
+            {"year": 2018, "total": 6, "domestic": 6, "international": 0},
+            {"year": 2019, "total": 8, "domestic": 8, "international": 0},
+            {"year": 2020, "total": 10, "domestic": 10, "international": 0},
+            {"year": 2021, "total": 6, "domestic": 6, "international": 0},
+            {"year": 2022, "total": 11, "domestic": 9, "international": 2},
+            {"year": 2023, "total": 16, "domestic": 14, "international": 2},
+            {"year": 2024, "total": 24, "domestic": 14, "international": 10},
+            {"year": 2025, "total": 21, "domestic": 9, "international": 12}
+        ];
+
+        let currentView = 'all';
+
+        // Toggle buttons
+        document.querySelectorAll('.toggle-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const view = this.dataset.view;
+                if (view === currentView) return;
+
+                currentView = view;
+                document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                d3.select('#viz').selectAll('*').remove();
+                renderChart(view);
+            });
+        });
+
+        function renderChart(view = 'all') {
+            const isMobile = window.innerWidth <= 600;
+            const margin = isMobile
+                ? {top: 20, right: 10, bottom: 60, left: 45}
+                : {top: 20, right: 20, bottom: 60, left: 60};
+            const width = document.getElementById('viz').offsetWidth - margin.left - margin.right;
+            const height = 300 - margin.top - margin.bottom;
+
+            const svg = d3.select('#viz')
+                .append('svg')
+                .attr('width', width + margin.left + margin.right)
+                .attr('height', height + margin.top + margin.bottom)
+                .append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
+
+            // Get the appropriate data based on view
+            const yearArray = yearData.map(d => ({
+                year: d.year,
+                count: view === 'all' ? d.total : (view === 'domestic' ? d.domestic : d.international),
+                domestic: d.domestic,
+                international: d.international,
+                total: d.total
+            }));
+
+            const x = d3.scaleBand()
+                .domain(yearArray.map(d => d.year))
+                .range([0, width])
+                .padding(0.2);
+
+            const y = d3.scaleLinear()
+                .domain([0, d3.max(yearArray, d => d.count)])
+                .nice()
+                .range([height, 0]);
+
+            svg.selectAll('.bar')
+                .data(yearArray)
+                .enter().append('rect')
+                .attr('class', 'bar')
+                .attr('x', d => x(d.year))
+                .attr('y', d => y(d.count))
+                .attr('width', x.bandwidth())
+                .attr('height', d => height - y(d.count))
+                .attr('fill', '#B38F75')
+                .on('mouseover', function(event, d) {
+                    const tooltip = d3.select('#tooltip');
+
+                    let tooltipContent = `Year: ${d.year}<br>`;
+                    if (view === 'all') {
+                        tooltipContent += `Total Flights: ${d.total}<br>`;
+                        tooltipContent += `Domestic: ${d.domestic}<br>`;
+                        tooltipContent += `International: ${d.international}`;
+                    } else if (view === 'domestic') {
+                        tooltipContent += `Domestic Flights: ${d.domestic}`;
+                    } else {
+                        tooltipContent += `International Flights: ${d.international}`;
+                    }
+
+                    tooltip.html(tooltipContent)
+                        .style('opacity', 1);
+
+                    // Smart positioning to keep tooltip in view
+                    const tooltipNode = tooltip.node();
+                    const tooltipWidth = tooltipNode.offsetWidth;
+                    const tooltipHeight = tooltipNode.offsetHeight;
+
+                    let left = event.clientX + 10;
+                    let top = event.clientY - 10;
+
+                    // Adjust if tooltip goes off right edge
+                    if (left + tooltipWidth > window.innerWidth) {
+                        left = event.clientX - tooltipWidth - 10;
+                    }
+
+                    // Adjust if tooltip goes off bottom edge
+                    if (top + tooltipHeight > window.innerHeight) {
+                        top = event.clientY - tooltipHeight - 10;
+                    }
+
+                    // Adjust if tooltip goes off top edge
+                    if (top < 0) {
+                        top = event.clientY + 10;
+                    }
+
+                    tooltip.style('left', left + 'px').style('top', top + 'px');
+                })
+                .on('mouseout', function() {
+                    d3.select('#tooltip').style('opacity', 0);
+                });
+
+            svg.append('g')
+                .attr('class', 'axis')
+                .attr('transform', `translate(0,${height})`)
+                .call(d3.axisBottom(x));
+
+            svg.append('g')
+                .attr('class', 'axis')
+                .call(d3.axisLeft(y).ticks(5));
+
+            // X-axis label
+            svg.append('text')
+                .attr('text-anchor', 'middle')
+                .attr('x', width / 2)
+                .attr('y', height + 45)
+                .attr('font-size', '12px')
+                .attr('fill', '#666')
+                .text('Year');
+
+            // Y-axis label
+            const yLabel = view === 'all' ? 'Number of Flights' :
+                          (view === 'domestic' ? 'Domestic Flights' : 'International Flights');
+
+            svg.append('text')
+                .attr('text-anchor', 'middle')
+                .attr('transform', 'rotate(-90)')
+                .attr('y', -margin.left + 15)
+                .attr('x', -height / 2)
+                .attr('font-size', '12px')
+                .attr('fill', '#666')
+                .text(yLabel);
+        }
+
+        renderChart('all');
+
+        // Re-render on window resize
+        window.addEventListener('resize', () => {
+            d3.select('#viz').selectAll('*').remove();
+            renderChart(currentView);
+        });
+    </script>
+</body>
+</html>

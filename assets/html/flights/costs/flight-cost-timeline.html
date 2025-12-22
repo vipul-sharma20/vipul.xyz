@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cost Timeline</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gentium+Basic:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f1f1f1;
+            padding: 15px 15px;
+            color: #333;
+        }
+
+        #chart {
+            background: #f1f1f1;
+        }
+
+        .chart-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #1a1a1a;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 10px;
+            font-family: 'Gentium Basic', serif;
+        }
+
+        .tooltip {
+            position: fixed;
+            background: rgba(30, 30, 30, 0.95);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 3px;
+            font-size: 13px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            max-width: 250px;
+        }
+
+        .area:hover {
+            opacity: 0.8;
+        }
+
+        .axis text {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .axis path,
+        .axis line {
+            stroke: #d0d0d0;
+        }
+
+        .year-marker {
+            stroke: #cccccc;
+            stroke-width: 1;
+            stroke-dasharray: 3, 3;
+            opacity: 0.5;
+        }
+
+        .year-label {
+            font-size: 10px;
+            fill: #999;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .chart-title {
+                font-size: 1.2em;
+                margin-bottom: 15px;
+            }
+
+            .axis text {
+                font-size: 9px;
+            }
+
+            .year-label {
+                font-size: 8px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 15px 10px;
+            }
+
+            .chart-title {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="chart">
+        <div class="chart-title">Spending Over Time</div>
+        <div id="viz"></div>
+    </div>
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        // Aggregated data (no exact dates, just cumulative spending over flights)
+        // Note: Excludes flights marked as "Paid" or "Connecting"
+        // For flights with pipe-separated costs (person|total), uses total cost
+        const cumulativeData = [{"index":0,"cost":5283,"cumulative":5283},{"index":1,"cost":7100,"cumulative":12383},{"index":2,"cost":7100,"cumulative":19483},{"index":3,"cost":5500,"cumulative":24983},{"index":4,"cost":5500,"cumulative":30483},{"index":5,"cost":4100,"cumulative":34583},{"index":6,"cost":4100,"cumulative":38683},{"index":7,"cost":2050,"cumulative":40733},{"index":8,"cost":2050,"cumulative":42783},{"index":9,"cost":5600,"cumulative":48383},{"index":10,"cost":5600,"cumulative":53983},{"index":11,"cost":10100,"cumulative":64083},{"index":12,"cost":4097,"cumulative":68180},{"index":13,"cost":6654,"cumulative":74834},{"index":14,"cost":5556,"cumulative":80390},{"index":15,"cost":4913,"cumulative":85303},{"index":16,"cost":5000,"cumulative":90303},{"index":17,"cost":5000,"cumulative":95303},{"index":18,"cost":3301,"cumulative":98604},{"index":19,"cost":1904,"cumulative":100508},{"index":20,"cost":5910,"cumulative":106418},{"index":21,"cost":7333,"cumulative":113751},{"index":22,"cost":7050,"cumulative":120801},{"index":23,"cost":7050,"cumulative":127851},{"index":24,"cost":5325,"cumulative":133176},{"index":25,"cost":6233,"cumulative":139409},{"index":26,"cost":3871,"cumulative":143280},{"index":27,"cost":5023,"cumulative":148303},{"index":28,"cost":5100,"cumulative":153403},{"index":29,"cost":8600,"cumulative":162003},{"index":30,"cost":3676,"cumulative":165679},{"index":31,"cost":6382,"cumulative":172061},{"index":32,"cost":6795,"cumulative":178856},{"index":33,"cost":7583,"cumulative":186439},{"index":34,"cost":4012,"cumulative":190451},{"index":35,"cost":5684,"cumulative":196135},{"index":36,"cost":7435,"cumulative":203570},{"index":37,"cost":6852,"cumulative":210422},{"index":38,"cost":7246,"cumulative":217668},{"index":39,"cost":14050,"cumulative":231718},{"index":40,"cost":9600,"cumulative":241318},{"index":41,"cost":8522,"cumulative":249840},{"index":42,"cost":9668,"cumulative":259508},{"index":43,"cost":3407,"cumulative":262915},{"index":44,"cost":4650,"cumulative":267565},{"index":45,"cost":12587,"cumulative":280152},{"index":46,"cost":9209,"cumulative":289361},{"index":47,"cost":5629,"cumulative":294990},{"index":48,"cost":5691,"cumulative":300681},{"index":49,"cost":4944,"cumulative":305625},{"index":50,"cost":6693,"cumulative":312318},{"index":51,"cost":17100,"cumulative":329418},{"index":52,"cost":17100,"cumulative":346518},{"index":53,"cost":8000,"cumulative":354518},{"index":54,"cost":12078,"cumulative":366596},{"index":55,"cost":5005,"cumulative":371601},{"index":56,"cost":5005,"cumulative":376606},{"index":57,"cost":5000,"cumulative":381606},{"index":58,"cost":5722,"cumulative":387328},{"index":59,"cost":15503,"cumulative":402831},{"index":60,"cost":3164,"cumulative":405995},{"index":61,"cost":4000,"cumulative":409995},{"index":62,"cost":16530,"cumulative":426525},{"index":63,"cost":7600,"cumulative":434125},{"index":64,"cost":7000,"cumulative":441125},{"index":65,"cost":7000,"cumulative":448125},{"index":66,"cost":11284,"cumulative":459409},{"index":67,"cost":18733,"cumulative":478142},{"index":68,"cost":19500,"cumulative":497642},{"index":69,"cost":9160,"cumulative":506802},{"index":70,"cost":9160,"cumulative":515962},{"index":71,"cost":7800,"cumulative":523762},{"index":72,"cost":12696,"cumulative":536458},{"index":73,"cost":15524,"cumulative":551982},{"index":74,"cost":31899,"cumulative":583881},{"index":75,"cost":32468,"cumulative":616349},{"index":76,"cost":15000,"cumulative":631349},{"index":77,"cost":9230,"cumulative":640579},{"index":78,"cost":6626,"cumulative":647205},{"index":79,"cost":7617,"cumulative":654822},{"index":80,"cost":4885,"cumulative":659707},{"index":81,"cost":4466,"cumulative":664173},{"index":82,"cost":14100,"cumulative":678273},{"index":83,"cost":14100,"cumulative":692373},{"index":84,"cost":32500,"cumulative":724873},{"index":85,"cost":32500,"cumulative":757373},{"index":86,"cost":12000,"cumulative":769373},{"index":87,"cost":12000,"cumulative":781373},{"index":88,"cost":14054,"cumulative":795427},{"index":89,"cost":9865,"cumulative":805292},{"index":90,"cost":24822,"cumulative":830114},{"index":91,"cost":5500,"cumulative":835614},{"index":92,"cost":3800,"cumulative":839414},{"index":93,"cost":15840,"cumulative":855254}];
+
+        const isMobile = window.innerWidth <= 600;
+        const margin = isMobile
+            ? {top: 20, right: 10, bottom: 60, left: 50}
+            : {top: 20, right: 30, bottom: 60, left: 70};
+        const width = document.getElementById('viz').offsetWidth - margin.left - margin.right;
+        const height = 300 - margin.top - margin.bottom;
+
+        const svg = d3.select('#viz')
+            .append('svg')
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom)
+            .append('g')
+            .attr('transform', `translate(${margin.left},${margin.top})`);
+
+        const x = d3.scaleLinear()
+            .domain([0, cumulativeData.length - 1])
+            .range([0, width]);
+
+        const y = d3.scaleLinear()
+            .domain([0, d3.max(cumulativeData, d => d.cumulative)])
+            .nice()
+            .range([height, 0]);
+
+        const area = d3.area()
+            .x((d, i) => x(i))
+            .y0(height)
+            .y1(d => y(d.cumulative))
+            .curve(d3.curveMonotoneX);
+
+        // Year markers data - positions where each year starts
+        const yearMarkers = [
+            { year: 2016, startIndex: 0 },
+            { year: 2017, startIndex: 3 },
+            { year: 2018, startIndex: 11 },
+            { year: 2019, startIndex: 16 },
+            { year: 2020, startIndex: 22 },
+            { year: 2021, startIndex: 26 },
+            { year: 2022, startIndex: 32 },
+            { year: 2023, startIndex: 43 },
+            { year: 2024, startIndex: 59 },
+            { year: 2025, startIndex: 76 }
+        ];
+
+        // Add year marker lines (behind the area)
+        svg.append('g')
+            .selectAll('line.year-marker')
+            .data(yearMarkers)
+            .enter()
+            .append('line')
+            .attr('class', 'year-marker')
+            .attr('x1', d => x(d.startIndex))
+            .attr('x2', d => x(d.startIndex))
+            .attr('y1', 0)
+            .attr('y2', height);
+
+        // Add year labels vertically at the top (exclude 2016)
+        svg.append('g')
+            .selectAll('text.year-label')
+            .data(yearMarkers.filter(d => d.year !== 2016))
+            .enter()
+            .append('text')
+            .attr('class', 'year-label')
+            .attr('x', d => x(d.startIndex))
+            .attr('y', 20)
+            .attr('text-anchor', 'start')
+            .attr('transform', d => `rotate(-90, ${x(d.startIndex)}, 20)`)
+            .text(d => d.year);
+
+        svg.append('path')
+            .datum(cumulativeData)
+            .attr('class', 'area')
+            .attr('fill', '#B38F75')
+            .attr('opacity', 0.8)
+            .attr('d', area)
+            .on('mousemove', function(event) {
+                const [xPos] = d3.pointer(event);
+                const index = Math.round(x.invert(xPos));
+                if (index >= 0 && index < cumulativeData.length) {
+                    const d = cumulativeData[index];
+                    const tooltip = d3.select('#tooltip');
+                    tooltip.html(`Flight #${index + 1}<br>Cost: ₹${d.cost.toLocaleString()}<br>Total: ₹${d.cumulative.toLocaleString()}`)
+                        .style('opacity', 1);
+
+                    // Smart positioning to keep tooltip in view
+                    const tooltipNode = tooltip.node();
+                    const tooltipWidth = tooltipNode.offsetWidth;
+                    const tooltipHeight = tooltipNode.offsetHeight;
+
+                    let left = event.clientX + 10;
+                    let top = event.clientY - 10;
+
+                    // Adjust if tooltip goes off right edge
+                    if (left + tooltipWidth > window.innerWidth) {
+                        left = event.clientX - tooltipWidth - 10;
+                    }
+
+                    // Adjust if tooltip goes off bottom edge
+                    if (top + tooltipHeight > window.innerHeight) {
+                        top = event.clientY - tooltipHeight - 10;
+                    }
+
+                    // Adjust if tooltip goes off top edge
+                    if (top < 0) {
+                        top = event.clientY + 10;
+                    }
+
+                    tooltip.style('left', left + 'px').style('top', top + 'px');
+                }
+            })
+            .on('mouseout', function() {
+                d3.select('#tooltip').style('opacity', 0);
+            });
+
+        svg.append('g')
+            .attr('class', 'axis')
+            .attr('transform', `translate(0,${height})`)
+            .call(d3.axisBottom(x).ticks(10).tickFormat(d => d + 1));
+
+        svg.append('g')
+            .attr('class', 'axis')
+            .call(d3.axisLeft(y).ticks(5).tickFormat(d => '₹' + (d/1000) + 'k'));
+
+        // X-axis label
+        svg.append('text')
+            .attr('text-anchor', 'middle')
+            .attr('x', width / 2)
+            .attr('y', height + 50)
+            .attr('font-size', '12px')
+            .attr('fill', '#666')
+            .text('Flight Number (Chronological)');
+
+        // Y-axis label
+        svg.append('text')
+            .attr('text-anchor', 'middle')
+            .attr('transform', 'rotate(-90)')
+            .attr('y', -margin.left + 20)
+            .attr('x', -height / 2)
+            .attr('font-size', '12px')
+            .attr('fill', '#666')
+            .text('Cumulative Spending (₹)');
+    </script>
+</body>
+</html>

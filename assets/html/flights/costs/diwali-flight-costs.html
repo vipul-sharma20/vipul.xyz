@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diwali Flight Costs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gentium+Basic:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f1f1f1;
+            padding: 15px 15px;
+            color: #333;
+        }
+
+        #chart {
+            background: #f1f1f1;
+        }
+
+        .chart-header {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .chart-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 10px;
+            font-family: 'Gentium Basic', serif;
+        }
+
+        .subtitle {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .view-toggle {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: flex;
+            gap: 0;
+        }
+
+        @media (max-width: 768px) {
+            .chart-header {
+                margin-bottom: 15px;
+            }
+
+            .view-toggle {
+                position: static;
+                margin-top: 15px;
+                justify-content: flex-start;
+            }
+        }
+
+        .toggle-btn {
+            background: #e0e0e0;
+            border: 1px solid #ccc;
+            padding: 8px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .toggle-btn:first-child {
+            border-radius: 4px 0 0 4px;
+        }
+
+        .toggle-btn:last-child {
+            border-radius: 0 4px 4px 0;
+            border-left: none;
+        }
+
+        .toggle-btn:hover {
+            background: #d5d5d5;
+        }
+
+        .toggle-btn.active {
+            background: #B38F75;
+            color: white;
+            border-color: #A37F65;
+        }
+
+        .tooltip {
+            position: fixed;
+            background: rgba(30, 30, 30, 0.95);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 3px;
+            font-size: 13px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            max-width: 250px;
+        }
+
+        .bar:hover {
+            opacity: 0.7;
+            cursor: pointer;
+        }
+
+        .axis text {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .axis path,
+        .axis line {
+            stroke: #d0d0d0;
+        }
+
+        .value-label {
+            font-size: 10px;
+            fill: #333;
+            font-weight: 500;
+        }
+
+        .airline-label {
+            font-size: 9px;
+            fill: #666;
+        }
+
+        @media (max-width: 768px) {
+            .chart-title {
+                font-size: 1.2em;
+                margin-bottom: 5px;
+            }
+
+            .toggle-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .axis text {
+                font-size: 9px;
+            }
+
+            .value-label {
+                font-size: 8px;
+            }
+
+            .airline-label {
+                font-size: 7px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 15px 10px;
+            }
+
+            .chart-title {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="chart">
+        <div class="chart-header">
+            <div class="chart-title">Diwali Flight Costs</div>
+            <div class="subtitle">Round-trip costs for annual Diwali travel home</div>
+            <div class="view-toggle">
+                <button class="toggle-btn active" data-view="nominal" title="Absolute costs">
+                    Absolute
+                </button>
+                <button class="toggle-btn" data-view="adjusted" title="Inflation-adjusted costs">
+                    Inflation-Adjusted
+                </button>
+            </div>
+        </div>
+        <div id="viz"></div>
+    </div>
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        // Diwali flight data with inflation-adjusted values
+        const diwaliData = [
+  {
+    "year": 2016,
+    "cost": 14200.0,
+    "adjusted_cost": 20979.08,
+    "airlines": "IndiGo",
+    "num_flights": 2
+  },
+  {
+    "year": 2017,
+    "cost": 11200.0,
+    "adjusted_cost": 15766.24,
+    "airlines": "IndiGo",
+    "num_flights": 2
+  },
+  {
+    "year": 2018,
+    "cost": 10469.0,
+    "adjusted_cost": 14261.92,
+    "airlines": "Air India, SpiceJet",
+    "num_flights": 2
+  },
+  {
+    "year": 2019,
+    "cost": 13243.0,
+    "adjusted_cost": 17357.60,
+    "airlines": "Air India, IndiGo",
+    "num_flights": 2
+  },
+  {
+    "year": 2021,
+    "cost": 10058.0,
+    "adjusted_cost": 11919.74,
+    "airlines": "IndiGo",
+    "num_flights": 2
+  },
+  {
+    "year": 2022,
+    "cost": 18190.0,
+    "adjusted_cost": 20505.59,
+    "airlines": "Air India, AirAsia India",
+    "num_flights": 2
+  },
+  {
+    "year": 2023,
+    "cost": 10010.0,
+    "adjusted_cost": 10575.57,
+    "airlines": "IndiGo",
+    "num_flights": 2
+  },
+  {
+    "year": 2024,
+    "cost": 18320.0,
+    "adjusted_cost": 18320.0,
+    "airlines": "Air India",
+    "num_flights": 2
+  },
+  {
+    "year": 2025,
+    "cost": 23919.0,
+    "adjusted_cost": 23919.0,
+    "airlines": "IndiGo, Akasa",
+    "num_flights": 2
+  }
+];
+
+        let currentView = 'nominal';
+
+        // Toggle buttons
+        document.querySelectorAll('.toggle-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const view = this.dataset.view;
+                if (view === currentView) return;
+
+                currentView = view;
+                document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                renderChart(view);
+            });
+        });
+
+        function renderChart(view) {
+            // Clear previous chart
+            d3.select('#viz').selectAll('*').remove();
+
+            const isMobile = window.innerWidth <= 600;
+            const margin = isMobile
+                ? {top: 30, right: 10, bottom: 80, left: 50}
+                : {top: 30, right: 30, bottom: 80, left: 70};
+            const width = document.getElementById('viz').offsetWidth - margin.left - margin.right;
+            const height = 400 - margin.top - margin.bottom;
+
+            const svg = d3.select('#viz')
+                .append('svg')
+                .attr('width', width + margin.left + margin.right)
+                .attr('height', height + margin.top + margin.bottom)
+                .append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
+
+            const x = d3.scaleBand()
+                .domain(diwaliData.map(d => d.year))
+                .range([0, width])
+                .padding(0.2);
+
+            const valueAccessor = view === 'adjusted' ? d => d.adjusted_cost : d => d.cost;
+
+            const y = d3.scaleLinear()
+                .domain([0, d3.max(diwaliData, valueAccessor) * 1.1])
+                .nice()
+                .range([height, 0]);
+
+            // Bars
+            svg.selectAll('.bar')
+                .data(diwaliData)
+                .enter().append('rect')
+                .attr('class', 'bar')
+                .attr('x', d => x(d.year))
+                .attr('y', d => y(valueAccessor(d)))
+                .attr('width', x.bandwidth())
+                .attr('height', d => height - y(valueAccessor(d)))
+                .attr('fill', '#B38F75')
+                .on('mouseover', function(event, d) {
+                    const tooltip = d3.select('#tooltip');
+                    const tooltipContent = view === 'adjusted'
+                        ? `<strong>${d.year}</strong><br>
+                           Airlines: ${d.airlines}<br>
+                           Flights: ${d.num_flights}<br>
+                           Nominal: ₹${d.cost.toLocaleString()}<br>
+                           <span style="color: #90EE90;">Adjusted (2024): ₹${d.adjusted_cost.toLocaleString()}</span>`
+                        : `<strong>${d.year}</strong><br>
+                           Airlines: ${d.airlines}<br>
+                           Flights: ${d.num_flights}<br>
+                           Total Cost: ₹${d.cost.toLocaleString()}`;
+
+                    tooltip.html(tooltipContent)
+                        .style('opacity', 1);
+
+                    // Smart positioning to keep tooltip in view
+                    const tooltipNode = tooltip.node();
+                    const tooltipWidth = tooltipNode.offsetWidth;
+                    const tooltipHeight = tooltipNode.offsetHeight;
+
+                    let left = event.clientX + 10;
+                    let top = event.clientY - 10;
+
+                    // Adjust if tooltip goes off right edge
+                    if (left + tooltipWidth > window.innerWidth) {
+                        left = event.clientX - tooltipWidth - 10;
+                    }
+
+                    // Adjust if tooltip goes off bottom edge
+                    if (top + tooltipHeight > window.innerHeight) {
+                        top = event.clientY - tooltipHeight - 10;
+                    }
+
+                    // Adjust if tooltip goes off top edge
+                    if (top < 0) {
+                        top = event.clientY + 10;
+                    }
+
+                    tooltip.style('left', left + 'px').style('top', top + 'px');
+                })
+                .on('mouseout', function() {
+                    d3.select('#tooltip').style('opacity', 0);
+                });
+
+            // Airline labels on bars (desktop) or under x-axis (mobile)
+            const isNarrow = window.innerWidth <= 600;
+
+            // Value labels on bars
+            svg.selectAll('.value-label')
+                .data(diwaliData)
+                .enter().append('text')
+                .attr('class', 'value-label')
+                .attr('x', d => x(d.year) + x.bandwidth() / 2)
+                .attr('y', d => y(valueAccessor(d)) - (isNarrow ? 8 : 25))
+                .attr('text-anchor', 'middle')
+                .text(d => '₹' + (valueAccessor(d) / 1000).toFixed(1) + 'k');
+
+            if (!isNarrow) {
+                // Desktop: labels on bars
+                svg.selectAll('.airline-label')
+                    .data(diwaliData)
+                    .enter().append('text')
+                    .attr('class', 'airline-label')
+                    .attr('x', d => x(d.year) + x.bandwidth() / 2)
+                    .attr('y', d => y(valueAccessor(d)) - 10)
+                    .attr('text-anchor', 'middle')
+                    .text(d => d.airlines);
+            }
+
+            // X-axis
+            svg.append('g')
+                .attr('class', 'axis')
+                .attr('transform', `translate(0,${height})`)
+                .call(d3.axisBottom(x).tickFormat(d => d));
+
+            // Airline labels under x-axis (mobile only, slanted)
+            if (isNarrow) {
+                svg.selectAll('.airline-label-axis')
+                    .data(diwaliData)
+                    .enter().append('text')
+                    .attr('class', 'airline-label-axis')
+                    .attr('x', d => x(d.year) + x.bandwidth() / 2 - 5)
+                    .attr('y', height + 40)
+                    .attr('text-anchor', 'start')
+                    .attr('font-size', '7px')
+                    .attr('fill', '#888')
+                    .attr('transform', d => {
+                        const xPos = x(d.year) + x.bandwidth() / 2 - 5;
+                        const yPos = height + 40;
+                        return `rotate(-45, ${xPos}, ${yPos})`;
+                    })
+                    .each(function(d) {
+                        const text = d3.select(this);
+                        const airlines = d.airlines.split(',').map(a => a.trim());
+
+                        airlines.forEach((airline, i) => {
+                            text.append('tspan')
+                                .attr('x', x(d.year) + x.bandwidth() / 2 - 5)
+                                .attr('dy', i === 0 ? 0 : '1em')
+                                .text(airline);
+                        });
+                    });
+            }
+
+            // Y-axis
+            svg.append('g')
+                .attr('class', 'axis')
+                .call(d3.axisLeft(y).tickFormat(d => '₹' + (d/1000).toFixed(0) + 'k'));
+
+            // X-axis label
+            svg.append('text')
+                .attr('text-anchor', 'middle')
+                .attr('x', width / 2)
+                .attr('y', height + (isNarrow ? 60 : 45))
+                .attr('font-size', '12px')
+                .attr('fill', '#666')
+                .text('Year');
+
+            // Y-axis label
+            const yLabel = view === 'adjusted'
+                ? 'Cost (2024 Prices)'
+                : 'Cost';
+
+            svg.append('text')
+                .attr('text-anchor', 'middle')
+                .attr('transform', 'rotate(-90)')
+                .attr('y', -margin.left + 15)
+                .attr('x', -height / 2)
+                .attr('font-size', '12px')
+                .attr('fill', '#666')
+                .text(yLabel);
+        }
+
+        // Initial render
+        renderChart('nominal');
+    </script>
+</body>
+</html>

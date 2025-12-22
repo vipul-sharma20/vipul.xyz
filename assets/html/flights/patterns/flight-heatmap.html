@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Activity Heatmap</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gentium+Basic:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f1f1f1;
+            color: #333;
+        }
+
+        body {
+            padding: 20px 15px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #chart {
+            background: #f1f1f1;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        #viz {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            flex: 1;
+            min-height: 0;
+        }
+
+        #viz svg {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+        }
+
+        .chart-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 10px;
+            font-family: 'Gentium Basic', serif;
+        }
+
+        .subtitle {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .tooltip {
+            position: fixed;
+            background: rgba(30, 30, 30, 0.95);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 3px;
+            font-size: 13px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            max-width: 250px;
+        }
+
+        .cell:hover {
+            stroke: #333;
+            stroke-width: 2;
+            cursor: pointer;
+        }
+
+        .month-label {
+            font-size: 11px;
+            fill: #666;
+        }
+
+        .year-label {
+            font-size: 12px;
+            font-weight: 600;
+            fill: #666;
+        }
+
+        .legend-label {
+            font-size: 10px;
+            fill: #666;
+        }
+
+        @media (max-width: 768px) {
+            .chart-title {
+                font-size: 1.2em;
+                margin-bottom: 15px;
+            }
+
+            .month-label {
+                font-size: 9px;
+            }
+
+            .year-label {
+                font-size: 10px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 15px 5px;
+            }
+
+            .chart-title {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="chart">
+        <div class="chart-title">Flight Activity by Year & Month</div>
+        <div id="viz"></div>
+    </div>
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        // Aggregated data by year and month
+        const heatmapData = [
+            // 2016
+            {year: 2016, month: 6, count: 1}, {year: 2016, month: 10, count: 1}, {year: 2016, month: 11, count: 1},
+            // 2017
+            {year: 2017, month: 3, count: 2}, {year: 2017, month: 6, count: 2}, {year: 2017, month: 7, count: 2},
+            {year: 2017, month: 10, count: 3},
+            // 2018
+            {year: 2018, month: 1, count: 2}, {year: 2018, month: 3, count: 2}, {year: 2018, month: 11, count: 2},
+            // 2019
+            {year: 2019, month: 3, count: 2}, {year: 2019, month: 6, count: 1}, {year: 2019, month: 7, count: 1},
+            {year: 2019, month: 10, count: 1}, {year: 2019, month: 11, count: 1}, {year: 2019, month: 12, count: 2},
+            // 2020
+            {year: 2020, month: 1, count: 3}, {year: 2020, month: 2, count: 3}, {year: 2020, month: 3, count: 2},
+            {year: 2020, month: 10, count: 1}, {year: 2020, month: 12, count: 1},
+            // 2021
+            {year: 2021, month: 4, count: 2}, {year: 2021, month: 10, count: 3}, {year: 2021, month: 11, count: 1},
+            // 2022
+            {year: 2022, month: 2, count: 2}, {year: 2022, month: 3, count: 3}, {year: 2022, month: 5, count: 2},
+            {year: 2022, month: 9, count: 1}, {year: 2022, month: 10, count: 3},
+            // 2023
+            {year: 2023, month: 1, count: 2}, {year: 2023, month: 5, count: 2}, {year: 2023, month: 6, count: 1},
+            {year: 2023, month: 7, count: 1}, {year: 2023, month: 8, count: 2}, {year: 2023, month: 9, count: 2},
+            {year: 2023, month: 10, count: 2}, {year: 2023, month: 11, count: 2}, {year: 2023, month: 12, count: 2},
+            // 2024
+            {year: 2024, month: 2, count: 4}, {year: 2024, month: 3, count: 2}, {year: 2024, month: 5, count: 2},
+            {year: 2024, month: 10, count: 5}, {year: 2024, month: 11, count: 2}, {year: 2024, month: 12, count: 9},
+            // 2025
+            {year: 2025, month: 1, count: 2}, {year: 2025, month: 3, count: 2}, {year: 2025, month: 5, count: 3},
+            {year: 2025, month: 6, count: 3}, {year: 2025, month: 7, count: 1}, {year: 2025, month: 10, count: 4},
+            {year: 2025, month: 11, count: 3}, {year: 2025, month: 12, count: 3}
+        ];
+
+        const years = [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025];
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        function drawChart() {
+            // Clear existing chart
+            d3.select('#viz').selectAll('*').remove();
+
+            // Use fixed reference dimensions for viewBox
+        const isMobile = window.innerWidth <= 600;
+        const baseWidth = 650;
+        const margin = isMobile
+            ? {top: 60, right: 20, bottom: 70, left: 60}
+            : {top: 60, right: 40, bottom: 70, left: 80};
+
+        const cellSize = (baseWidth - margin.left - margin.right) / months.length;
+        const height = years.length * cellSize + margin.top + margin.bottom;
+
+        const svg = d3.select('#viz')
+            .append('svg')
+            .attr('viewBox', `0 0 ${baseWidth} ${height}`)
+            .attr('preserveAspectRatio', 'xMidYMid meet');
+
+        const g = svg.append('g')
+            .attr('transform', `translate(${margin.left},${margin.top})`);
+
+        // Create a map for quick lookup
+        const dataMap = new Map();
+        heatmapData.forEach(d => {
+            dataMap.set(`${d.year}-${d.month}`, d.count);
+        });
+
+        // Color scale - terracotta gradient for activity intensity
+        const maxCount = d3.max(heatmapData, d => d.count);
+        const colorScale = d3.scaleSequential()
+            .domain([0, maxCount])
+            .interpolator(d3.interpolateRgb('#E8DCD5', '#B38F75'));
+
+        // Draw cells
+        years.forEach((year, i) => {
+            months.forEach((month, j) => {
+                const count = dataMap.get(`${year}-${j + 1}`) || 0;
+
+                g.append('rect')
+                    .attr('class', 'cell')
+                    .attr('x', j * cellSize)
+                    .attr('y', i * cellSize)
+                    .attr('width', cellSize - 2)
+                    .attr('height', cellSize - 2)
+                    .attr('fill', count === 0 ? '#f8f8f8' : colorScale(count))
+                    .attr('stroke', '#e0e0e0')
+                    .attr('stroke-width', 1)
+                    .on('mouseover', function(event) {
+                        const tooltip = d3.select('#tooltip');
+                        if (count > 0) {
+                            tooltip.html(`<strong>${month} ${year}</strong><br>Flights: ${count}`)
+                                .style('opacity', 1);
+
+                            // Smart positioning to keep tooltip in view
+                            const tooltipNode = tooltip.node();
+                            const tooltipWidth = tooltipNode.offsetWidth;
+                            const tooltipHeight = tooltipNode.offsetHeight;
+
+                            let left = event.clientX + 10;
+                            let top = event.clientY - 10;
+
+                            // Adjust if tooltip goes off right edge
+                            if (left + tooltipWidth > window.innerWidth) {
+                                left = event.clientX - tooltipWidth - 10;
+                            }
+
+                            // Adjust if tooltip goes off bottom edge
+                            if (top + tooltipHeight > window.innerHeight) {
+                                top = event.clientY - tooltipHeight - 10;
+                            }
+
+                            // Adjust if tooltip goes off top edge
+                            if (top < 0) {
+                                top = event.clientY + 10;
+                            }
+
+                            tooltip.style('left', left + 'px').style('top', top + 'px');
+                        }
+                    })
+                    .on('mouseout', function() {
+                        d3.select('#tooltip').style('opacity', 0);
+                    });
+            });
+        });
+
+        // Add month labels
+        months.forEach((month, i) => {
+            g.append('text')
+                .attr('class', 'month-label')
+                .attr('x', i * cellSize + cellSize / 2)
+                .attr('y', -10)
+                .attr('text-anchor', 'middle')
+                .text(month);
+        });
+
+        // Add year labels
+        years.forEach((year, i) => {
+            g.append('text')
+                .attr('class', 'year-label')
+                .attr('x', -10)
+                .attr('y', i * cellSize + cellSize / 2)
+                .attr('text-anchor', 'end')
+                .attr('dy', '0.35em')
+                .text(year);
+        });
+
+        // Add legend
+        const legendWidth = 240;
+        const legendHeight = 10;
+        const legendX = margin.left;
+        const legendY = height - margin.bottom + 20;
+
+        const legendScale = d3.scaleLinear()
+            .domain([0, maxCount])
+            .range([0, legendWidth]);
+
+        const legend = svg.append('g')
+            .attr('transform', `translate(${legendX},${legendY})`);
+
+        // Legend gradient
+        const defs = svg.append('defs');
+        const linearGradient = defs.append('linearGradient')
+            .attr('id', 'legend-gradient');
+
+        linearGradient.selectAll('stop')
+            .data(d3.range(0, 1.1, 0.1))
+            .enter().append('stop')
+            .attr('offset', d => `${d * 100}%`)
+            .attr('stop-color', d => colorScale(d * maxCount));
+
+        legend.append('rect')
+            .attr('width', legendWidth)
+            .attr('height', legendHeight)
+            .style('fill', 'url(#legend-gradient)');
+
+        // Legend labels
+        legend.append('text')
+            .attr('class', 'legend-label')
+            .attr('x', 0)
+            .attr('y', legendHeight + 15)
+            .text('0');
+
+        legend.append('text')
+            .attr('class', 'legend-label')
+            .attr('x', legendWidth)
+            .attr('y', legendHeight + 15)
+            .attr('text-anchor', 'end')
+            .text(`${maxCount} flights`);
+        }
+
+        // Draw chart (viewBox handles scaling automatically)
+        drawChart();
+    </script>
+</body>
+</html>

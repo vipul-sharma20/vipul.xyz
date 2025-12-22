@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Statistics</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f1f1f1;
+            padding: 0;
+            color: #333;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            padding: 20px;
+        }
+
+        .stat-card {
+            background: #f1f1f1;
+            border: 1px solid #000;
+            border-radius: 4px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 5px;
+        }
+
+        .stat-value-wrapper {
+            min-height: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            margin-bottom: 8px;
+        }
+
+        .stat-subvalue {
+            font-size: 0.75em;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        .stat-label {
+            font-size: 0.85em;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                padding: 15px;
+            }
+
+            .stat-value {
+                font-size: 1.5em;
+            }
+
+            .stat-value-wrapper {
+                min-height: 50px;
+            }
+
+            .stat-subvalue {
+                font-size: 0.7em;
+            }
+
+            .stat-label {
+                font-size: 0.75em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value-wrapper">
+                <div class="stat-value" id="total-flights">0</div>
+            </div>
+            <div class="stat-label">Total Flights</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value-wrapper">
+                <div class="stat-value" id="total-cost">₹0</div>
+                <div class="stat-subvalue" id="total-cost-usd">$0</div>
+            </div>
+            <div class="stat-label">Total Spent</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value-wrapper">
+                <div class="stat-value" id="total-hours">0h</div>
+            </div>
+            <div class="stat-label">Hours in Air</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value-wrapper">
+                <div class="stat-value" id="unique-airports">0</div>
+            </div>
+            <div class="stat-label">Airports Visited</div>
+        </div>
+    </div>
+
+    <script>
+        // Aggregated data (no raw flight dates exposed)
+        // Note: Total cost excludes flights marked as "Paid" or "Connecting"
+        const stats = {"totalFlights":114,"totalCost":855254,"totalHours":300,"uniqueAirports":27};
+
+        // Conversion rate (approximate INR to USD)
+        const usdConversionRate = 90;
+
+        document.getElementById('total-flights').textContent = stats.totalFlights;
+        document.getElementById('total-cost').textContent = '₹' + (stats.totalCost / 1000).toFixed(0) + 'k';
+        document.getElementById('total-cost-usd').textContent = '~$' + ((stats.totalCost / usdConversionRate) / 1000).toFixed(1) + 'k';
+        document.getElementById('total-hours').textContent = stats.totalHours + 'h';
+        document.getElementById('unique-airports').textContent = stats.uniqueAirports;
+    </script>
+</body>
+</html>

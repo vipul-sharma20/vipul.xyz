@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Average Flight Costs by Year</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gentium+Basic:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f1f1f1;
+            padding: 15px 15px;
+            color: #333;
+        }
+
+        #chart {
+            background: #f1f1f1;
+        }
+
+        .chart-header {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .chart-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 10px;
+            font-family: 'Gentium Basic', serif;
+        }
+
+        .subtitle {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .toggle-container {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: flex;
+            gap: 0;
+        }
+
+        @media (max-width: 768px) {
+            .chart-header {
+                margin-bottom: 15px;
+            }
+
+            .toggle-container {
+                position: static;
+                margin-top: 15px;
+                justify-content: flex-start;
+            }
+        }
+
+        .toggle-btn {
+            background: #e0e0e0;
+            border: 1px solid #ccc;
+            padding: 8px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .toggle-btn:first-child {
+            border-radius: 4px 0 0 4px;
+        }
+
+        .toggle-btn:last-child {
+            border-radius: 0 4px 4px 0;
+            border-left: none;
+        }
+
+        .toggle-btn:hover {
+            background: #d5d5d5;
+        }
+
+        .toggle-btn.active {
+            background: #B38F75;
+            color: white;
+            border-color: #A37F65;
+        }
+
+        .tooltip {
+            position: fixed;
+            background: rgba(30, 30, 30, 0.95);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 3px;
+            font-size: 13px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            max-width: 250px;
+        }
+
+        .bar:hover {
+            opacity: 0.7;
+            cursor: pointer;
+        }
+
+        .axis text {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .axis path,
+        .axis line {
+            stroke: #d0d0d0;
+        }
+
+        .value-label {
+            font-size: 10px;
+            fill: #333;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .chart-title {
+                font-size: 1.2em;
+                margin-bottom: 5px;
+            }
+
+            .toggle-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .axis text {
+                font-size: 9px;
+            }
+
+            .value-label {
+                font-size: 8px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 15px 10px;
+            }
+
+            .chart-title {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="chart">
+        <div class="chart-header">
+            <div class="chart-title">
+                Average Flight Costs by Year
+            </div>
+            <div class="subtitle">India domestic flights only</div>
+            <div class="toggle-container">
+                <button class="toggle-btn active" data-view="nominal">
+                    Absolute
+                </button>
+                <button class="toggle-btn" data-view="adjusted">
+                    Inflation-Adjusted
+                </button>
+            </div>
+        </div>
+        <div id="viz"></div>
+    </div>
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        // Domestic cost data by year
+        // Note: Excludes flights marked as "Paid" or "Connecting"
+        // For flights with pipe-separated costs (person|total), uses per-person cost for averages
+        const yearData = [
+            { "year": 2016, "count": 3, "total": 19483, "average": 6494, "adjustedTotal": 28784, "adjustedAverage": 9594 },
+            { "year": 2017, "count": 8, "total": 34500, "average": 4312, "adjustedTotal": 48565, "adjustedAverage": 6070 },
+            { "year": 2018, "count": 5, "total": 31320, "average": 6264, "adjustedTotal": 42667, "adjustedAverage": 8533 },
+            { "year": 2019, "count": 6, "total": 28448, "average": 4741, "adjustedTotal": 37286, "adjustedAverage": 6214 },
+            { "year": 2020, "count": 4, "total": 25658, "average": 6414, "adjustedTotal": 32421, "adjustedAverage": 8105 },
+            { "year": 2021, "count": 6, "total": 32652, "average": 5442, "adjustedTotal": 38695, "adjustedAverage": 6449 },
+            { "year": 2022, "count": 9, "total": 63797, "average": 7088, "adjustedTotal": 71918, "adjustedAverage": 7990 },
+            { "year": 2023, "count": 14, "total": 93620, "average": 6687, "adjustedTotal": 98909, "adjustedAverage": 7064 },
+            { "year": 2024, "count": 9, "total": 87224, "average": 7901, "adjustedTotal": 87224, "adjustedAverage": 7901 },
+            { "year": 2025, "count": 9, "total": 77243, "average": 7749, "adjustedTotal": 77243, "adjustedAverage": 7749 }
+        ];
+
+        let currentView = 'nominal';
+
+        // Toggle buttons
+        document.querySelectorAll('.toggle-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const view = this.dataset.view;
+                if (view === currentView) return;
+
+                currentView = view;
+                document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                renderChart(view);
+            });
+        });
+
+        function renderChart(view) {
+            // Clear previous chart
+            d3.select('#viz').selectAll('*').remove();
+
+            const isMobile = window.innerWidth <= 600;
+            const margin = isMobile
+                ? {top: 20, right: 10, bottom: 60, left: 50}
+                : {top: 20, right: 20, bottom: 60, left: 70};
+            const width = document.getElementById('viz').offsetWidth - margin.left - margin.right;
+            const height = 350 - margin.top - margin.bottom;
+
+            const svg = d3.select('#viz')
+                .append('svg')
+                .attr('width', width + margin.left + margin.right)
+                .attr('height', height + margin.top + margin.bottom)
+                .append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
+
+            const x = d3.scaleBand()
+                .domain(yearData.map(d => d.year))
+                .range([0, width])
+                .padding(0.2);
+
+            const valueAccessor = view === 'adjusted' ? d => d.adjustedAverage : d => d.average;
+
+            const y = d3.scaleLinear()
+                .domain([0, d3.max(yearData, valueAccessor) * 1.1])
+                .nice()
+                .range([height, 0]);
+
+            // Color gradient - terracotta for economic data
+            const colorScale = d3.scaleSequential()
+                .domain([d3.min(yearData, valueAccessor), d3.max(yearData, valueAccessor)])
+                .interpolator(d3.interpolateRgb('#E8DCD5', '#B38F75'));
+
+            // Bars
+            svg.selectAll('.bar')
+                .data(yearData)
+                .enter().append('rect')
+                .attr('class', 'bar')
+                .attr('x', d => x(d.year))
+                .attr('y', d => y(valueAccessor(d)))
+                .attr('width', x.bandwidth())
+                .attr('height', d => height - y(valueAccessor(d)))
+                .attr('fill', d => colorScale(valueAccessor(d)))
+                .on('mouseover', function(event, d) {
+                    const tooltip = d3.select('#tooltip');
+                    const tooltipContent = view === 'adjusted'
+                        ? `<strong>${d.year}</strong><br>
+                           Flights: ${d.count}<br>
+                           Nominal Total: ₹${d.total.toLocaleString()}<br>
+                           Nominal Avg: ₹${d.average.toLocaleString()}<br>
+                           <span style="color: #90EE90;">Adjusted Total (2024): ₹${Math.round(d.adjustedTotal).toLocaleString()}</span><br>
+                           <span style="color: #90EE90;">Adjusted Avg (2024): ₹${Math.round(d.adjustedAverage).toLocaleString()}</span>${d.year === 2025 ? '<br><span style="color: #FFA500; font-size: 11px;">*2025 not adjusted (incomplete year)</span>' : ''}`
+                        : `<strong>${d.year}</strong><br>
+                           Flights: ${d.count}<br>
+                           Total Spent: ₹${d.total.toLocaleString()}<br>
+                           Average: ₹${d.average.toLocaleString()}`;
+
+                    tooltip.html(tooltipContent).style('opacity', 1);
+
+                    // Smart positioning to keep tooltip in view
+                    const tooltipNode = tooltip.node();
+                    const tooltipWidth = tooltipNode.offsetWidth;
+                    const tooltipHeight = tooltipNode.offsetHeight;
+
+                    let left = event.clientX + 10;
+                    let top = event.clientY - 10;
+
+                    // Adjust if tooltip goes off right edge
+                    if (left + tooltipWidth > window.innerWidth) {
+                        left = event.clientX - tooltipWidth - 10;
+                    }
+
+                    // Adjust if tooltip goes off bottom edge
+                    if (top + tooltipHeight > window.innerHeight) {
+                        top = event.clientY - tooltipHeight - 10;
+                    }
+
+                    // Adjust if tooltip goes off top edge
+                    if (top < 0) {
+                        top = event.clientY + 10;
+                    }
+
+                    tooltip.style('left', left + 'px').style('top', top + 'px');
+                })
+                .on('mouseout', function() {
+                    d3.select('#tooltip').style('opacity', 0);
+                });
+
+            // Value labels on bars
+            svg.selectAll('.value-label')
+                .data(yearData)
+                .enter().append('text')
+                .attr('class', 'value-label')
+                .attr('x', d => x(d.year) + x.bandwidth() / 2)
+                .attr('y', d => y(valueAccessor(d)) - 5)
+                .attr('text-anchor', 'middle')
+                .text(d => `₹${(valueAccessor(d) / 1000).toFixed(1)}k`);
+
+            // X-axis
+            svg.append('g')
+                .attr('class', 'axis')
+                .attr('transform', `translate(0,${height})`)
+                .call(d3.axisBottom(x));
+
+            // Y-axis
+            svg.append('g')
+                .attr('class', 'axis')
+                .call(d3.axisLeft(y).tickFormat(d => `₹${(d / 1000).toFixed(0)}k`));
+
+            // Y-axis label
+            const yLabel = view === 'adjusted'
+                ? 'Average Cost per Flight (2024 Prices)'
+                : 'Average Cost per Flight';
+
+            svg.append('text')
+                .attr('text-anchor', 'middle')
+                .attr('transform', 'rotate(-90)')
+                .attr('y', -margin.left + 15)
+                .attr('x', -height / 2)
+                .attr('font-size', '12px')
+                .attr('fill', '#666')
+                .text(yLabel);
+
+            // X-axis label
+            svg.append('text')
+                .attr('text-anchor', 'middle')
+                .attr('x', width / 2)
+                .attr('y', height + 45)
+                .attr('font-size', '12px')
+                .attr('fill', '#666')
+                .text('Year');
+        }
+
+        // Initial render
+        renderChart('nominal');
+    </script>
+</body>
+</html>

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airline Distribution</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gentium+Basic:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f1f1f1;
+            padding: 20px 25px;
+            color: #333;
+        }
+
+        #chart {
+            background: #f1f1f1;
+        }
+
+        .chart-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #1a1a1a;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 10px;
+            font-family: 'Gentium Basic', serif;
+        }
+
+        .tooltip {
+            position: fixed;
+            background: rgba(30, 30, 30, 0.95);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 3px;
+            font-size: 13px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            max-width: 250px;
+        }
+
+        .pie-slice {
+            stroke: #fff;
+            stroke-width: 1;
+            transition: all 0.3s ease;
+        }
+
+        .pie-slice:hover {
+            filter: brightness(1.15);
+            cursor: pointer;
+        }
+
+        #legend-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px 15px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 3px;
+            transition: background-color 0.2s;
+        }
+
+        .legend-item:hover {
+            background-color: #f5f5f5;
+        }
+
+        .legend-color {
+            width: 14px;
+            height: 14px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        .legend-label {
+            font-size: 12px;
+            color: #333;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .slice-label {
+            pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 20px;
+            }
+
+            .chart-title {
+                font-size: 1.2em;
+                margin-bottom: 15px;
+            }
+
+            #legend-container {
+                gap: 8px;
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .legend-item {
+                font-size: 11px;
+            }
+
+            .legend-label {
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="chart">
+        <div class="chart-title">Airline Distribution</div>
+        <div id="viz"></div>
+        <div id="legend-container"></div>
+    </div>
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        // Aggregated data (no raw dates)
+        const airlineArray = [{"airline":"IndiGo","count":53},{"airline":"Air India","count":13},{"airline":"AirAsia India","count":12},{"airline":"Thai AirAsia","count":6},{"airline":"SpiceJet","count":5},{"airline":"Vistara","count":5},{"airline":"GoAir","count":4},{"airline":"Akasa","count":3},{"airline":"Singapore Airlines","count":2},{"airline":"Thai Airways","count":2},{"airline":"Etihad Airways","count":2},{"airline":"Air Asia","count":2},{"airline":"VietJet Air","count":2},{"airline":"Jet Airways","count":1},{"airline":"AirAsia X","count":1},{"airline":"Akasa Air","count":1}];
+        const data = airlineArray; // For compatibility with existing code
+
+        const width = document.getElementById('viz').offsetWidth;
+        const height = 350;
+        const radius = Math.min(width, height) / 2 - 30;
+
+        const svg = d3.select('#viz')
+            .append('svg')
+            .attr('width', width)
+            .attr('height', height);
+
+        const g = svg.append('g')
+            .attr('transform', `translate(${width/2},${height/2})`);
+
+        const color = d3.scaleOrdinal()
+            .domain(airlineArray.map(d => d.airline))
+            .range([
+                '#B38F75', '#a8c8d8', '#a8b898', '#D4935B', '#b8a8b8',
+                '#C9A857', '#AF7A7A', '#b8c898', '#B5A595', '#c8b8c8',
+                '#99b088', '#D4A57A', '#8ab8c8', '#AF9B7A', '#a898a8', '#a8b888'
+            ]);
+
+        const pie = d3.pie()
+            .value(d => d.count)
+            .sort(null);
+
+        const arc = d3.arc()
+            .innerRadius(radius * 0.6)
+            .outerRadius(radius)
+            .cornerRadius(3);
+
+        const arcs = g.selectAll('.arc')
+            .data(pie(airlineArray))
+            .enter().append('g')
+            .attr('class', 'arc');
+
+        arcs.append('path')
+            .attr('class', 'pie-slice')
+            .attr('d', arc)
+            .attr('fill', d => color(d.data.airline))
+            .on('mouseover', function(event, d) {
+                const tooltip = d3.select('#tooltip');
+                const total = airlineArray.reduce((sum, a) => sum + a.count, 0);
+                tooltip.html(`<strong>${d.data.airline}</strong><br>Flights: ${d.data.count}<br>Share: ${((d.data.count/total)*100).toFixed(1)}%`)
+                    .style('opacity', 1);
+
+                // Smart positioning to keep tooltip in view
+                const tooltipNode = tooltip.node();
+                const tooltipWidth = tooltipNode.offsetWidth;
+                const tooltipHeight = tooltipNode.offsetHeight;
+
+                let left = event.clientX + 10;
+                let top = event.clientY - 10;
+
+                // Adjust if tooltip goes off right edge
+                if (left + tooltipWidth > window.innerWidth) {
+                    left = event.clientX - tooltipWidth - 10;
+                }
+
+                // Adjust if tooltip goes off bottom edge
+                if (top + tooltipHeight > window.innerHeight) {
+                    top = event.clientY - tooltipHeight - 10;
+                }
+
+                // Adjust if tooltip goes off top edge
+                if (top < 0) {
+                    top = event.clientY + 10;
+                }
+
+                tooltip.style('left', left + 'px').style('top', top + 'px');
+            })
+            .on('mouseout', function() {
+                d3.select('#tooltip').style('opacity', 0);
+            });
+
+        // Add airline name labels (for slices with count >= 5)
+        arcs.filter(d => d.data.count >= 5)
+            .append('text')
+            .attr('class', 'slice-label airline-name')
+            .attr('transform', d => `translate(${arc.centroid(d)})`)
+            .attr('text-anchor', 'middle')
+            .attr('font-size', '11px')
+            .attr('fill', 'white')
+            .attr('font-weight', 'bold')
+            .text(d => d.data.airline);
+
+        // Add count labels (initially hidden)
+        arcs.append('text')
+            .attr('class', 'slice-label count-label')
+            .attr('transform', d => `translate(${arc.centroid(d)})`)
+            .attr('text-anchor', 'middle')
+            .attr('font-size', '14px')
+            .attr('fill', 'white')
+            .attr('font-weight', 'bold')
+            .style('opacity', 0)
+            .text(d => d.data.count);
+
+        // Create legend
+        const legend = d3.select('#legend-container');
+
+        airlineArray.forEach(airline => {
+            const legendItem = legend.append('div')
+                .attr('class', 'legend-item')
+                .on('click', function() {
+                    toggleCounts();
+                });
+
+            legendItem.append('div')
+                .attr('class', 'legend-color')
+                .style('background-color', color(airline.airline));
+
+            legendItem.append('span')
+                .attr('class', 'legend-label')
+                .text(`${airline.airline} (${airline.count})`);
+        });
+
+        // Add center label
+        const total = airlineArray.reduce((sum, a) => sum + a.count, 0);
+
+        g.append('text')
+            .attr('text-anchor', 'middle')
+            .attr('dy', '-0.3em')
+            .attr('font-size', '36px')
+            .attr('font-weight', 'bold')
+            .attr('fill', '#333')
+            .text(total);
+
+        g.append('text')
+            .attr('text-anchor', 'middle')
+            .attr('dy', '1.2em')
+            .attr('font-size', '14px')
+            .attr('fill', '#666')
+            .text('Total Flights');
+
+        // Toggle function for showing/hiding counts
+        let countsVisible = false;
+        function toggleCounts() {
+            countsVisible = !countsVisible;
+
+            g.selectAll('.count-label')
+                .transition()
+                .duration(300)
+                .style('opacity', countsVisible ? 1 : 0);
+
+            g.selectAll('.airline-name')
+                .transition()
+                .duration(300)
+                .style('opacity', countsVisible ? 0 : 1);
+        }
+    </script>
+</body>
+</html>

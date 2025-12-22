@@ -1,0 +1,198 @@
+/* Flight Journey Post Styles */
+
+/* ============================================
+   MAP SECTION STYLING
+   ============================================ */
+
+/* Make only the map section wider than normal content */
+#flight-controls,
+#flight-map-iframe,
+#flight-routes-static-iframe {
+  width: 140%;
+  max-width: 900px;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Tablet portrait mode - prevent overflow */
+@media (max-width: 1024px) and (min-width: 769px) {
+  #flight-controls,
+  #flight-map-iframe,
+  #flight-routes-static-iframe {
+    width: 100%;
+    left: 0;
+    transform: none;
+  }
+}
+
+/* Make map wider on mobile */
+@media (max-width: 768px) {
+  #flight-controls,
+  #flight-map-iframe,
+  #flight-routes-static-iframe {
+    width: 95vw;
+    max-width: none;
+  }
+}
+
+/* Style the flight control buttons */
+.flight-btn {
+  background: #B38F75;
+  color: white;
+  border: 1px solid #A37F65;
+  padding: 8px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.flight-btn:hover:not(:disabled) {
+  background: #A37F65;
+}
+
+.flight-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* Mobile-friendly map sizing */
+#flight-map-iframe,
+#flight-routes-static-iframe {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  #flight-map-iframe,
+  #flight-routes-static-iframe {
+    height: 60vh !important;
+    min-height: 400px !important;
+    max-height: 600px !important;
+    margin: 0;
+  }
+
+  /* Increase height for domestic cost iframes on mobile to accommodate toggle buttons on new line */
+  iframe[src*="domestic-cost"] {
+    height: 490px !important;
+  }
+
+  /* Additional height for airline chart on mobile */
+  iframe[src*="domestic-cost-airline"] {
+    height: 530px !important;
+  }
+
+  /* Reduce height for radial visualizations on mobile */
+  iframe[src*="monthly-radial"] {
+    height: 400px !important;
+  }
+
+  iframe[src*="weekday-radial"] {
+    height: 400px !important;
+  }
+
+  iframe[src*="departure-radial"] {
+    height: 420px !important;
+  }
+
+  /* Reduce height for hourly flight distribution on mobile */
+  iframe[src*="departure-time"] {
+    height: 400px !important;
+  }
+
+  /* Increase height for chord diagram on mobile for better visibility */
+  iframe[src*="routes-chord"] {
+    height: 450px !important;
+  }
+
+  /* Increase height for heatmap on mobile to show all content */
+  iframe[src*="heatmap"] {
+    height: 400px !important;
+  }
+
+  /* Increase height for Diwali booking advance chart on mobile */
+  iframe[src*="diwali-booking-advance"] {
+    height: 610px !important;
+  }
+}
+
+
+/* ============================================
+   VISUALIZATION IFRAME STYLING
+   ============================================ */
+
+/* Visualization styling - full width */
+.viz-iframe {
+  width: 100%;
+  border: 1px solid #000;
+  display: block;
+  margin: 20px 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Stats section wider */
+.viz-iframe-stats {
+  width: 130%;
+  max-width: 900px;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  border: none;
+  display: block;
+  margin: 20px 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .viz-iframe-stats {
+    width: 100%;
+    height: 250px !important;
+  }
+}
+
+
+/* ============================================
+   DIWALI TABLE & DETAILS STYLING
+   ============================================ */
+
+.diwali-table-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.diwali-table-wrapper table {
+  width: auto !important;
+}
+
+.diwali-table-wrapper th,
+.diwali-table-wrapper td {
+  padding: 12px 40px !important;
+}
+
+details summary {
+  cursor: pointer;
+  font-weight: normal;
+  font-size: 0.9em;
+  margin-bottom: 10px;
+  list-style: none;
+}
+
+details summary::-webkit-details-marker {
+  display: none;
+}
+
+details summary::marker {
+  display: none;
+  content: '';
+}
+
+details summary::before {
+  content: '▶ ';
+  font-size: 0.8em;
+}
+
+details[open] summary::before {
+  content: '▼ ';
+}

@@ -166,7 +166,12 @@
   width: auto !important;
 }
 
-.diwali-table-wrapper th,
+.diwali-table-wrapper th {
+  padding: 12px 40px !important;
+  background-color: #C9A98A;
+  color: white;
+}
+
 .diwali-table-wrapper td {
   padding: 12px 40px !important;
 }

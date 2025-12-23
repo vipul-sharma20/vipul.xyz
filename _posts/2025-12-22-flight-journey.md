@@ -16,7 +16,7 @@ Bengaluru to start my professional career in Bengaluru.
 
 Around the start of 2025, I spent around 4 hours digging through my emails to
 log information of all my flight bookings and journey between 2016 and until
-then (January 2025). I just used a filter `"has:attachment flight"` in gmail
+then (January 2025). I just used a filter _"has:attachment flight"_ in gmail
 got a list of all the flight booking emails, went through all the ticket PDFs
 manually and logged the information. You can call it inefficient and tell me 5
 different ways to do it optimally but I have now already done it.

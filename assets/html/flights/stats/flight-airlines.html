@@ -165,7 +165,7 @@
             .sort(null);
 
         const arc = d3.arc()
-            .innerRadius(radius * 0.6)
+            .innerRadius(radius * 0.45)
             .outerRadius(radius)
             .cornerRadius(3);
 
@@ -235,10 +235,10 @@
             .style('opacity', 0)
             .text(d => d.data.count);
 
-        // Create legend
+        // Create legend (only for airlines with 3+ flights)
         const legend = d3.select('#legend-container');
 
-        airlineArray.forEach(airline => {
+        airlineArray.filter(airline => airline.count >= 3).forEach(airline => {
             const legendItem = legend.append('div')
                 .attr('class', 'legend-item')
                 .on('click', function() {

@@ -60,7 +60,7 @@
             stroke-linejoin: round;
             stroke-linecap: round;
             vector-effect: non-scaling-stroke;
-            transition: filter 0.3s ease;
+            transition: filter 0.05s ease;
         }
 
         .country:hover {
@@ -72,7 +72,7 @@
             stroke-width: 1.2;
             opacity: 0.7;
             vector-effect: non-scaling-stroke;
-            transition: all 0.3s ease;
+            transition: all 0.05s ease;
             pointer-events: none;
         }
 
@@ -86,21 +86,45 @@
         }
 
         .flight-path.hover {
-            stroke-width: 2.5;
+            stroke: #c1554d !important;
+            stroke-width: 1.8 !important;
             opacity: 1;
-            filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.6));
+            filter: drop-shadow(0 0 4px rgba(193, 85, 77, 0.6));
+            stroke-dasharray: 8 4;
+            animation: dash-flow 1s linear infinite;
+        }
+
+        .flight-path.dimmed {
+            opacity: 0 !important;
+            transition: none !important;
+        }
+
+        .flight-path.highlighted {
+            stroke: #c1554d !important;
+            stroke-width: 1.8 !important;
+            opacity: 1 !important;
+            filter: drop-shadow(0 0 4px rgba(193, 85, 77, 0.6));
+            transition: none !important;
+            stroke-dasharray: 8 4;
+            animation: dash-flow 1s linear infinite;
+        }
+
+        @keyframes dash-flow {
+            to {
+                stroke-dashoffset: -12;
+            }
         }
 
         .airport {
-            fill: #1e40af;
+            fill: #c1554d;
             stroke: none;
             cursor: pointer;
             vector-effect: non-scaling-stroke;
-            transition: all 0.3s ease;
+            transition: all 0.05s ease;
         }
 
         .airport:hover {
-            filter: drop-shadow(0 0 6px rgba(231, 76, 60, 1.0));
+            filter: drop-shadow(0 0 6px rgba(193, 85, 77, 1.0));
         }
 
         .airport-label {
@@ -111,12 +135,19 @@
             opacity: 0;
             text-anchor: middle;
             font-family: 'Alegreya Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            transition: opacity 0.2s ease;
+            transition: opacity 0.05s ease;
             filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.8));
         }
 
         .airport-label.hover {
-            opacity: 1;
+            opacity: 0;
+        }
+
+        .airport-hitarea {
+            fill: transparent;
+            stroke: none;
+            cursor: pointer;
+            vector-effect: non-scaling-stroke;
         }
 
         /* Legend */
@@ -187,7 +218,7 @@
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: #1e40af;
+            background: #c1554d;
         }
 
         .legend-text {
@@ -200,13 +231,12 @@
             position: absolute;
             background: rgba(0, 0, 0, 0.9);
             color: white;
-            padding: 8px 12px;
-            border-radius: 4px;
-            font-size: 13px;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 11px;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             pointer-events: none;
             opacity: 0;
-            transition: opacity 0.1s ease;
             z-index: 10000;
             white-space: nowrap;
         }
@@ -514,6 +544,15 @@
             }
         });
 
+        // Track outbound flights for each airport
+        const outboundFlights = {};
+        uniqueRoutes.forEach((flight, key) => {
+            if (!outboundFlights[flight.from]) {
+                outboundFlights[flight.from] = [];
+            }
+            outboundFlights[flight.from].push(key);
+        });
+
         // Find max frequency for color scaling
         const maxFrequency = Math.max(...Array.from(routeFrequencies.values()));
 
@@ -586,7 +625,8 @@
                         .attr('class', 'flight-path-hitarea')
                         .attr('d', pathD)
                         .attr('data-route', `${cityNames[flight.from]} → ${cityNames[flight.to]}`)
-                        .attr('data-frequency', flight.frequency);
+                        .attr('data-frequency', flight.frequency)
+                        .attr('data-route-key', key);
 
                     // Create visible path
                     const flightPath = g.append('path')
@@ -594,6 +634,7 @@
                         .attr('d', pathD)
                         .attr('data-route', `${cityNames[flight.from]} → ${cityNames[flight.to]}`)
                         .attr('data-frequency', flight.frequency)
+                        .attr('data-route-key', key)
                         .style('stroke', pathColor)
                         .style('stroke-width', strokeWidth);
 
@@ -615,28 +656,43 @@
                 const coords = airportCoords[code];
                 const point = projection(coords);
 
+                // Add larger invisible circle for easier hovering
+                const hitArea = g.append('circle')
+                    .attr('class', `airport-hitarea airport-hitarea-${code}`)
+                    .attr('cx', point[0])
+                    .attr('cy', point[1])
+                    .attr('r', 6)
+                    .attr('data-city', cityNames[code]);
+
+                // Add visible airport dot
                 const circle = g.append('circle')
                     .attr('class', `airport airport-${code}`)
                     .attr('cx', point[0])
                     .attr('cy', point[1])
-                    .attr('r', 1.5);
+                    .attr('r', 1.5)
+                    .style('pointer-events', 'none');
 
-                // Add city name label
+                // Add city name label (hidden by default)
                 const label = g.append('text')
                     .attr('class', `airport-label label-${code}`)
                     .attr('x', point[0])
                     .attr('y', point[1] - 2.5)
                     .text(cityNames[code]);
 
-                // Add hover functionality
-                circle.on('mouseenter', function() {
-                    label.classed('hover', true);
+                // Add hover functionality to the hit area
+                hitArea.on('mouseenter', function() {
+                    highlightOutboundFlights(code);
+                    // Show tooltip
+                    const city = cityNames[code];
+                    tooltip.textContent = city;
+                    tooltip.classList.add('show');
+                }).on('mousemove', function(event) {
+                    tooltip.style.left = (event.pageX + 10) + 'px';
+                    tooltip.style.top = (event.pageY - 30) + 'px';
                 }).on('mouseleave', function() {
-                    label.classed('hover', false);
+                    clearFlightHighlight();
+                    tooltip.classList.remove('show');
                 });
-
-                // Store city name as data attribute
-                circle.attr('data-city', cityNames[code]);
             });
 
             // Add tooltip functionality
@@ -671,15 +727,29 @@
                     }
                 });
 
-            // Tooltip for airports
-            d3.selectAll('.airport')
-                .on('mousemove', function(event) {
-                    const city = d3.select(this).attr('data-city');
-                    tooltip.textContent = city;
-                    tooltip.classList.add('show');
-                    tooltip.style.left = (event.pageX + 10) + 'px';
-                    tooltip.style.top = (event.pageY - 30) + 'px';
+            // Function to highlight outbound flights from an airport
+            function highlightOutboundFlights(airportCode) {
+                const outbound = outboundFlights[airportCode] || [];
+
+                if (outbound.length === 0) return;
+
+                // Dim all flights first
+                d3.selectAll('.flight-path').classed('dimmed', true).classed('highlighted', false);
+
+                // Highlight outbound flights
+                outbound.forEach(routeKey => {
+                    d3.selectAll(`.flight-path[data-route-key="${routeKey}"]`)
+                        .classed('dimmed', false)
+                        .classed('highlighted', true);
                 });
+            }
+
+            // Function to clear flight highlighting
+            function clearFlightHighlight() {
+                d3.selectAll('.flight-path')
+                    .classed('dimmed', false)
+                    .classed('highlighted', false);
+            }
 
             // Update legend with gradient and max frequency
             const gradientElement = document.getElementById('frequency-gradient');

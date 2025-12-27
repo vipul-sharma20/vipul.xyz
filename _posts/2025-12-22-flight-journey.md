@@ -4,9 +4,8 @@ title: "Analyzing My Flight Journey Data"
 excerpt: "I tracked all the flights I've taken since 2016 and created interactive visualizations to explore my travel patterns, booking behaviors, and cost trends"
 date: 2025-12-22
 tags: [travel, visualization]
-header:
-  teaser: /assets/images/flight-map-teaser.png
 author_profile: false
+image: "https://s3.vipul.xyz/blog/flight-chord.png"
 ---
 
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/flight-journey.css">

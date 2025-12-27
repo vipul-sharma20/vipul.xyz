@@ -35,6 +35,10 @@ masthead_title           : " "
 breadcrumbs              : false
 search                   : true
 
+# Twitter Cards
+twitter:
+  username               : "vipul_sharma"
+
 paginate: 5
 paginate_path: /page:num/
 include                  : ["_pages", "_portfolio", "_includes", "_journal", "_printing", "_photos"]

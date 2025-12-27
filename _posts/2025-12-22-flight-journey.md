@@ -1,6 +1,7 @@
 ---
 layout: single
 title: "Analyzing My Flight Journey Data"
+permalink: "/2025/12/22/flight-journey/"
 excerpt: "I tracked all the flights I've taken since 2016 and created interactive visualizations to explore my travel patterns, booking behaviors, and cost trends"
 date: 2025-12-22
 tags: [travel, visualization]

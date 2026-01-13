@@ -35,6 +35,9 @@ masthead_title           : " "
 breadcrumbs              : false
 search                   : true
 
+footer:
+  since: "2020"
+
 # Twitter Cards
 twitter:
   username               : "vipul_sharma"

@@ -1,5 +1,5 @@
 ---
-title: Privacy writing with neovim
+title: Privacy writing with Neovim
 draft: false
 date: 2026-01-05
 tags:

@@ -4,6 +4,7 @@ draft: false
 date: 2026-01-05
 tags:
   - scribbles
+  - neovim
 author_profile: false
 excerpt: "My writing workflow while sitting in the middle seat of a flight"
 layout: single
@@ -32,10 +33,4 @@ decided to use this.
 </video>
 </div>
 
-
-
-
 [rot13]: https://en.wikipedia.org/wiki/ROT13
-
-
-

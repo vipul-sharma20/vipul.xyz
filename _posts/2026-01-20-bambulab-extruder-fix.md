@@ -5,7 +5,6 @@ draft: false
 date: 2026-01-20
 tags:
   - 3dprinting
-  - scribbles
 author_profile: false
 excerpt: Filament broke in my 3D printer's extruder and nozzle, this is a small blog post on my experience
 ---

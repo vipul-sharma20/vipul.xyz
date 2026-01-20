@@ -30,7 +30,7 @@ th, td {
 }
 
 video {
-    width: 500px;
+    width: 700px;
     height: auto;
 }
 
@@ -248,6 +248,9 @@ div.highlighter-rouge {
         margin-top: 1em; /* Add space between content and caption */
         left: 0; /* Reset any left positioning */
         box-shadow: none; /* Optional: Remove shadow for a cleaner mobile look */
+    }
+    video {
+        width: 350px;
     }
 }
 

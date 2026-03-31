@@ -10,9 +10,13 @@ tags:
 author_profile: false
 ---
 
-These are mostly some parking traffic violations that I have captured in Bengaluru.
+These are mostly some parking traffic violations that I have captured in
+Bengaluru. These pictures are in reverse chronological order of when they were
+taken.
 
 ---
+
+{% include image.html url="https://github.com/user-attachments/assets/98ac392f-f0b9-4701-b8df-21654a93ce9c" alt="violation" size="700" caption="wide footpath = parking space" %}
 
 {% include image.html url="https://github.com/user-attachments/assets/37e03993-0823-4e1b-97f3-e9614658f794" alt="violation" size="700" caption="walkable footpaths" %}
 

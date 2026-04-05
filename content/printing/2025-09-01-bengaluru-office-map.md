@@ -4,6 +4,7 @@ excerpt: 3D printed map area around my office in Bengaluru
 permalink: /threedee/bengaluru-office
 tags:
 - 3dprinting
+- bengaluru
 thumbnail: /assets/images/printing/full/2025/09/20250901-145810.jpg
 title: Bengaluru Map
 ---

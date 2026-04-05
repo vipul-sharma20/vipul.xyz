@@ -10,10 +10,12 @@ tags:
 title: Traffic violations of Bengaluru
 ---
 
-No LLM was used to generate or refine the content of this post. This is not to
-show apprehension towards LLM but to call out that for blog posts, I like to
+No LLMs were used to generate or refine the content of this post. This is not
+to show apprehension towards LLM but to call out that for blog posts, I like to
 write them myself. So all the thoughts, opinions are expressed by my brain
 including any incorrect grammar, typos etc.
+<br><br>
+If I do use LLM assistance, I'll add a call-out like this.
 {: .notice--info}
 
 This post will be an always active post of pictures of some parking traffic

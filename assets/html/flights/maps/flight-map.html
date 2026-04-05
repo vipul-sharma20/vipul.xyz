@@ -1,0 +1,1552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Map Animation</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://d3js.org/d3-geo.v3.min.js"></script>
+    <script src="https://d3js.org/topojson.v3.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f4ede1;
+            color: #2c3e50;
+            overflow: hidden;
+            min-height: 100vh;
+        }
+
+        #map-container {
+            width: 100%;
+            background: #f4ede1;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        #map-wrapper {
+            width: 100%;
+            height: 100%;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+            background: #f4ede1;
+        }
+
+        html, body, #map-container {
+            height: 100%;
+            width: 100%;
+        }
+
+        /* YouTube-like seek bar overlay */
+        #seek-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 15px;
+            z-index: 10000;
+            transition: opacity 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        #seek-overlay:hover {
+            background: rgba(0, 0, 0, 0.75);
+        }
+
+        /* Mobile adjustments for controls */
+        @media (max-width: 768px) {
+            #seek-overlay {
+                height: 50px;
+                padding: 0 10px;
+                gap: 8px;
+                background: rgba(0, 0, 0, 0.75);
+            }
+
+            #play-pause-btn {
+                width: 36px;
+                height: 36px;
+            }
+
+            #play-pause-btn img {
+                width: 18px;
+                height: 18px;
+            }
+
+            #time-display {
+                font-size: 11px;
+                min-width: 70px;
+            }
+
+            #speed-btn {
+                font-size: 11px;
+                padding: 5px 10px;
+                min-width: 40px;
+            }
+
+            #seek-bar-container {
+                height: 8px;
+            }
+        }
+
+        #play-pause-btn {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        #play-pause-btn:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: scale(1.1);
+        }
+
+        #play-pause-btn img {
+            width: 16px;
+            height: 16px;
+        }
+
+        #seek-bar-container {
+            flex: 1;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            cursor: pointer;
+            position: relative;
+            overflow: visible;
+            user-select: none;
+        }
+
+        #seek-bar-container:active {
+            cursor: grabbing;
+        }
+
+        #seek-bar-container:hover {
+            height: 8px;
+        }
+
+        #seek-progress {
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.1s linear;
+            position: relative;
+        }
+
+        #seek-progress::after {
+            content: '';
+            position: absolute;
+            right: -6px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        #seek-bar-container:hover #seek-progress::after {
+            opacity: 1;
+        }
+
+        #time-display {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 12px;
+            font-weight: 500;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-width: 80px;
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        /* Speed selector button */
+        #speed-selector {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        #speed-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.9);
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            transition: all 0.2s ease;
+            min-width: 45px;
+            text-align: center;
+        }
+
+        #speed-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Speed dropdown menu */
+        #speed-menu {
+            position: absolute;
+            bottom: 45px;
+            right: 0;
+            background: rgba(28, 28, 28, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 6px;
+            padding: 6px 0;
+            min-width: 80px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 1001;
+        }
+
+        #speed-menu.show {
+            display: block;
+        }
+
+        .speed-option {
+            padding: 8px 16px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 13px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .speed-option:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .speed-option.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-weight: 700;
+        }
+
+        /* YouTube-style tap feedback */
+        #tap-feedback {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 999;
+        }
+
+        #tap-feedback.show {
+            opacity: 1;
+        }
+
+        #tap-feedback img {
+            width: 80px;
+            height: 80px;
+            filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.5));
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            padding: 20px;
+        }
+
+        svg {
+            display: block;
+            width: 100%;
+            height: calc(100% - 40px);
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            svg {
+                height: calc(100% - 50px);
+            }
+        }
+
+        .country {
+            stroke: #9a8a6e;
+            stroke-width: 0.5;
+            stroke-linejoin: round;
+            stroke-linecap: round;
+            vector-effect: non-scaling-stroke;
+            transition: filter 0.05s ease;
+        }
+
+        .country:hover {
+            filter: brightness(0.92);
+        }
+
+
+
+        .flight-path {
+            fill: none;
+            stroke: #3498db;
+            stroke-width: 1.2;
+            opacity: 0;
+            vector-effect: non-scaling-stroke;
+        }
+
+        .flight-path.active {
+            stroke: #c1554d;
+            stroke-width: 2.5;
+            opacity: 1;
+            filter: drop-shadow(0 0 4px rgba(193, 85, 77, 0.6));
+            vector-effect: non-scaling-stroke;
+        }
+
+        .flight-path.completed {
+            opacity: 0.8;
+            stroke: #6b7280;
+        }
+
+        .flight-path.dimmed {
+            opacity: 0 !important;
+            stroke: #9ca3af;
+            transition: none !important;
+        }
+
+        .flight-path.highlighted {
+            stroke: #c1554d !important;
+            stroke-width: 1.8 !important;
+            opacity: 1 !important;
+            filter: drop-shadow(0 0 4px rgba(193, 85, 77, 0.6));
+            transition: none !important;
+            stroke-dasharray: 8 4;
+            animation: dash-flow 1s linear infinite;
+        }
+
+        .flight-path.hover {
+            stroke: #c1554d !important;
+            stroke-width: 1.8 !important;
+            opacity: 1;
+            filter: drop-shadow(0 0 4px rgba(193, 85, 77, 0.6));
+            stroke-dasharray: 8 4;
+            animation: dash-flow 1s linear infinite;
+        }
+
+        .flight-path-hitarea {
+            fill: none;
+            stroke: transparent;
+            stroke-width: 12;
+            opacity: 0;
+            vector-effect: non-scaling-stroke;
+            cursor: pointer;
+        }
+
+        @keyframes dash-flow {
+            to {
+                stroke-dashoffset: -12;
+            }
+        }
+
+        .airport {
+            fill: #c1554d;
+            stroke: none;
+            cursor: pointer;
+            vector-effect: non-scaling-stroke;
+            transition: all 0.05s ease;
+        }
+
+        .airport.visited {
+            fill: #c1554d;
+            stroke: none;
+        }
+
+        .airport.current {
+            fill: #c1554d;
+            stroke: none;
+            filter: drop-shadow(0 0 4px rgba(193, 85, 77, 0.8));
+        }
+
+        .airport:hover {
+            filter: drop-shadow(0 0 6px rgba(193, 85, 77, 1.0));
+        }
+
+        .airport-label {
+            fill: #2c3e50;
+            font-size: 3px;
+            font-weight: 700;
+            pointer-events: none;
+            opacity: 0;
+            text-anchor: middle;
+            font-family: 'Alegreya Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            transition: opacity 0.05s ease;
+            filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.8));
+        }
+
+        .airport-label.visible {
+            opacity: 1;
+        }
+
+        .airport-label.hover {
+            opacity: 0;
+        }
+
+        .airport-hitarea {
+            fill: transparent;
+            stroke: none;
+            cursor: pointer;
+            vector-effect: non-scaling-stroke;
+        }
+
+        /* Tooltip */
+        #tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 10000;
+            white-space: nowrap;
+        }
+
+        #tooltip.show {
+            opacity: 1;
+        }
+
+        .plane {
+            fill: #fff;
+            filter: drop-shadow(0 0 3px rgba(255,255,255,0.8));
+        }
+
+        .controls {
+            text-align: center;
+            padding: 8px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: #313244;
+            border: 1px solid #45475a;
+            color: #cdd6f4;
+            padding: 6px 16px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 13px;
+            font-family: 'Alegreya Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        button:hover:not(:disabled) {
+            background: #45475a;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        button:disabled {
+            background: #181825;
+            color: #6c7086;
+            cursor: not-allowed;
+            border-color: #313244;
+        }
+
+        .speed-control {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Alegreya Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 13px;
+        }
+
+        .speed-control label {
+            color: #bac2de;
+            font-weight: 500;
+        }
+
+        .speed-control input {
+            width: 120px;
+        }
+
+        .speed-control span {
+            color: #9399b2;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div id="map-container">
+
+        <div id="map-wrapper">
+            <svg id="map"></svg>
+            <div id="tooltip"></div>
+            <!-- Tap feedback overlay -->
+            <div id="tap-feedback">
+                <img id="tap-icon" src="icons/pause.png" alt="Pause">
+            </div>
+            <!-- YouTube-like seek bar overlay -->
+            <div id="seek-overlay">
+                <button id="play-pause-btn" aria-label="Play/Pause">
+                    <!-- Play icon - shown when paused -->
+                    <img id="play-icon" src="icons/play.png" alt="Play">
+                    <!-- Pause icon - shown when playing -->
+                    <img id="pause-icon" src="icons/pause.png" alt="Pause" style="display: none;">
+                </button>
+                <div id="seek-bar-container">
+                    <div id="seek-progress"></div>
+                </div>
+                <div id="time-display">
+                    <span id="current-time">0</span> / <span id="total-time">114</span>
+                </div>
+                <div id="speed-selector">
+                    <button id="speed-btn">1x</button>
+                    <div id="speed-menu">
+                        <div class="speed-option active" data-speed="1500">1x</div>
+                        <div class="speed-option" data-speed="1000">1.5x</div>
+                        <div class="speed-option" data-speed="750">2x</div>
+                        <div class="speed-option" data-speed="600">2.5x</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Airport coordinates database
+        const airportCoords = {
+            'DEL': [77.1025, 28.5562], // Delhi
+            'BLR': [77.7064, 13.1986], // Bangalore
+            'LKO': [80.8893, 26.7606], // Lucknow
+            'PNQ': [73.9197, 18.5822], // Pune
+            'HYD': [78.4294, 17.2403], // Hyderabad
+            'GOI': [73.8314, 15.3808], // Goa
+            'IXZ': [92.7296, 11.6410], // Port Blair
+            'IXB': [88.3295, 26.6812], // Bagdogra
+            'JLR': [80.0520, 23.1778], // Jabalpur
+            'SIN': [103.9894, 1.3644], // Singapore
+            'KUL': [101.7099, 2.7456], // Kuala Lumpur
+            'BOM': [72.8777, 19.0896], // Mumbai
+            'KNU': [80.4100, 26.4041], // Kanpur
+            'IXD': [81.7339, 25.4405], // Allahabad
+            'BKK': [100.7501, 13.6900], // Bangkok
+            'HKT': [98.3169, 8.1132], // Phuket
+            'DMK': [100.6074, 13.9126], // Bangkok Don Mueang
+            'BHO': [77.3374, 23.2876], // Bhopal
+            'AUH': [54.6511, 24.4330], // Abu Dhabi
+            'LHR': [-0.4543, 51.4700], // London Heathrow
+            'COK': [76.4011, 10.1520], // Cochin
+            'MLE': [73.5290, 4.1916], // Male (Maldives)
+            'VNS': [82.8594, 25.4520], // Varanasi
+            'SGN': [106.6519, 10.8188], // Ho Chi Minh
+            'HAN': [105.8019, 21.2212], // Hanoi
+            'CCU': [88.4467, 22.6547], // Kolkata
+            'DAD': [108.1991, 16.0439]  // Danang
+        };
+
+        // City names for airports
+        const cityNames = {
+            'DEL': 'Delhi',
+            'BLR': 'Bangalore',
+            'LKO': 'Lucknow',
+            'PNQ': 'Pune',
+            'HYD': 'Hyderabad',
+            'GOI': 'Goa',
+            'IXZ': 'Port Blair',
+            'IXB': 'Bagdogra',
+            'JLR': 'Jabalpur',
+            'SIN': 'Singapore',
+            'KUL': 'Kuala Lumpur',
+            'BOM': 'Mumbai',
+            'KNU': 'Kanpur',
+            'IXD': 'Allahabad',
+            'BKK': 'Bangkok',
+            'HKT': 'Phuket',
+            'DMK': 'Bangkok',
+            'BHO': 'Bhopal',
+            'AUH': 'Abu Dhabi',
+            'LHR': 'London',
+            'COK': 'Cochin',
+            'MLE': 'Male',
+            'VNS': 'Varanasi',
+            'SGN': 'Ho Chi Minh',
+            'HAN': 'Hanoi',
+            'CCU': 'Kolkata',
+            'DAD': 'Danang'
+        };
+
+        // Flight data (randomized order to preserve privacy)
+        // Animation displays flights in a non-chronological sequence
+        const flights = [
+            {from: 'BLR', to: 'BOM'},
+            {from: 'DEL', to: 'BLR'},
+            {from: 'BLR', to: 'DEL'},
+            {from: 'BLR', to: 'SIN'},
+            {from: 'BOM', to: 'BLR'},
+            {from: 'BLR', to: 'IXZ'},
+            {from: 'DEL', to: 'BLR'},
+            {from: 'BLR', to: 'BOM'},
+            {from: 'BLR', to: 'DEL'},
+            {from: 'BLR', to: 'LKO'},
+            {from: 'DEL', to: 'BLR'},
+            {from: 'BLR', to: 'BOM'},
+            {from: 'GOI', to: 'BLR'},
+            {from: 'BOM', to: 'BLR'},
+            {from: 'BLR', to: 'GOI'},
+            {from: 'BLR', to: 'BKK'},
+            {from: 'KNU', to: 'BLR'},
+            {from: 'BLR', to: 'DEL'},
+            {from: 'BOM', to: 'BLR'},
+            {from: 'DEL', to: 'BLR'},
+            {from: 'BLR', to: 'BOM'},
+            {from: 'BLR', to: 'KUL'},
+            {from: 'BLR', to: 'DEL'},
+            {from: 'LKO', to: 'BLR'},
+            {from: 'BLR', to: 'SIN'},
+            {from: 'BLR', to: 'DEL'},
+            {from: 'IXZ', to: 'BLR'},
+            {from: 'DEL', to: 'BLR'},
+            {from: 'VNS', to: 'DEL'},
+            {from: 'BLR', to: 'LKO'},
+            {from: 'BOM', to: 'BLR'},
+            {from: 'BLR', to: 'BHO'},
+            {from: 'BLR', to: 'IXD'},
+            {from: 'DEL', to: 'BLR'},
+            {from: 'BLR', to: 'GOI'},
+            {from: 'BLR', to: 'BOM'},
+            {from: 'HKT', to: 'DMK'},
+            {from: 'BLR', to: 'DEL'},
+            {from: 'JLR', to: 'BLR'},
+            {from: 'DEL', to: 'BLR'},
+            {from: 'BLR', to: 'IXB'},
+            {from: 'DEL', to: 'BLR'},
+            {from: 'BLR', to: 'COK'},
+            {from: 'BLR', to: 'DMK'},
+            {from: 'IXB', to: 'DEL'},
+            {from: 'DMK', to: 'HKT'},
+            {from: 'BLR', to: 'BOM'},
+            {from: 'LKO', to: 'BLR'},
+            {from: 'DAD', to: 'HAN'},
+            {from: 'BKK', to: 'HKT'},
+            {from: 'BLR', to: 'DEL'},
+            {from: 'BLR', to: 'BOM'},
+            {from: 'KUL', to: 'SGN'},
+            {from: 'DEL', to: 'BLR'},
+            {from: 'BHO', to: 'BLR'},
+            {from: 'BOM', to: 'BLR'},
+            {from: 'BLR', to: 'PNQ'},
+            {from: 'BLR', to: 'JLR'},
+            {from: 'BLR', to: 'KNU'},
+            {from: 'BLR', to: 'AUH'},
+            {from: 'BLR', to: 'DEL'},
+            {from: 'BOM', to: 'BLR'},
+            {from: 'BLR', to: 'LKO'},
+            {from: 'HYD', to: 'DEL'},
+            {from: 'BLR', to: 'BOM'},
+            {from: 'BLR', to: 'DEL'},
+            {from: 'DEL', to: 'BLR'},
+            {from: 'LKO', to: 'BLR'},
+            {from: 'BOM', to: 'BLR'},
+            {from: 'DMK', to: 'BLR'},
+            {from: 'BLR', to: 'HYD'},
+            {from: 'HKT', to: 'DMK'},
+            {from: 'SIN', to: 'BLR'},
+            {from: 'BOM', to: 'LHR'},
+            {from: 'BLR', to: 'BOM'},
+            {from: 'BOM', to: 'BLR'},
+            {from: 'BLR', to: 'SIN'},
+            {from: 'GOI', to: 'BLR'},
+            {from: 'DEL', to: 'BLR'},
+            {from: 'BLR', to: 'DEL'},
+            {from: 'BOM', to: 'BLR'},
+            {from: 'BLR', to: 'LKO'},
+            {from: 'BKK', to: 'BLR'},
+            {from: 'DEL', to: 'BLR'},
+            {from: 'COK', to: 'MLE'},
+            {from: 'BLR', to: 'BOM'},
+            {from: 'DEL', to: 'BLR'},
+            {from: 'BLR', to: 'DEL'},
+            {from: 'BLR', to: 'BOM'},
+            {from: 'DEL', to: 'BLR'},
+            {from: 'PNQ', to: 'BLR'},
+            {from: 'BLR', to: 'DEL'},
+            {from: 'DEL', to: 'BLR'},
+            {from: 'BLR', to: 'DEL'},
+            {from: 'AUH', to: 'BLR'},
+            {from: 'MLE', to: 'BLR'},
+            {from: 'SGN', to: 'DAD'},
+            {from: 'BLR', to: 'BOM'},
+            {from: 'HAN', to: 'CCU'},
+            {from: 'BLR', to: 'LKO'},
+            {from: 'IXD', to: 'BLR'},
+            {from: 'LHR', to: 'BLR'},
+            {from: 'BOM', to: 'BLR'},
+            {from: 'SIN', to: 'BLR'},
+            {from: 'KUL', to: 'BLR'},
+            {from: 'DEL', to: 'BLR'},
+            {from: 'BLR', to: 'DEL'},
+            {from: 'DEL', to: 'BLR'},
+            {from: 'CCU', to: 'BLR'}
+        ];
+
+        // Setup
+        const container = document.getElementById('map-wrapper');
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+        let currentFlight = 0;
+        let animationInterval = null;
+        let isPlaying = false;
+        let animationSpeed = 1500;
+
+        const visitedAirports = new Set();
+        const visitedCountries = new Set();
+
+        // Track outbound flights for each airport
+        const outboundFlights = {};
+        flights.forEach((flight, index) => {
+            if (!outboundFlights[flight.from]) {
+                outboundFlights[flight.from] = [];
+            }
+            outboundFlights[flight.from].push(index);
+        });
+
+        // Track selected airport for click filtering
+        let selectedAirport = null;
+
+        // Create SVG
+        const svg = d3.select('#map')
+            .attr('viewBox', `0 0 ${width} ${height}`)
+            .attr('preserveAspectRatio', 'xMidYMid meet');
+
+        const g = svg.append('g');
+
+        // Initial projection centered on India
+        const projection = d3.geoMercator()
+            .center([78, 20])  // Center on India (longitude, latitude)
+            .scale(450)
+            .translate([width / 2, height / 2]);
+
+        const path = d3.geoPath().projection(projection);
+
+        // Add zoom behavior for manual zoom/pan
+        const zoom = d3.zoom()
+            .scaleExtent([0.5, 8])  // Min zoom 0.5x, max zoom 8x
+            .on('zoom', (event) => {
+                g.attr('transform', event.transform);
+            });
+
+        svg.call(zoom);
+
+        // Define vintage/retro map color palette
+        const vintageMapColors = [
+            '#e6a67e', '#d4926e', '#c4a47e', '#e8d39a', '#f0d89a', '#d4c48a',
+            '#b8c8a0', '#99b088', '#a8b898', '#b8a8b8', '#a898a8', '#c8b8c8',
+            '#a8c8d8', '#8ab8c8', '#b8d8c8', '#e8c89a', '#d4b88a', '#c8a878',
+            '#d8b898', '#c8b8a8', '#b8a898', '#d8c8a8', '#a8b8a8', '#98a898',
+            '#e8b88a', '#d8a87a', '#c8987a', '#b8c898', '#a8b888', '#98a878'
+        ];
+
+        // Function to get random vintage map color
+        function getRandomVintageColor() {
+            return vintageMapColors[Math.floor(Math.random() * vintageMapColors.length)];
+        }
+
+        // Load world map with higher resolution
+        Promise.all([
+            d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json'),
+            d3.json('/assets/data/geo/india_state.json')
+        ]).then(([world, indiaData]) => {
+                const countries = topojson.feature(world, world.objects.countries);
+
+                // Draw world map
+                g.append('g')
+                    .selectAll('path')
+                    .data(countries.features)
+                    .enter().append('path')
+                    .attr('class', 'country')
+                    .attr('d', path)
+                    .style('fill', () => getRandomVintageColor());
+
+                // Overlay India with disputed territories (only outer borders visible)
+                const indiaGroup = g.append('g').attr('class', 'india-overlay');
+
+                // Draw India with distinct color
+                indiaGroup.selectAll('.india-state')
+                    .data(indiaData.features)
+                    .enter().append('path')
+                    .attr('class', 'india-state')
+                    .attr('d', path)
+                    .style('fill', '#d4c48a')  // Vintage yellow-tan for India overlay
+                    .style('fill-opacity', 1.0)  // Fully opaque for consistent static color
+                    .style('stroke', '#d4c48a')  // Same as fill to hide internal borders
+                    .style('stroke-width', 0.5)
+                    .style('vector-effect', 'non-scaling-stroke');
+
+                console.log('India overlay loaded');
+
+                // Add flight paths
+                flights.forEach((flight, i) => {
+                    const fromCoord = airportCoords[flight.from];
+                    const toCoord = airportCoords[flight.to];
+
+                    if (fromCoord && toCoord) {
+                        const fromPoint = projection(fromCoord);
+                        const toPoint = projection(toCoord);
+
+                        // Create path with gentle curve using quadratic bezier
+                        const midX = (fromPoint[0] + toPoint[0]) / 2;
+                        const midY = (fromPoint[1] + toPoint[1]) / 2;
+
+                        // Subtle perpendicular offset for gentle curve
+                        const dx = toPoint[0] - fromPoint[0];
+                        const dy = toPoint[1] - fromPoint[1];
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        const offsetRatio = 0.1; // Gentle curve offset
+
+                        const controlX = midX - (dy / dist) * dist * offsetRatio;
+                        const controlY = midY + (dx / dist) * dist * offsetRatio;
+
+                        const pathD = `M ${fromPoint[0]} ${fromPoint[1]} Q ${controlX} ${controlY} ${toPoint[0]} ${toPoint[1]}`;
+
+                        // Create invisible wider path for easier hovering
+                        const hitArea = g.append('path')
+                            .attr('class', `flight-path-hitarea flight-hitarea-${i}`)
+                            .attr('d', pathD)
+                            .attr('data-route', `${cityNames[flight.from]} → ${cityNames[flight.to]}`);
+
+                        // Create visible path
+                        const flightPath = g.append('path')
+                            .attr('class', `flight-path flight-${i}`)
+                            .attr('d', pathD);
+
+                        // Link the two paths for hover effects
+                        hitArea.node().__visiblePath = flightPath.node();
+                        flightPath.node().__hitArea = hitArea.node();
+
+                        // Add hover functionality to hit area
+                        const tooltip = document.getElementById('tooltip');
+                        hitArea.on('mouseenter', function() {
+                            const route = d3.select(this).attr('data-route');
+                            tooltip.textContent = route;
+                            tooltip.classList.add('show');
+
+                            // Highlight the visible path
+                            const visiblePath = this.__visiblePath;
+                            if (visiblePath) {
+                                d3.select(visiblePath).classed('hover', true);
+                            }
+                        }).on('mousemove', function(event) {
+                            tooltip.style.left = (event.pageX + 10) + 'px';
+                            tooltip.style.top = (event.pageY - 30) + 'px';
+                        }).on('mouseleave', function() {
+                            tooltip.classList.remove('show');
+
+                            // Remove highlight from the visible path
+                            const visiblePath = this.__visiblePath;
+                            if (visiblePath) {
+                                d3.select(visiblePath).classed('hover', false);
+                            }
+                        });
+                    }
+                });
+
+                // Add airport markers
+                Object.keys(airportCoords).forEach(code => {
+                    const coords = airportCoords[code];
+                    const point = projection(coords);
+
+                    // Add larger invisible circle for easier hovering
+                    const hitArea = g.append('circle')
+                        .attr('class', `airport-hitarea airport-hitarea-${code}`)
+                        .attr('cx', point[0])
+                        .attr('cy', point[1])
+                        .attr('r', 6)
+                        .attr('data-city', cityNames[code]);
+
+                    // Add visible airport dot
+                    const circle = g.append('circle')
+                        .attr('class', `airport airport-${code}`)
+                        .attr('cx', point[0])
+                        .attr('cy', point[1])
+                        .attr('r', 1.5)
+                        .style('pointer-events', 'none');
+
+                    // Add city name label (hidden by default)
+                    const label = g.append('text')
+                        .attr('class', `airport-label label-${code}`)
+                        .attr('x', point[0])
+                        .attr('y', point[1] - 2.5)
+                        .text(cityNames[code]);
+
+                    // Get tooltip element
+                    const tooltip = document.getElementById('tooltip');
+
+                    // Add hover functionality to the hit area
+                    hitArea.on('mouseenter', function() {
+                        // Highlight outbound flights on hover (if not in animation)
+                        if (!isPlaying) {
+                            highlightOutboundFlights(code, true);
+                        }
+                        // Show tooltip
+                        const city = cityNames[code];
+                        tooltip.textContent = city;
+                        tooltip.classList.add('show');
+                    }).on('mousemove', function(event) {
+                        tooltip.style.left = (event.pageX + 10) + 'px';
+                        tooltip.style.top = (event.pageY - 30) + 'px';
+                    }).on('mouseleave', function() {
+                        // Hide tooltip
+                        tooltip.classList.remove('show');
+                        // Restore previous state on mouse leave
+                        if (!isPlaying) {
+                            if (selectedAirport && selectedAirport !== code) {
+                                // Restore the selected airport's highlight
+                                highlightOutboundFlights(selectedAirport, false);
+                            } else if (!selectedAirport) {
+                                // Clear highlight if no airport is selected
+                                clearFlightHighlight();
+                            }
+                            // If hovering over the selected airport, keep its highlight
+                        }
+                    });
+
+                    // Add click functionality to filter flights
+                    hitArea.on('click', function(event) {
+                        event.stopPropagation();
+
+                        // Toggle selection
+                        if (selectedAirport === code) {
+                            // Unselect - reset to normal view
+                            selectedAirport = null;
+                            clearFlightHighlight();
+                        } else {
+                            // Select this airport
+                            selectedAirport = code;
+                            highlightOutboundFlights(code, false);
+                        }
+                    });
+                });
+            });
+
+        // Function to highlight outbound flights from an airport
+        function highlightOutboundFlights(airportCode, isHover) {
+            const outbound = outboundFlights[airportCode] || [];
+
+            if (outbound.length === 0) return;
+
+            // Dim all flights first
+            d3.selectAll('.flight-path').each(function(d, i) {
+                const path = d3.select(this);
+                if (!path.classed('active')) {
+                    path.classed('dimmed', true);
+                    path.classed('highlighted', false);
+                }
+            });
+
+            // Highlight outbound flights
+            outbound.forEach(flightIndex => {
+                const path = d3.select(`.flight-${flightIndex}`);
+                if (!path.classed('active')) {
+                    path.classed('dimmed', false);
+                    path.classed('highlighted', true);
+                    // Ensure the path is fully visible
+                    path.style('stroke-dasharray', 'none');
+                    path.style('stroke-dashoffset', 0);
+                }
+            });
+        }
+
+        // Function to clear flight highlighting
+        function clearFlightHighlight() {
+            d3.selectAll('.flight-path').each(function() {
+                const path = d3.select(this);
+                if (!path.classed('active') && !path.classed('completed')) {
+                    path.classed('dimmed', false);
+                    path.classed('highlighted', false);
+                    // Reset to initial hidden state if not completed
+                    const pathLength = this.getTotalLength();
+                    path.style('stroke-dasharray', pathLength);
+                    path.style('stroke-dashoffset', pathLength);
+                } else if (path.classed('completed')) {
+                    // Just remove the classes for completed paths
+                    path.classed('dimmed', false);
+                    path.classed('highlighted', false);
+                }
+            });
+        }
+
+        // Function to calculate zoom bounds for two points
+        function getZoomTransform(fromCoord, toCoord) {
+            const padding = 60;
+
+            const fromPoint = projection(fromCoord);
+            const toPoint = projection(toCoord);
+
+            const minX = Math.min(fromPoint[0], toPoint[0]) - padding;
+            const maxX = Math.max(fromPoint[0], toPoint[0]) + padding;
+            const minY = Math.min(fromPoint[1], toPoint[1]) - padding;
+            const maxY = Math.max(fromPoint[1], toPoint[1]) + padding;
+
+            const dx = maxX - minX;
+            const dy = maxY - minY;
+            const centerX = (minX + maxX) / 2;
+            const centerY = (minY + maxY) / 2;
+
+            const scale = Math.min(width / dx, height / dy) * 1.4;
+            const translateX = width / 2 - centerX * scale;
+            const translateY = height / 2 - centerY * scale;
+
+            return { scale, translateX, translateY };
+        }
+
+        // Animation functions
+        function animateFlight(index) {
+            if (index >= flights.length) {
+                stopAnimation();
+                return;
+            }
+
+            const flight = flights[index];
+            const fromCoord = airportCoords[flight.from];
+            const toCoord = airportCoords[flight.to];
+
+            if (!fromCoord || !toCoord) {
+                currentFlight++;
+                return;
+            }
+
+            // Update stats
+            visitedAirports.add(flight.from);
+            visitedAirports.add(flight.to);
+
+            // Calculate zoom transform
+            const transform = getZoomTransform(fromCoord, toCoord);
+
+            // Smooth zoom transition using D3 zoom
+            const zoomTransform = d3.zoomIdentity
+                .translate(transform.translateX, transform.translateY)
+                .scale(transform.scale);
+
+            svg.transition()
+                .duration(animationSpeed * 0.6)
+                .ease(d3.easeCubicInOut)
+                .call(zoom.transform, zoomTransform);
+
+            // Highlight current airports and show labels
+            d3.selectAll('.airport').classed('current', false).attr('r', 1.5);
+            d3.selectAll('.airport-label').classed('visible', false).classed('hover', false);
+
+            d3.select(`.airport-${flight.from}`)
+                .classed('current', true)
+                .transition()
+                .duration(200)
+                .attr('r', 2.5);
+            d3.select(`.label-${flight.from}`)
+                .classed('visible', true);
+
+            d3.select(`.airport-${flight.to}`)
+                .classed('current', true)
+                .transition()
+                .duration(200)
+                .attr('r', 2.5);
+            d3.select(`.label-${flight.to}`)
+                .classed('visible', true);
+
+            // Highlight flight path after zoom completes
+            setTimeout(() => {
+                d3.selectAll('.flight-path').classed('active', false);
+
+                const currentPath = d3.select(`.flight-${index}`);
+                const pathLength = currentPath.node().getTotalLength();
+
+                // Animate line drawing from source to destination with solid line
+                currentPath
+                    .classed('active', true)
+                    .style('opacity', 1)
+                    .style('stroke-dasharray', pathLength)
+                    .style('stroke-dashoffset', pathLength)
+                    .transition()
+                    .duration(animationSpeed * 0.35)
+                    .ease(d3.easeLinear)
+                    .style('stroke-dashoffset', 0)
+                    .on('end', function() {
+                        // Remove dasharray after animation completes to show solid line
+                        d3.select(this).style('stroke-dasharray', 'none');
+                    });
+
+                // Mark airports as visited
+                d3.select(`.airport-${flight.from}`).classed('visited', true);
+                d3.select(`.airport-${flight.to}`).classed('visited', true);
+
+                // Mark previous paths as completed
+                if (index > 0) {
+                    d3.select(`.flight-${index - 1}`)
+                        .classed('active', false)
+                        .classed('completed', true)
+                        .style('stroke-dasharray', 'none');
+                }
+            }, animationSpeed * 0.6);
+        }
+
+        function play() {
+            if (isPlaying) return;
+
+            // Clear any airport selection when starting animation
+            selectedAirport = null;
+            clearFlightHighlight();
+
+            // If we're at the end, reset before playing
+            if (currentFlight >= flights.length) {
+                reset();
+                // Wait a bit for reset to complete before starting
+                setTimeout(() => {
+                    isPlaying = true;
+                    updateButtonStates();
+                    animationInterval = setInterval(() => {
+                        if (currentFlight < flights.length) {
+                            animateFlight(currentFlight);
+                            currentFlight++;
+                            updateFlightPosition();
+                        } else {
+                            stopAnimation();
+                        }
+                    }, animationSpeed);
+                }, 100);
+                return;
+            }
+
+            isPlaying = true;
+            updateButtonStates();
+
+            animationInterval = setInterval(() => {
+                if (currentFlight < flights.length) {
+                    animateFlight(currentFlight);
+                    currentFlight++;
+                    updateFlightPosition();
+                } else {
+                    stopAnimation();
+                }
+            }, animationSpeed);
+        }
+
+        function pause() {
+            isPlaying = false;
+            clearInterval(animationInterval);
+            updateButtonStates();
+        }
+
+        function stopAnimation() {
+            pause();
+        }
+
+        function reset() {
+            pause();
+            currentFlight = 0;
+            visitedAirports.clear();
+            visitedCountries.clear();
+
+            // Clear any airport selection
+            selectedAirport = null;
+
+            // Reset zoom using zoom behavior
+            svg.transition()
+                .duration(1000)
+                .call(zoom.transform, d3.zoomIdentity);
+
+            d3.selectAll('.flight-path').each(function() {
+                const pathLength = this.getTotalLength();
+                d3.select(this)
+                    .style('opacity', 0)
+                    .classed('active', false)
+                    .classed('completed', false)
+                    .classed('dimmed', false)
+                    .classed('highlighted', false)
+                    .style('stroke-dasharray', pathLength)
+                    .style('stroke-dashoffset', pathLength)
+                    .style('stroke', null); // Clear inline stroke color
+            });
+            d3.selectAll('.airport')
+                .classed('visited', false)
+                .classed('current', false)
+                .attr('r', 1.5);
+            d3.selectAll('.airport-label').classed('visible', false).classed('hover', false);
+            updateFlightPosition();
+        }
+
+        function skipToEnd() {
+            pause();
+
+            // Clear any airport selection
+            selectedAirport = null;
+            clearFlightHighlight();
+
+            // Reset zoom using zoom behavior
+            svg.transition()
+                .duration(1000)
+                .call(zoom.transform, d3.zoomIdentity);
+
+            for (let i = currentFlight; i < flights.length; i++) {
+                const flight = flights[i];
+                visitedAirports.add(flight.from);
+                visitedAirports.add(flight.to);
+
+                d3.select(`.flight-${i}`)
+                    .classed('active', false)
+                    .classed('completed', true)
+                    .style('opacity', 1)
+                    .style('stroke-dasharray', 'none')
+                    .style('stroke-dashoffset', 0);
+                d3.select(`.airport-${flight.from}`).classed('visited', true);
+                d3.select(`.airport-${flight.to}`).classed('visited', true);
+            }
+
+            currentFlight = flights.length;
+            updateFlightPosition();
+        }
+
+        // Function to send button state to parent
+        function updateButtonStates() {
+            window.parent.postMessage({
+                type: 'buttonState',
+                playDisabled: isPlaying,
+                pauseDisabled: !isPlaying,
+                resetDisabled: false,
+                skipDisabled: false
+            }, '*');
+        }
+
+        // Function to send current flight position to parent
+        function updateFlightPosition() {
+            window.parent.postMessage({
+                type: 'flightPosition',
+                currentFlight: currentFlight
+            }, '*');
+        }
+
+        // Seek to specific flight
+        function seekToFlight(flightIndex) {
+            if (flightIndex < 0 || flightIndex > flights.length) return;
+
+            pause();
+            currentFlight = 0;
+
+            // Clear any airport selection
+            selectedAirport = null;
+
+            // Reset everything
+            d3.selectAll('.flight-path').each(function() {
+                const pathLength = this.getTotalLength();
+                d3.select(this)
+                    .style('opacity', 0)
+                    .classed('active', false)
+                    .classed('completed', false)
+                    .classed('dimmed', false)
+                    .classed('highlighted', false)
+                    .style('stroke-dasharray', pathLength)
+                    .style('stroke-dashoffset', pathLength)
+                    .style('stroke', null); // Clear inline stroke color
+            });
+            d3.selectAll('.airport')
+                .classed('visited', false)
+                .classed('current', false)
+                .attr('r', 1.5);
+            d3.selectAll('.airport-label').classed('visible', false);
+
+            // Jump to the target flight
+            for (let i = 0; i < flightIndex && i < flights.length; i++) {
+                const flight = flights[i];
+                d3.select(`.flight-${i}`)
+                    .classed('active', false)
+                    .classed('completed', true)
+                    .style('opacity', 1)
+                    .style('stroke-dasharray', 'none')
+                    .style('stroke-dashoffset', 0);
+                d3.select(`.airport-${flight.from}`).classed('visited', true);
+                d3.select(`.airport-${flight.to}`).classed('visited', true);
+            }
+
+            currentFlight = flightIndex;
+            updateFlightPosition();
+            updateButtonStates();
+        }
+
+        // Go to previous flight
+        function previousFlight() {
+            if (currentFlight > 0) {
+                seekToFlight(currentFlight - 1);
+            }
+        }
+
+        // Go to next flight
+        function nextFlight() {
+            if (currentFlight < flights.length) {
+                seekToFlight(currentFlight + 1);
+            }
+        }
+
+        // Listen for messages from parent
+        window.addEventListener('message', function(event) {
+            switch(event.data.command) {
+                case 'play':
+                    play();
+                    break;
+                case 'pause':
+                    pause();
+                    break;
+                case 'reset':
+                    reset();
+                    break;
+                case 'skip':
+                    skipToEnd();
+                    break;
+                case 'seek':
+                    seekToFlight(event.data.flightIndex);
+                    break;
+                case 'previous':
+                    previousFlight();
+                    break;
+                case 'next':
+                    nextFlight();
+                    break;
+                case 'setSpeed':
+                    animationSpeed = event.data.speed;
+                    if (isPlaying) {
+                        pause();
+                        play();
+                    }
+                    break;
+            }
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            const newWidth = container.clientWidth;
+            const newHeight = container.clientHeight;
+            svg.attr('viewBox', `0 0 ${newWidth} ${newHeight}`);
+        });
+
+        // YouTube-like seek bar functionality
+        const playPauseBtn = document.getElementById('play-pause-btn');
+        const playIcon = document.getElementById('play-icon');
+        const pauseIcon = document.getElementById('pause-icon');
+        const seekBarContainer = document.getElementById('seek-bar-container');
+        const seekProgress = document.getElementById('seek-progress');
+        const currentTimeDisplay = document.getElementById('current-time');
+        const totalTimeDisplay = document.getElementById('total-time');
+
+        // Update play/pause icon
+        function updatePlayPauseIcon() {
+            if (isPlaying) {
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'block';
+            } else {
+                playIcon.style.display = 'block';
+                pauseIcon.style.display = 'none';
+            }
+        }
+
+        // Update seek bar progress
+        function updateSeekBar() {
+            const progress = (currentFlight / flights.length) * 100;
+            seekProgress.style.width = progress + '%';
+            currentTimeDisplay.textContent = currentFlight;
+        }
+
+        // Play/pause button click
+        playPauseBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                pause();
+            } else {
+                play();
+            }
+            updatePlayPauseIcon();
+        });
+
+        // Seek bar click and drag functionality
+        let isDragging = false;
+        let wasPlayingBeforeDrag = false;
+
+        function seekToPosition(clientX) {
+            const rect = seekBarContainer.getBoundingClientRect();
+            const clickX = Math.max(0, Math.min(clientX - rect.left, rect.width));
+            const percent = clickX / rect.width;
+            const targetFlight = Math.floor(percent * flights.length);
+
+            seekToFlight(targetFlight);
+            updateSeekBar();
+        }
+
+        seekBarContainer.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            wasPlayingBeforeDrag = isPlaying;
+
+            // Pause while dragging for smoother experience
+            if (isPlaying) {
+                pause();
+            }
+
+            seekToPosition(e.clientX);
+            e.preventDefault(); // Prevent text selection while dragging
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                seekToPosition(e.clientX);
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+
+                // Resume playing if it was playing before drag
+                if (wasPlayingBeforeDrag) {
+                    play();
+                }
+            }
+        });
+
+        // Also handle mouse leaving the window
+        document.addEventListener('mouseleave', () => {
+            if (isDragging) {
+                isDragging = false;
+
+                if (wasPlayingBeforeDrag) {
+                    play();
+                }
+            }
+        });
+
+        // Override updateFlightPosition to also update seek bar
+        const originalUpdateFlightPosition = updateFlightPosition;
+        updateFlightPosition = function() {
+            originalUpdateFlightPosition();
+            updateSeekBar();
+        };
+
+        // Override updateButtonStates to also update play/pause icon
+        const originalUpdateButtonStates = updateButtonStates;
+        updateButtonStates = function() {
+            originalUpdateButtonStates();
+            updatePlayPauseIcon();
+        };
+
+        // Speed selector functionality
+        const speedBtn = document.getElementById('speed-btn');
+        const speedMenu = document.getElementById('speed-menu');
+        const speedOptions = document.querySelectorAll('.speed-option');
+
+        // Toggle speed menu
+        speedBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            speedMenu.classList.toggle('show');
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!speedBtn.contains(e.target) && !speedMenu.contains(e.target)) {
+                speedMenu.classList.remove('show');
+            }
+        });
+
+        // Handle speed selection
+        speedOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const newSpeed = parseInt(option.dataset.speed);
+                const speedLabel = option.textContent;
+
+                // Update animation speed
+                animationSpeed = newSpeed;
+
+                // Update button label
+                speedBtn.textContent = speedLabel;
+
+                // Update active state
+                speedOptions.forEach(opt => opt.classList.remove('active'));
+                option.classList.add('active');
+
+                // Close menu
+                speedMenu.classList.remove('show');
+
+                // Restart animation if playing
+                if (isPlaying) {
+                    pause();
+                    play();
+                }
+            });
+        });
+
+        // Initialize seek bar
+        totalTimeDisplay.textContent = flights.length;
+        updateSeekBar();
+        updatePlayPauseIcon();
+
+        // Initialize button states
+        updateButtonStates();
+
+        // YouTube-style tap to play/pause
+        const tapFeedback = document.getElementById('tap-feedback');
+        const tapIcon = document.getElementById('tap-icon');
+        let tapTimeout;
+
+        svg.on('click', function(event) {
+            // Don't trigger if clicking on controls or dragging
+            if (event.defaultPrevented) return;
+
+            // Toggle play/pause
+            if (isPlaying) {
+                pause();
+                tapIcon.src = 'icons/pause.png';  // Show pause icon when paused
+                tapIcon.alt = 'Pause';
+            } else {
+                play();
+                tapIcon.src = 'icons/play.png';  // Show play icon when playing
+                tapIcon.alt = 'Play';
+            }
+
+            // Show feedback
+            tapFeedback.classList.add('show');
+
+            // Hide feedback after a short delay
+            clearTimeout(tapTimeout);
+            tapTimeout = setTimeout(() => {
+                tapFeedback.classList.remove('show');
+            }, 500);
+        });
+
+        // Prevent tap feedback when dragging/zooming
+        let isDraggingMap = false;
+        svg.on('mousedown', function() {
+            isDraggingMap = false;
+        });
+
+        svg.on('mousemove', function() {
+            isDraggingMap = true;
+        });
+
+        svg.on('mouseup', function(event) {
+            if (isDraggingMap) {
+                event.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>

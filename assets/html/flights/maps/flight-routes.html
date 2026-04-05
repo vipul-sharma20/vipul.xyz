@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Routes</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: transparent;
+            padding: 30px 25px;
+            color: #333;
+        }
+
+        #chart {
+            background: transparent;
+        }
+
+        .chart-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #1a1a1a;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 10px;
+
+        }
+
+        .tooltip {
+            position: fixed;
+            background: rgba(30, 30, 30, 0.95);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 3px;
+            font-size: 13px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            max-width: 250px;
+        }
+
+        .bar:hover {
+            opacity: 0.7;
+            cursor: pointer;
+        }
+
+        .axis text {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .axis path,
+        .axis line {
+            stroke: #d0d0d0;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px 10px;
+            }
+
+            .chart-title {
+                font-size: 1.2em;
+                margin-bottom: 15px;
+            }
+
+            .axis text {
+                font-size: 9px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="chart">
+        <div class="chart-title">Top 10 Routes</div>
+        <div id="viz"></div>
+    </div>
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        // Aggregated data (no raw dates)
+        const routeArray = [{"route":"Delhi → Bangalore","count":21},{"route":"Bangalore → Delhi","count":15},{"route":"Bangalore → Mumbai","count":11},{"route":"Mumbai → Bangalore","count":10},{"route":"Bangalore → Lucknow","count":5},{"route":"Lucknow → Bangalore","count":3},{"route":"Bangalore → Singapore","count":3},{"route":"Bangalore → Goa","count":2},{"route":"Goa → Bangalore","count":2},{"route":"Bangalore → Kanpur","count":2}];
+
+        const isMobile = window.innerWidth <= 768;
+        const margin = {
+            top: 20,
+            right: isMobile ? 10 : 20,
+            bottom: 60,
+            left: isMobile ? 120 : 200
+        };
+        const width = document.getElementById('viz').offsetWidth - margin.left - margin.right;
+        const height = 400 - margin.top - margin.bottom;
+
+        const svg = d3.select('#viz')
+            .append('svg')
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom)
+            .append('g')
+            .attr('transform', `translate(${margin.left},${margin.top})`);
+
+        const x = d3.scaleLinear()
+            .domain([0, d3.max(routeArray, d => d.count)])
+            .nice()
+            .range([0, width]);
+
+        const y = d3.scaleBand()
+            .domain(routeArray.map(d => d.route))
+            .range([0, height])
+            .padding(0.2);
+
+        svg.selectAll('.bar')
+            .data(routeArray)
+            .enter().append('rect')
+            .attr('class', 'bar')
+            .attr('x', 0)
+            .attr('y', d => y(d.route))
+            .attr('width', d => x(d.count))
+            .attr('height', y.bandwidth())
+            .attr('fill', '#76b7b2')
+            .on('mouseover', function(event, d) {
+                const tooltip = d3.select('#tooltip');
+                tooltip.html(`${d.route}<br>Flights: ${d.count}`)
+                    .style('opacity', 1);
+
+                // Smart positioning to keep tooltip in view
+                const tooltipNode = tooltip.node();
+                const tooltipWidth = tooltipNode.offsetWidth;
+                const tooltipHeight = tooltipNode.offsetHeight;
+
+                let left = event.clientX + 10;
+                let top = event.clientY - 10;
+
+                // Adjust if tooltip goes off right edge
+                if (left + tooltipWidth > window.innerWidth) {
+                    left = event.clientX - tooltipWidth - 10;
+                }
+
+                // Adjust if tooltip goes off bottom edge
+                if (top + tooltipHeight > window.innerHeight) {
+                    top = event.clientY - tooltipHeight - 10;
+                }
+
+                // Adjust if tooltip goes off top edge
+                if (top < 0) {
+                    top = event.clientY + 10;
+                }
+
+                tooltip.style('left', left + 'px').style('top', top + 'px');
+            })
+            .on('mouseout', function() {
+                d3.select('#tooltip').style('opacity', 0);
+            });
+
+        svg.selectAll('.label')
+            .data(routeArray)
+            .enter().append('text')
+            .attr('class', 'label')
+            .attr('x', d => x(d.count) + 5)
+            .attr('y', d => y(d.route) + y.bandwidth() / 2)
+            .attr('dy', '.35em')
+            .attr('font-size', '12px')
+            .attr('fill', '#2c3e50')
+            .text(d => d.count);
+
+        svg.append('g')
+            .attr('class', 'axis')
+            .attr('transform', `translate(0,${height})`)
+            .call(d3.axisBottom(x).ticks(5));
+
+        svg.append('g')
+            .attr('class', 'axis')
+            .call(d3.axisLeft(y));
+
+        // X-axis label
+        svg.append('text')
+            .attr('text-anchor', 'middle')
+            .attr('x', width / 2)
+            .attr('y', height + 45)
+            .attr('font-size', '12px')
+            .attr('fill', '#666')
+            .text('Number of Flights');
+    </script>
+</body>
+</html>

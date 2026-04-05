@@ -1,0 +1,347 @@
+---
+---
+
+// Photo Story - Newspaper Style Layout
+// Text wraps around images like a magazine/newspaper article
+// Uses blog fonts: 'Alegreya Sans' for body, 'Gentium Basic' for headings
+
+.photo-story-article {
+  max-width: 800px;
+  width: 80%;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  font-family: 'Alegreya Sans', sans-serif;
+  line-height: 1.3;
+  color: #181818;
+}
+
+// Header
+.photo-story-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.photo-story-categories {
+  margin-bottom: 0.75rem;
+  font-family: 'Alegreya Sans', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #666;
+
+  .category {
+    display: inline;
+  }
+
+  .separator {
+    margin: 0 0.4rem;
+    color: #999;
+  }
+}
+
+.photo-story-title {
+  font-family: 'Gentium Basic', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 0.5rem 0;
+  color: #181818;
+}
+
+.photo-story-subtitle {
+  font-family: 'Alegreya Sans', sans-serif;
+  font-size: 1rem;
+  font-style: italic;
+  color: #555;
+  margin: 0 0 0.75rem 0;
+}
+
+.photo-story-meta {
+  font-family: 'Alegreya Sans', sans-serif;
+  font-size: 0.8rem;
+  color: #888;
+
+  time {
+    display: inline;
+  }
+
+  .location {
+    &::before {
+      content: " · ";
+    }
+  }
+}
+
+// Content area
+.photo-story-content {
+  font-size: 0.8em;
+  text-align: left;
+
+  p {
+    margin: 0 0 1.25rem 0;
+  }
+
+  // Headings within content
+  h2 {
+    font-family: 'Gentium Basic', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 2rem 0 0.75rem 0;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+  }
+
+  h3 {
+    font-family: 'Gentium Basic', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 1.5rem 0 0.5rem 0;
+  }
+
+  // Default image styling
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 1.25rem auto;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+
+  // Float left - text wraps on right
+  .img-left {
+    float: left;
+    max-width: 45%;
+    margin: 0.25rem 1.25rem 0.75rem 0;
+  }
+
+  // Float right - text wraps on left
+  .img-right {
+    float: right;
+    max-width: 45%;
+    margin: 0.25rem 0 0.75rem 1.25rem;
+  }
+
+  // Small images
+  .img-small {
+    max-width: 35%;
+  }
+
+  .img-medium {
+    max-width: 50%;
+  }
+
+  // Full width image
+  .img-full {
+    float: none;
+    width: 100%;
+    max-width: 100%;
+    margin: 1.5rem 0;
+  }
+
+  // Wide image (breaks out slightly)
+  .img-wide {
+    float: none;
+    width: calc(100% + 4rem);
+    max-width: calc(100% + 4rem);
+    margin: 1.5rem -2rem;
+  }
+
+  // Image with caption wrapper
+  figure {
+    margin: 0;
+
+    &.figure-left {
+      float: left;
+      max-width: 45%;
+      margin: 0.25rem 1.25rem 0.75rem 0;
+    }
+
+    &.figure-right {
+      float: right;
+      max-width: 45%;
+      margin: 0.25rem 0 0.75rem 1.25rem;
+    }
+
+    &.figure-full {
+      float: none;
+      max-width: 100%;
+      margin: 1.5rem 0;
+    }
+
+    img {
+      margin: 0;
+      width: 100%;
+    }
+
+    figcaption {
+      font-family: 'Alegreya Sans', sans-serif;
+      font-size: 0.75rem;
+      font-style: italic;
+      color: #666;
+      padding: 0.4rem 0;
+    }
+  }
+
+  // Clear float
+  .clear {
+    clear: both;
+  }
+
+  // Dropcap for first paragraph
+  .dropcap::first-letter {
+    float: left;
+    font-family: 'Gentium Basic', serif;
+    font-size: 4rem;
+    line-height: 0.8;
+    padding-right: 0.4rem;
+    padding-top: 0.2rem;
+    font-weight: 700;
+    color: #181818;
+  }
+
+  // Pull quote
+  blockquote,
+  .pullquote {
+    float: right;
+    width: 40%;
+    margin: 0.25rem 0 0.75rem 1.25rem;
+    padding: 0.75rem 0 0.75rem 1rem;
+    border-left: 3px solid #181818;
+    font-family: 'Gentium Basic', serif;
+    font-size: 1.1rem;
+    font-style: italic;
+    line-height: 1.4;
+    color: #333;
+
+    &.pullquote-left {
+      float: left;
+      margin: 0.25rem 1.25rem 0.75rem 0;
+      border-left: none;
+      border-right: 3px solid #181818;
+      padding-left: 0;
+      padding-right: 1rem;
+      text-align: right;
+    }
+  }
+
+  // Horizontal rule as section break
+  hr {
+    border: none;
+    text-align: center;
+    margin: 2rem 0;
+
+    &::before {
+      content: "• • •";
+      font-size: 0.85rem;
+      color: #999;
+      letter-spacing: 0.4rem;
+    }
+  }
+}
+
+// Footer with tags (matches blog .tag style from main.scss)
+.photo-story-footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #ddd;
+  clear: both;
+}
+
+.photo-story-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+// Lightbox
+.photo-story-lightbox {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+
+  &.active {
+    display: flex;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 2.5rem;
+    color: #fff;
+    cursor: pointer;
+    line-height: 1;
+
+    &:hover {
+      color: #ccc;
+    }
+  }
+
+  .lightbox-image {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    box-shadow: none;
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .photo-story-article {
+    padding: 1.5rem 1rem;
+  }
+
+  .photo-story-title {
+    font-size: 1.75rem;
+  }
+
+  .photo-story-content {
+    font-size: 1rem;
+    text-align: left;
+
+    // Stack images on mobile
+    .img-left,
+    .img-right,
+    .img-small,
+    .img-medium {
+      float: none;
+      max-width: 100%;
+      margin: 1.5rem 0;
+    }
+
+    figure.figure-left,
+    figure.figure-right {
+      float: none;
+      max-width: 100%;
+      margin: 1.5rem 0;
+    }
+
+    blockquote,
+    .pullquote,
+    .pullquote-left {
+      float: none;
+      width: 100%;
+      margin: 1.5rem 0;
+      border-left: 3px solid #1a1a1a;
+      border-right: none;
+      padding-left: 1rem;
+      padding-right: 0;
+      text-align: left;
+    }
+
+    .img-wide {
+      width: calc(100% + 2rem);
+      margin: 1.5rem -1rem;
+    }
+  }
+}

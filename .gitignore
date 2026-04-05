@@ -1,29 +1,40 @@
-# Vim
-*~
-*.sw[p_]
+# Dependencies
+frontend/node_modules/
+frontend/.next/
+frontend/out/
 
-# Sublime Text
-*.sublime-project
-*.sublime-workspace
+# Generated files
+frontend/public/search-index.json
+frontend/public/feed.xml
 
-# Ruby Gem
-*.gem
-.bundle
-Gemfile.lock
-**/vendor/bundle
+# Build
+*.tsbuildinfo
 
-# Node.js and NPM
-node_modules
-npm-debug.log*
-package-lock.json
-codekit-config.json
-
-# macOS
+# OS
 .DS_Store
+Thumbs.db
 
-# Jekyll generated files
-.jekyll-cache
-.jekyll-metadata
-.sass-cache
-_asset_bundler_cache
-_site
+# Editor
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Environment
+.env
+.env.local
+.env.production
+
+# Python (legacy backend / migration scripts)
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+backend/
+
+.claude/
+
+# Unused thumbnail cache
+assets/images/photos/thumbs/
+assets/images/printing/thumbs/

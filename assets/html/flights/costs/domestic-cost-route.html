@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Domestic Flight Costs by Route</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: transparent;
+            padding: 30px 25px;
+            color: #333;
+        }
+
+        #chart {
+            background: transparent;
+        }
+
+        .chart-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #1a1a1a;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .tooltip {
+            position: fixed;
+            background: rgba(30, 30, 30, 0.95);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 3px;
+            font-size: 13px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            max-width: 250px;
+        }
+
+        .bar:hover {
+            opacity: 0.7;
+            cursor: pointer;
+        }
+
+        .axis text {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .axis path,
+        .axis line {
+            stroke: #d0d0d0;
+        }
+
+        .count-label {
+            font-size: 9px;
+            fill: #666;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px 10px;
+            }
+
+            .chart-title {
+                font-size: 1.2em;
+                margin-bottom: 15px;
+            }
+
+            .axis text {
+                font-size: 9px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="chart">
+        <div class="chart-title">
+            Top 10 Domestic Routes by Total Spending
+            <div class="subtitle">India domestic flights only</div>
+        </div>
+        <div id="viz"></div>
+    </div>
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        // Top 10 routes by total spending
+        const routeData = [
+  {
+    "route": "Delhi → Bangalore",
+    "count": 20,
+    "total": 148424,
+    "average": 7421
+  },
+  {
+    "route": "Bangalore → Delhi",
+    "count": 16,
+    "total": 98490,
+    "average": 6156
+  },
+  {
+    "route": "Bangalore → Lucknow",
+    "count": 5,
+    "total": 48791,
+    "average": 9758
+  },
+  {
+    "route": "Bangalore → Cochin",
+    "count": 1,
+    "total": 31899,
+    "average": 31899
+  },
+  {
+    "route": "Bangalore → Mumbai",
+    "count": 4,
+    "total": 29918,
+    "average": 7480
+  },
+  {
+    "route": "Lucknow → Bangalore",
+    "count": 3,
+    "total": 26228,
+    "average": 8743
+  },
+  {
+    "route": "Mumbai → Bangalore",
+    "count": 4,
+    "total": 25963,
+    "average": 6491
+  },
+  {
+    "route": "Varanasi → Delhi",
+    "count": 1,
+    "total": 12696,
+    "average": 12696
+  },
+  {
+    "route": "Port Blair → Bangalore",
+    "count": 1,
+    "total": 8600,
+    "average": 8600
+  },
+  {
+    "route": "Goa → Bangalore",
+    "count": 2,
+    "total": 8324,
+    "average": 4162
+  }
+];
+
+        const margin = {top: 20, right: 60, bottom: 60, left: 180};
+        const width = document.getElementById('viz').offsetWidth - margin.left - margin.right;
+        const height = 450 - margin.top - margin.bottom;
+
+        const svg = d3.select('#viz')
+            .append('svg')
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom)
+            .append('g')
+            .attr('transform', `translate(${margin.left},${margin.top})`);
+
+        const y = d3.scaleBand()
+            .domain(routeData.map(d => d.route))
+            .range([0, height])
+            .padding(0.2);
+
+        const x = d3.scaleLinear()
+            .domain([0, d3.max(routeData, d => d.total) * 1.1])
+            .nice()
+            .range([0, width]);
+
+        // Color scale based on total spending
+        const colorScale = d3.scaleSequential()
+            .domain([d3.min(routeData, d => d.total), d3.max(routeData, d => d.total)])
+            .interpolator(d3.interpolateBlues);
+
+        // Bars
+        svg.selectAll('.bar')
+            .data(routeData)
+            .enter().append('rect')
+            .attr('class', 'bar')
+            .attr('y', d => y(d.route))
+            .attr('x', 0)
+            .attr('height', y.bandwidth())
+            .attr('width', d => x(d.total))
+            .attr('fill', d => colorScale(d.total))
+            .on('mouseover', function(event, d) {
+                const tooltip = d3.select('#tooltip');
+                tooltip.html(`
+                    <strong>${d.route}</strong><br>
+                    Flights: ${d.count}<br>
+                    Total Spent: ₹${d.total.toLocaleString()}<br>
+                    Average: ₹${d.average.toLocaleString()}
+                `)
+                    .style('opacity', 1);
+
+                // Smart positioning to keep tooltip in view
+                const tooltipNode = tooltip.node();
+                const tooltipWidth = tooltipNode.offsetWidth;
+                const tooltipHeight = tooltipNode.offsetHeight;
+
+                let left = event.clientX + 10;
+                let top = event.clientY - 10;
+
+                // Adjust if tooltip goes off right edge
+                if (left + tooltipWidth > window.innerWidth) {
+                    left = event.clientX - tooltipWidth - 10;
+                }
+
+                // Adjust if tooltip goes off bottom edge
+                if (top + tooltipHeight > window.innerHeight) {
+                    top = event.clientY - tooltipHeight - 10;
+                }
+
+                // Adjust if tooltip goes off top edge
+                if (top < 0) {
+                    top = event.clientY + 10;
+                }
+
+                tooltip.style('left', left + 'px').style('top', top + 'px');
+            })
+            .on('mouseout', function() {
+                d3.select('#tooltip').style('opacity', 0);
+            });
+
+        // Value labels
+        svg.selectAll('.count-label')
+            .data(routeData)
+            .enter().append('text')
+            .attr('class', 'count-label')
+            .attr('y', d => y(d.route) + y.bandwidth() / 2 + 4)
+            .attr('x', d => x(d.total) + 5)
+            .text(d => `₹${(d.total / 1000).toFixed(0)}k (${d.count})`);
+
+        // Y-axis
+        svg.append('g')
+            .attr('class', 'axis')
+            .call(d3.axisLeft(y));
+
+        // X-axis
+        svg.append('g')
+            .attr('class', 'axis')
+            .attr('transform', `translate(0,${height})`)
+            .call(d3.axisBottom(x).tickFormat(d => `₹${(d / 1000).toFixed(0)}k`));
+
+        // X-axis label
+        svg.append('text')
+            .attr('text-anchor', 'middle')
+            .attr('x', width / 2)
+            .attr('y', height + 45)
+            .attr('font-size', '12px')
+            .attr('fill', '#666')
+            .text('Total Spent');
+    </script>
+</body>
+</html>

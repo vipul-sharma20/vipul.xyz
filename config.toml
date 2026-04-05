@@ -1,0 +1,65 @@
+# ============================================
+# vipul.xyz — Blog Configuration
+# ============================================
+# Single source of truth for all configurable items.
+# Read by the content engine at build time.
+
+[site]
+title = "Vipul Sharma"
+description = "Personal blog of Vipul Sharma"
+url = "https://vipul.xyz"
+language = "en"
+
+[author]
+name = "Vipul Sharma"
+bio = "Engineer at Skit.ai"
+email = "vipul.sharma20@gmail.com"
+avatar = "/assets/images/me.jpg"
+
+[author.socials]
+github = "https://github.com/vipul-sharma20"
+twitter = "https://twitter.com/vipul_sharma"
+linkedin = "https://www.linkedin.com/in/vipul20/"
+
+[navigation]
+# Items shown in the nav bar (in order)
+# label = path
+[navigation.links]
+Posts = "/"
+Scribbles = "/scribbles"
+Music = "/music"
+Gallery = "/gallery"
+"3D Printing" = "/threedee"
+About = "/about"
+
+[content]
+# Directory containing markdown files (relative to project root)
+content_dir = "content"
+assets_dir = "assets"
+
+# Posts per page (if pagination is added later)
+posts_per_page = 20
+
+# Default author_profile visibility on posts
+default_author_profile = true
+
+[theme]
+# Default color theme id (warm-sienna, muted-teal, deep-ink, slate-blue, forest, plum)
+default_theme = "warm-sienna"
+
+# Default font pairing id (literata-plex, newsreader-general, fraunces-switzer, source-serif-inter, crimson-work, lora-karla)
+default_font = "literata-plex"
+
+[build]
+# Site URL used for RSS feed and meta tags
+site_url = "https://vipul.xyz"
+
+# Number of items in RSS feed
+rss_limit = 30
+
+# Search index body text limit (characters)
+search_body_limit = 500
+
+[analytics]
+plausible_domain = "vipul.xyz"
+plausible_script = "https://plausible.vipul.xyz/js/script.js"

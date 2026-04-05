@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>24-Hour Departure Pattern</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gentium+Basic:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: transparent;
+            color: #333;
+        }
+
+        body {
+            padding: 15px 15px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #chart {
+            background: transparent;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        #viz {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            flex: 1;
+            min-height: 0;
+        }
+
+        #viz svg {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+        }
+
+        .chart-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 25px;
+            color: #1a1a1a;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 10px;
+            font-family: 'Gentium Basic', serif;
+        }
+
+        .tooltip {
+            position: fixed;
+            background: rgba(30, 30, 30, 0.95);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 3px;
+            font-size: 13px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            max-width: 250px;
+        }
+
+        .arc:hover {
+            opacity: 0.7;
+            cursor: pointer;
+        }
+
+        .hour-label {
+            font-size: 11px;
+            font-weight: 600;
+            fill: #666;
+        }
+
+        .period-arc {
+            opacity: 0.12;
+        }
+
+        .period-label {
+            font-size: 10px;
+            font-weight: 600;
+            fill: #888;
+            text-anchor: middle;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px 15px;
+            }
+
+            .chart-title {
+                font-size: 1.2em;
+                margin-bottom: 15px;
+            }
+
+            .hour-label {
+                font-size: 9px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .chart-title {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="chart">
+        <div class="chart-title">24-Hour Departure Pattern</div>
+        <div id="viz"></div>
+    </div>
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        // Hourly data - matching flight-departure-time.html exactly
+        const hourlyData = [
+            {"hour": 0, "count": 1, "period": "Night"},
+            {"hour": 1, "count": 0, "period": "Night"},
+            {"hour": 2, "count": 0, "period": "Night"},
+            {"hour": 3, "count": 2, "period": "Night"},
+            {"hour": 4, "count": 3, "period": "Early Morning"},
+            {"hour": 5, "count": 8, "period": "Early Morning"},
+            {"hour": 6, "count": 12, "period": "Early Morning"},
+            {"hour": 7, "count": 9, "period": "Morning"},
+            {"hour": 8, "count": 7, "period": "Morning"},
+            {"hour": 9, "count": 6, "period": "Morning"},
+            {"hour": 10, "count": 5, "period": "Morning"},
+            {"hour": 11, "count": 8, "period": "Morning"},
+            {"hour": 12, "count": 4, "period": "Afternoon"},
+            {"hour": 13, "count": 6, "period": "Afternoon"},
+            {"hour": 14, "count": 7, "period": "Afternoon"},
+            {"hour": 15, "count": 5, "period": "Afternoon"},
+            {"hour": 16, "count": 9, "period": "Evening"},
+            {"hour": 17, "count": 8, "period": "Evening"},
+            {"hour": 18, "count": 6, "period": "Evening"},
+            {"hour": 19, "count": 4, "period": "Evening"},
+            {"hour": 20, "count": 3, "period": "Night"},
+            {"hour": 21, "count": 2, "period": "Night"},
+            {"hour": 22, "count": 2, "period": "Night"},
+            {"hour": 23, "count": 1, "period": "Night"}
+        ];
+
+        function drawChart() {
+            // Clear existing chart
+            d3.select('#viz').selectAll('*').remove();
+
+            const size = 520;
+        const radius = size / 2 - 60;
+
+        const svg = d3.select('#viz')
+            .append('svg')
+            .attr('viewBox', `0 0 ${size} ${size}`)
+            .attr('preserveAspectRatio', 'xMidYMid meet')
+            .append('g')
+            .attr('transform', `translate(${size/2},${size/2})`);
+
+        // Scales - hour 12 at top (-π/2), hour 0 at bottom (π/2)
+        const angleScale = d3.scaleLinear()
+            .domain([0, 24])
+            .range([Math.PI / 2, Math.PI / 2 + 2 * Math.PI]);
+
+        const radiusScale = d3.scaleLinear()
+            .domain([0, d3.max(hourlyData, d => d.count)])
+            .range([0, radius]);
+
+        // Color scale - muted colors inspired by weekday pattern
+        const periodColors = {
+            'Night': '#6B8A9B',           // Slate blue (like weekday)
+            'Early Morning': '#D4926E',   // Muted sunrise orange
+            'Morning': '#E0B884',         // Soft golden
+            'Afternoon': '#8A9B88',       // Muted sage
+            'Evening': '#A8838F'          // Muted mauve
+        };
+
+        // Draw period background arcs - distinct time periods
+        const periods = [
+            {name: 'Night', start: 20, end: 4, color: '#6B8A9B', label: 'Night\n(8PM-3AM)'},
+            {name: 'Early Morning', start: 4, end: 7, color: '#D4926E', label: 'Early Morning\n(4AM-6AM)'},
+            {name: 'Morning', start: 7, end: 12, color: '#E0B884', label: 'Morning\n(7AM-11AM)'},
+            {name: 'Afternoon', start: 12, end: 16, color: '#8A9B88', label: 'Afternoon\n(12PM-3PM)'},
+            {name: 'Evening', start: 16, end: 20, color: '#A8838F', label: 'Evening\n(4PM-7PM)'}
+        ];
+
+        const dataRotation = Math.PI / 2;  // Rotate data 90 degrees clockwise
+        periods.forEach(period => {
+            let startAngle, endAngle;
+            if (period.name === 'Night') {
+                // Night wraps around midnight
+                svg.append('path')
+                    .attr('class', 'period-arc')
+                    .attr('d', d3.arc()
+                        .innerRadius(0)
+                        .outerRadius(radius + 20)
+                        .startAngle(angleScale(20) + dataRotation)
+                        .endAngle(angleScale(24) + dataRotation)
+                    )
+                    .attr('fill', period.color);
+                svg.append('path')
+                    .attr('class', 'period-arc')
+                    .attr('d', d3.arc()
+                        .innerRadius(0)
+                        .outerRadius(radius + 20)
+                        .startAngle(angleScale(0) + dataRotation)
+                        .endAngle(angleScale(4) + dataRotation)
+                    )
+                    .attr('fill', period.color);
+            } else {
+                svg.append('path')
+                    .attr('class', 'period-arc')
+                    .attr('d', d3.arc()
+                        .innerRadius(0)
+                        .outerRadius(radius + 20)
+                        .startAngle(angleScale(period.start) + dataRotation)
+                        .endAngle(angleScale(period.end) + dataRotation)
+                    )
+                    .attr('fill', period.color);
+            }
+        });
+
+        // Draw hour bars - rotate 90 degrees counter-clockwise to align with labels
+        svg.selectAll('.arc')
+            .data(hourlyData)
+            .enter().append('path')
+            .attr('class', 'arc')
+            .attr('d', d3.arc()
+                .innerRadius(30)
+                .outerRadius(d => 30 + radiusScale(d.count))
+                .startAngle(d => angleScale(d.hour) + dataRotation)
+                .endAngle(d => angleScale(d.hour + 1) + dataRotation)
+                .padAngle(0.02)
+            )
+            .attr('fill', d => periodColors[d.period])
+            .on('mouseover', function(event, d) {
+                const tooltip = d3.select('#tooltip');
+                const hourLabel = `${String(d.hour).padStart(2, '0')}:00`;
+                tooltip.html(`${hourLabel}<br>Flights: ${d.count}<br>${d.period}`)
+                    .style('opacity', 1);
+
+                // Smart positioning to keep tooltip in view
+                const tooltipNode = tooltip.node();
+                const tooltipWidth = tooltipNode.offsetWidth;
+                const tooltipHeight = tooltipNode.offsetHeight;
+
+                let left = event.clientX + 10;
+                let top = event.clientY - 10;
+
+                // Adjust if tooltip goes off right edge
+                if (left + tooltipWidth > window.innerWidth) {
+                    left = event.clientX - tooltipWidth - 10;
+                }
+
+                // Adjust if tooltip goes off bottom edge
+                if (top + tooltipHeight > window.innerHeight) {
+                    top = event.clientY - tooltipHeight - 10;
+                }
+
+                // Adjust if tooltip goes off top edge
+                if (top < 0) {
+                    top = event.clientY + 10;
+                }
+
+                tooltip.style('left', left + 'px').style('top', top + 'px');
+            })
+            .on('mouseout', function() {
+                d3.select('#tooltip').style('opacity', 0);
+            });
+
+        // Add hour labels - every 3 hours for cleaner look
+        const displayHours = [0, 3, 6, 9, 12, 15, 18, 21];
+        const displayLabels = ['00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00'];
+
+        displayHours.forEach((hour, i) => {
+            const angle = angleScale(hour);
+            const labelRadius = radius + 45;
+
+            svg.append('text')
+                .attr('class', 'hour-label')
+                .attr('text-anchor', 'middle')
+                .attr('x', Math.cos(angle) * labelRadius)
+                .attr('y', Math.sin(angle) * labelRadius)
+                .attr('dy', '0.35em')
+                .text(displayLabels[i]);
+        });
+
+        // Add hour tick marks for all 24 hours - no rotation needed as they use same angleScale as labels
+        for (let h = 0; h < 24; h++) {
+            const angle = angleScale(h);
+            const tickStart = radius + 25;
+            const tickEnd = h % 3 === 0 ? radius + 32 : radius + 28;
+
+            svg.append('line')
+                .attr('x1', Math.cos(angle) * tickStart)
+                .attr('y1', Math.sin(angle) * tickStart)
+                .attr('x2', Math.cos(angle) * tickEnd)
+                .attr('y2', Math.sin(angle) * tickEnd)
+                .attr('stroke', '#999')
+                .attr('stroke-width', h % 3 === 0 ? 2 : 1);
+        }
+
+        // Add clock face circle
+        svg.append('circle')
+            .attr('r', 28)
+            .attr('fill', '#f1f1f1')
+            .attr('stroke', '#bbb')
+            .attr('stroke-width', 2);
+
+        // Add center dot
+        svg.append('circle')
+            .attr('r', 3)
+            .attr('fill', '#666');
+        }
+
+        // Draw chart (viewBox handles scaling automatically)
+        drawChart();
+    </script>
+</body>
+</html>

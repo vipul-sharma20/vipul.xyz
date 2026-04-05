@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flights by Time Period</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: transparent;
+            padding: 30px 25px;
+            color: #333;
+        }
+
+        #chart {
+            background: transparent;
+        }
+
+        .chart-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #1a1a1a;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+
+        .tooltip {
+            position: fixed;
+            background: rgba(30, 30, 30, 0.95);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 3px;
+            font-size: 13px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            max-width: 250px;
+        }
+
+        .bar:hover {
+            opacity: 0.7;
+            cursor: pointer;
+        }
+
+        .axis text {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .axis path,
+        .axis line {
+            stroke: #d0d0d0;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px 10px;
+            }
+
+            .chart-title {
+                font-size: 1.2em;
+                margin-bottom: 15px;
+            }
+
+            .axis text {
+                font-size: 8px;
+            }
+
+            .axis text tspan {
+                font-size: 9px !important;
+            }
+
+            .axis text tspan:last-child {
+                font-size: 8px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="chart">
+        <div class="chart-title">Flights by Time Period</div>
+        <div id="viz"></div>
+    </div>
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        // Aggregated data by time period
+        // Night: 8 PM - 3 AM (hours 20-23, 0-3)
+        // Early Morning: 4 AM - 6 AM (hours 4-6)
+        // Morning: 7 AM - 11 AM (hours 7-11)
+        // Afternoon: 12 PM - 3 PM (hours 12-15)
+        // Evening: 4 PM - 7 PM (hours 16-19)
+        const periodData = [
+            {period: "Night", hours: "8 PM - 3 AM", count: 11, order: 0},
+            {period: "Early Morning", hours: "4 AM - 6 AM", count: 23, order: 1},
+            {period: "Morning", hours: "7 AM - 11 AM", count: 35, order: 2},
+            {period: "Afternoon", hours: "12 PM - 3 PM", count: 22, order: 3},
+            {period: "Evening", hours: "4 PM - 7 PM", count: 27, order: 4}
+        ];
+
+        const margin = {top: 20, right: 20, bottom: 80, left: 50};
+        const width = document.getElementById('viz').offsetWidth - margin.left - margin.right;
+        const height = 300 - margin.top - margin.bottom;
+
+        const svg = d3.select('#viz')
+            .append('svg')
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom)
+            .append('g')
+            .attr('transform', `translate(${margin.left},${margin.top})`);
+
+        const x = d3.scaleBand()
+            .domain(periodData.map(d => d.period))
+            .range([0, width])
+            .padding(0.2);
+
+        const y = d3.scaleLinear()
+            .domain([0, d3.max(periodData, d => d.count)])
+            .nice()
+            .range([height, 0]);
+
+        // Color scale for different time periods
+        const colorScale = d => {
+            if (d.period === 'Night') return '#4a5568'; // Dark gray-blue
+            if (d.period === 'Early Morning') return '#ed8936'; // Orange
+            if (d.period === 'Morning') return '#ecc94b'; // Yellow
+            if (d.period === 'Afternoon') return '#48bb78'; // Green
+            if (d.period === 'Evening') return '#4299e1'; // Blue
+        };
+
+        svg.selectAll('.bar')
+            .data(periodData)
+            .enter().append('rect')
+            .attr('class', 'bar')
+            .attr('x', d => x(d.period))
+            .attr('y', d => y(d.count))
+            .attr('width', x.bandwidth())
+            .attr('height', d => height - y(d.count))
+            .attr('fill', d => colorScale(d))
+            .on('mouseover', function(event, d) {
+                const tooltip = d3.select('#tooltip');
+                tooltip.html(`${d.period}<br>${d.hours}<br>Flights: ${d.count}`)
+                    .style('opacity', 1);
+
+                // Smart positioning to keep tooltip in view
+                const tooltipNode = tooltip.node();
+                const tooltipWidth = tooltipNode.offsetWidth;
+                const tooltipHeight = tooltipNode.offsetHeight;
+
+                let left = event.clientX + 10;
+                let top = event.clientY - 10;
+
+                // Adjust if tooltip goes off right edge
+                if (left + tooltipWidth > window.innerWidth) {
+                    left = event.clientX - tooltipWidth - 10;
+                }
+
+                // Adjust if tooltip goes off bottom edge
+                if (top + tooltipHeight > window.innerHeight) {
+                    top = event.clientY - tooltipHeight - 10;
+                }
+
+                // Adjust if tooltip goes off top edge
+                if (top < 0) {
+                    top = event.clientY + 10;
+                }
+
+                tooltip.style('left', left + 'px').style('top', top + 'px');
+            })
+            .on('mouseout', function() {
+                d3.select('#tooltip').style('opacity', 0);
+            });
+
+        // X-axis with multi-line labels
+        const xAxis = svg.append('g')
+            .attr('class', 'axis')
+            .attr('transform', `translate(0,${height})`)
+            .call(d3.axisBottom(x));
+
+        // Remove default text labels
+        xAxis.selectAll('text').remove();
+
+        // Check if mobile
+        const isMobile = window.innerWidth <= 768;
+        const baseFontSize = isMobile ? '9px' : '11px';
+
+        // Add custom multi-line labels
+        xAxis.selectAll('.tick')
+            .append('text')
+            .attr('y', 10)
+            .attr('text-anchor', 'middle')
+            .style('font-size', baseFontSize)
+            .each(function(d) {
+                const tick = d3.select(this);
+                const data = periodData.find(p => p.period === d);
+
+                // Period name
+                tick.append('tspan')
+                    .attr('x', 0)
+                    .attr('dy', 0)
+                    .style('font-weight', '500')
+                    .style('fill', '#333')
+                    .text(data.period);
+
+                // Time range
+                tick.append('tspan')
+                    .attr('x', 0)
+                    .attr('dy', isMobile ? '1.1em' : '1.2em')
+                    .style('font-size', isMobile ? '0.8em' : '0.85em')
+                    .style('fill', '#666')
+                    .text(data.hours);
+            });
+
+        // Y-axis
+        svg.append('g')
+            .attr('class', 'axis')
+            .call(d3.axisLeft(y).ticks(5));
+
+        // Add y-axis label
+        svg.append('text')
+            .attr('text-anchor', 'middle')
+            .attr('transform', 'rotate(-90)')
+            .attr('y', -margin.left + 15)
+            .attr('x', -height / 2)
+            .attr('font-size', '12px')
+            .attr('fill', '#666')
+            .text('Number of Flights');
+    </script>
+</body>
+</html>

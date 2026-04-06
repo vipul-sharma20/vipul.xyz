@@ -15,6 +15,20 @@ export interface Theme {
 
 export const themes: Theme[] = [
   {
+    id: 'minimal-air',
+    name: 'Minimal Air',
+    colors: {
+      bg: '#f1f1f1',
+      bgSecondary: '#e6e6e6',
+      text: '#181818',
+      textSecondary: '#393e46',
+      accent: '#4a5f8a',
+      accentHover: '#3a4f7a',
+      linkVisited: '#181818',
+      border: '#cecfd1',
+    },
+  },
+  {
     id: 'warm-sienna',
     name: 'Warm Sienna',
     colors: {

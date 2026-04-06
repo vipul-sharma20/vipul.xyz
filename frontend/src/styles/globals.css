@@ -5,14 +5,14 @@ img, picture, video, canvas, svg { display: block; max-width: 100%; }
 input, button, textarea, select { font: inherit; }
 
 :root {
-  --bg: #faf8f5;
-  --bg-secondary: #f0ece6;
-  --text: #2d2a26;
-  --text-secondary: #6b6560;
-  --accent: #a0522d;
-  --accent-hover: #8b4226;
-  --link-visited: #7a5c4f;
-  --border: #ddd5cb;
+  --bg: #f1f1f1;
+  --bg-secondary: #e6e6e6;
+  --text: #181818;
+  --text-secondary: #393e46;
+  --accent: #4a5f8a;
+  --accent-hover: #3a4f7a;
+  --link-visited: #181818;
+  --border: #cecfd1;
   --garden-seedling: #7a8b5c;
   --garden-budding: #b89b3b;
   --garden-evergreen: #4a7a5c;

@@ -78,7 +78,9 @@ const imageModalScript = `
   function openModal(target) {
     const src = typeof target === 'string' ? target : target && (target.currentSrc || target.src);
     if (!src) return;
-    previousOverflow = document.body.style.overflow;
+    if (modal.hidden) {
+      previousOverflow = document.body.style.overflow;
+    }
     modalImage.src = src;
     modal.hidden = false;
     document.body.style.overflow = 'hidden';

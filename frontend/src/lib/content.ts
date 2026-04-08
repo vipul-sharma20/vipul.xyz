@@ -283,6 +283,10 @@ export function getAllSlugs(): { collection: string; slug: string; date: string 
   return loadAll().map(i => ({ collection: i.collection, slug: i.slug, date: i.date, permalink: i.permalink }));
 }
 
+function escapeXml(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+}
+
 function stripMarkdown(md: string): string {
   return md
     .replace(/!\[.*?\]\(.*?\)/g, '')
@@ -315,16 +319,15 @@ export function generateRssFeed(): string {
     const link = getUrlPath(item);
     const pubDate = item.date ? new Date(item.date).toUTCString() : '';
     return `    <item>
-      <title><![CDATA[${item.title}]]></title>
+      <title>${escapeXml(item.title)}</title>
       <link>${siteUrl}${link}</link>
       <guid>${siteUrl}${link}</guid>
-      <description><![CDATA[${item.excerpt}]]></description>
+      <description>${escapeXml(item.excerpt || '')}</description>
       ${pubDate ? `<pubDate>${pubDate}</pubDate>` : ''}
     </item>`;
   }).join('\n');
 
   return `<?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet href="/feed.xsl" type="text/xsl"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>${config.site.title}</title>

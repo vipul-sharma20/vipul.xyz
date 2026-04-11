@@ -101,6 +101,9 @@ These pictures are in reverse chronological order of when they were taken.
   <img src="https://github.com/user-attachments/assets/15b1e641-064d-44bd-a247-cefcf0594f96" alt="violation" style="max-width:700px;" />
 </figure>
 
+<figure style="text-align:center">
+  <img src="https://github.com/user-attachments/assets/1aa8bc43-d5c0-4356-aad2-702a6c363cc3" alt="violation" style="max-width:700px;" />
+</figure>
 
 ## March, 2026
 

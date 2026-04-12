@@ -1,10 +1,22 @@
+import { getConfig } from '@/lib/config';
+
 export default function Footer() {
+  const config = getConfig();
+  const { name, socials } = config.author;
+  const year = new Date().getFullYear();
+
   return (
     <footer className="site-footer">
-      &copy; 2026 Vipul Sharma &middot;{' '}
-      <a href="/feed.xml">RSS</a> &middot;{' '}
-      <a href="https://github.com/vipul-sharma20" target="_blank" rel="noopener noreferrer">GitHub</a> &middot;{' '}
-      <a href="https://x.com/vipul_sharma" target="_blank" rel="noopener noreferrer">Twitter</a>
+      &copy; {year} {name} &middot;{' '}
+      <a href="/feed.xml">RSS</a>
+      {Object.entries(socials).map(([label, url]) => (
+        <span key={label}>
+          {' '}&middot;{' '}
+          <a href={url} target="_blank" rel="noopener noreferrer">
+            {label.charAt(0).toUpperCase() + label.slice(1)}
+          </a>
+        </span>
+      ))}
     </footer>
   );
 }

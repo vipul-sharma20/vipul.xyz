@@ -12,6 +12,7 @@ Credits to [ShapeShift 3D Creations][shapeshift] for their [Batman Pen Holder mo
 
 <figure style="text-align:center">
   <img src="https://github.com/user-attachments/assets/23ff53e7-3768-4870-9244-b8442dac6d42" alt="batman-pen-holder" style="max-width:500px;" />
+  <figcaption>Batman holding my 8+ years old mechanical pencil (Staedtler)</figcaption>
 </figure>
 
 ## Timelapse

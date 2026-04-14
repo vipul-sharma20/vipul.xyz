@@ -18,6 +18,9 @@ export default function ThreeDeePage() {
   return (
     <>
       <h1 className="page-title">3D Printing</h1>
+      <p className="section-intro">
+        These are some (not all) of the things I&apos;ve 3D printed.
+      </p>
       <div className="collection-grid">
         {items.map((item) => (
           <div key={item.slug} className="collection-tile">

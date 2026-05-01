@@ -47,3 +47,10 @@ tags: [tag1, tag2]
 excerpt: "Optional short description"
 ---
 ```
+
+## LICENCE
+
+See [here][license]
+
+
+[license]: https://github.com/vipul-sharma20/vipul.xyz?tab=License-1-ov-file

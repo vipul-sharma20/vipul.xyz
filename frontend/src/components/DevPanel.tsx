@@ -5,6 +5,9 @@ import {
   themes, type Theme, applyTheme, storeThemeId, getStoredThemeId, defaultTheme,
   fontPairings, type FontPairing, applyFontPairing, storeFontId, getStoredFontId, defaultFontPairing,
 } from '@/lib/themes';
+import {
+  chartPalettes, defaultChartPalette, getStoredPaletteId, storePaletteId, CHART_PALETTE_EVENT,
+} from '@/lib/chartPalettes';
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -39,6 +42,7 @@ export default function DevPanel() {
   const [collapsed, setCollapsed] = useState(true);
   const [activeThemeId, setActiveThemeId] = useState<string>(defaultTheme.id);
   const [activeFontId, setActiveFontId] = useState<string>(defaultFontPairing.id);
+  const [activePaletteId, setActivePaletteId] = useState<string>(defaultChartPalette.id);
   const [customColors, setCustomColors] = useState<Theme['colors']>({ ...defaultTheme.colors });
   const [position, setPosition] = useState({ x: 16, y: 16 });
   const [dragging, setDragging] = useState(false);
@@ -57,6 +61,10 @@ export default function DevPanel() {
     const storedFontId = getStoredFontId();
     if (storedFontId) {
       setActiveFontId(storedFontId);
+    }
+    const storedPaletteId = getStoredPaletteId();
+    if (storedPaletteId) {
+      setActivePaletteId(storedPaletteId);
     }
   }, []);
 
@@ -90,6 +98,12 @@ export default function DevPanel() {
     setActiveFontId(pairing.id);
     applyFontPairing(pairing);
     storeFontId(pairing.id);
+  }
+
+  function selectPalette(id: string) {
+    setActivePaletteId(id);
+    storePaletteId(id);
+    window.dispatchEvent(new CustomEvent(CHART_PALETTE_EVENT, { detail: id }));
   }
 
   function updateColor(key: keyof Theme['colors'], value: string) {
@@ -159,6 +173,41 @@ export default function DevPanel() {
                       {' · '}
                       <span style={{ fontFamily: pairing.mono }}>code</span>
                     </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Chart palettes (for /listening) */}
+            <div style={s.section}>
+              <div style={s.sectionTitle}>Chart Palette</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                {chartPalettes.map((p) => (
+                  <button
+                    key={p.id}
+                    onClick={() => selectPalette(p.id)}
+                    style={{
+                      padding: '5px 8px',
+                      border: activePaletteId === p.id ? '2px solid #333' : '1px solid #ddd',
+                      borderRadius: '4px',
+                      background: '#fff',
+                      cursor: 'pointer',
+                      fontSize: '11px',
+                      textAlign: 'left',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '3px',
+                    }}
+                  >
+                    <span style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ fontWeight: 500 }}>{p.name}</span>
+                    </span>
+                    <span style={{ display: 'flex', height: '10px', borderRadius: '1px', overflow: 'hidden' }}>
+                      {p.colors.map((c, i) => (
+                        <span key={i} style={{ flex: 1, background: c }} />
+                      ))}
+                    </span>
+                    <span style={{ fontSize: '10px', color: '#888' }}>{p.description}</span>
                   </button>
                 ))}
               </div>

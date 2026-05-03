@@ -1709,3 +1709,157 @@ aside.sidebar__right {
     flex-shrink: 0;
   }
 }
+
+/* ─── Listening page ──────────────────────────────────────────── */
+
+.listening-section {
+  margin-bottom: 2.6em;
+}
+
+.listening-section h2 {
+  margin-top: 1em;
+}
+
+.listening-week-range {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: -0.4em;
+  margin-bottom: 1em;
+  letter-spacing: 0.02em;
+}
+
+.listening-section-note {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-top: -0.3em;
+  margin-bottom: 1em;
+  line-height: 1.5;
+}
+
+.listening-empty {
+  font-size: 15px;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* Share bar (Recent section) */
+.share-bar {
+  margin: 1rem 0 0.25rem;
+}
+
+.share-bar-track {
+  display: flex;
+  width: 100%;
+  height: 28px;
+  overflow: hidden;
+  background: var(--bg-secondary);
+}
+
+.share-bar-seg {
+  height: 100%;
+  border-right: 1px solid var(--bg);
+  min-width: 2px;
+  cursor: default;
+  transition: opacity 120ms ease, box-shadow 120ms ease;
+}
+
+.share-bar-seg:last-child {
+  border-right: none;
+}
+
+/* When something is hovered, dim everything except the active one */
+.share-bar.has-hover .share-bar-seg:not(.is-active) {
+  opacity: 0.25;
+}
+
+/* Active segment: dark inset ring so even the palest palette colors pop. */
+.share-bar-seg.is-active {
+  box-shadow: inset 0 0 0 2px var(--text);
+}
+
+.share-legend {
+  list-style: none;
+  padding: 0;
+  margin: 0.85rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 1.5rem;
+  row-gap: 4px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.share-legend-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  cursor: default;
+  transition: opacity 120ms ease;
+}
+
+.share-bar.has-hover .share-legend-item:not(.is-active) {
+  opacity: 0.4;
+}
+
+.share-legend-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  align-self: center;
+  transition: box-shadow 120ms ease;
+}
+
+.share-legend-item.is-active .share-legend-dot {
+  box-shadow: 0 0 0 1.5px var(--text);
+}
+
+.share-legend-item.is-active .share-legend-name {
+  font-weight: 600;
+}
+
+.share-legend-name {
+  color: var(--text);
+}
+
+.share-legend-count {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Joy plot */
+.joy-plot {
+  width: 100%;
+  overflow: visible;
+}
+.joy-svg {
+  display: block;
+  overflow: visible;
+}
+.joy-readout {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 6px;
+  padding: 6px 8px;
+  background: var(--bg-secondary);
+  border-radius: 2px;
+  line-height: 1.5;
+}
+.joy-readout.is-empty {
+  visibility: hidden;
+}
+.joy-readout-label {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text);
+}
+.joy-empty {
+  font-size: 15px;
+  color: var(--text-secondary);
+  font-style: italic;
+}

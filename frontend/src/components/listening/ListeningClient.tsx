@@ -38,21 +38,21 @@ export default function ListeningClient() {
 
   useEffect(() => {
     let cancelled = false;
+    async function tryFetch(url: string, init?: RequestInit): Promise<Aggregated> {
+      const r = await fetch(url, init);
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const j = (await r.json()) as Aggregated;
+      if (!j?.recent || !j?.timeline) throw new Error('unexpected payload shape');
+      return j;
+    }
     async function load() {
-      // Try the cached response first, then bust the cache once if the
-      // schema doesn't match (a previous publish lingering in browser/CDN
-      // cache could otherwise crash the page mid-deploy).
-      for (const init of [{ cache: 'default' as RequestCache }, { cache: 'no-store' as RequestCache }]) {
-        const url = init.cache === 'no-store' ? `${SOURCE_URL}?v=${Date.now()}` : SOURCE_URL;
-        const r = await fetch(url, init);
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        const j = (await r.json()) as Aggregated;
-        if (j?.recent && j?.timeline) {
-          if (!cancelled) setData(j);
-          return;
-        }
+      try {
+        const j = await tryFetch(SOURCE_URL);
+        if (!cancelled) setData(j);
+      } catch {
+        const j = await tryFetch(`${SOURCE_URL}?v=${Date.now()}`, { cache: 'no-store' });
+        if (!cancelled) setData(j);
       }
-      throw new Error('unexpected payload shape');
     }
     load().catch((e: Error) => { if (!cancelled) setError(e.message); });
     return () => { cancelled = true; };

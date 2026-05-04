@@ -1816,9 +1816,6 @@ aside.sidebar__right {
   box-shadow: 0 0 0 1.5px var(--text);
 }
 
-.share-legend-item.is-active .share-legend-name {
-  font-weight: 600;
-}
 
 .share-legend-name {
   color: var(--text);

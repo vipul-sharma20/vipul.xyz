@@ -8,7 +8,6 @@ export interface Theme {
     textSecondary: string;
     accent: string;
     accentHover: string;
-    linkVisited: string;
     border: string;
   };
 }
@@ -24,7 +23,6 @@ export const themes: Theme[] = [
       textSecondary: '#393e46',
       accent: '#4a5f8a',
       accentHover: '#3a4f7a',
-      linkVisited: '#181818',
       border: '#cecfd1',
     },
   },
@@ -38,7 +36,6 @@ export const themes: Theme[] = [
       textSecondary: '#6b6560',
       accent: '#a0522d',
       accentHover: '#8b4226',
-      linkVisited: '#7a5c4f',
       border: '#ddd5cb',
     },
   },
@@ -52,7 +49,6 @@ export const themes: Theme[] = [
       textSecondary: '#5f6b66',
       accent: '#4a7a6a',
       accentHover: '#3a6355',
-      linkVisited: '#5a7a70',
       border: '#d5ddd8',
     },
   },
@@ -66,7 +62,6 @@ export const themes: Theme[] = [
       textSecondary: '#6b6560',
       accent: '#3d3530',
       accentHover: '#2d2520',
-      linkVisited: '#5a5450',
       border: '#ddd5cb',
     },
   },
@@ -80,7 +75,6 @@ export const themes: Theme[] = [
       textSecondary: '#5a6577',
       accent: '#4a5f8a',
       accentHover: '#3a4f7a',
-      linkVisited: '#6a7a9a',
       border: '#d5dae3',
     },
   },
@@ -94,7 +88,6 @@ export const themes: Theme[] = [
       textSecondary: '#5f6558',
       accent: '#5a7a4a',
       accentHover: '#4a6a3a',
-      linkVisited: '#6a8a5a',
       border: '#d5ddc8',
     },
   },
@@ -108,7 +101,6 @@ export const themes: Theme[] = [
       textSecondary: '#6b5f6b',
       accent: '#7a4a6a',
       accentHover: '#6a3a5a',
-      linkVisited: '#8a6a7a',
       border: '#ddd5dd',
     },
   },
@@ -222,7 +214,6 @@ export function applyTheme(theme: Theme): void {
   root.style.setProperty('--text-secondary', theme.colors.textSecondary);
   root.style.setProperty('--accent', theme.colors.accent);
   root.style.setProperty('--accent-hover', theme.colors.accentHover);
-  root.style.setProperty('--link-visited', theme.colors.linkVisited);
   root.style.setProperty('--border', theme.colors.border);
 }
 
@@ -234,6 +225,5 @@ export function applyCustomColors(colors: Partial<Theme['colors']>): void {
   if (colors.textSecondary) root.style.setProperty('--text-secondary', colors.textSecondary);
   if (colors.accent) root.style.setProperty('--accent', colors.accent);
   if (colors.accentHover) root.style.setProperty('--accent-hover', colors.accentHover);
-  if (colors.linkVisited) root.style.setProperty('--link-visited', colors.linkVisited);
   if (colors.border) root.style.setProperty('--border', colors.border);
 }

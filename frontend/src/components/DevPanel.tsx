@@ -23,7 +23,6 @@ const colorFields: ColorField[] = [
   { key: 'textSecondary', label: 'Text Secondary' },
   { key: 'accent', label: 'Accent' },
   { key: 'accentHover', label: 'Accent Hover' },
-  { key: 'linkVisited', label: 'Link Visited' },
   { key: 'border', label: 'Border' },
 ];
 
@@ -34,7 +33,6 @@ const cssVarMap: Record<keyof Theme['colors'], string> = {
   textSecondary: '--text-secondary',
   accent: '--accent',
   accentHover: '--accent-hover',
-  linkVisited: '--link-visited',
   border: '--border',
 };
 

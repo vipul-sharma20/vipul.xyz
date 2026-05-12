@@ -1,5 +1,5 @@
 ---
-date: 2026-04-15
+date: 2026-05-13
 permalink: /2026/04/15/digital-photo-frame/
 draft: false
 excerpt: I built a digital photo frame using Raspberry Pi Touch Display

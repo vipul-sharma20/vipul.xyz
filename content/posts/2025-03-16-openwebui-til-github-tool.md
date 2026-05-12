@@ -7,6 +7,7 @@ status: evergreen
 tags:
 - github
 - llm
+- scribbles
 title: 'Open WebUI: Push to GitHub Tool'
 ---
 

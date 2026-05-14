@@ -12,14 +12,15 @@ that it might be helpful to others.
 
 <div class="caption-wrapper">
     <p class="caption-borderless">
-    <i>Last updated: July 21st, 2025. Currently a little pause on the keyboard stuff</i>
+    <i>Last updated: May 15th, 2026</i>
     </p>
 </div>
 
-In the recent times, I have gotten myself into [self-hosting][self-hosting],
-[3D printing][threedee] and [building keyboards][keyboard]. This might be
-outdated when you read this but I'll try to keep things updated with whatever I
-am working on.
+These days (outside of work) I am mostly spending time on setting up
+[self-hosted][self-hosted] solutions, working on my backlog of
+software/hardware project ideas, [3D printing][threedee] and [building keyboards][keyboard].
+This might be outdated when you read this but I'll try to keep things updated
+with whatever I am working on.
 
 Throughout my school life, I was fortunate to have great Computer Science
 teachers who kept my interest alive. All that led me to take up this as a field
@@ -42,7 +43,7 @@ check [this][business-card] post for the assembly guide
 
 [skit-ai]: https://tech.skit.ai/
 [github]: https://github.com/vipul-sharma20/
-[self-hosting]: https://vipul.xyz/tags/self-hosting/
+[self-hosted]: https://vipul.xyz/tags/self-hosted/
 [threedee]: https://vipul.xyz/tags/3dprinting/
 [keyboard]: https://vipul.xyz/tags/keyboard/
 [business-card]: https://vipul.xyz/2025/01/business-card-assembly/

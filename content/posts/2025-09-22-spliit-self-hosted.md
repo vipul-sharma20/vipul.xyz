@@ -4,7 +4,7 @@ excerpt: ''
 status: evergreen
 tags:
 - scribbles
-- self-hosting
+- self-hosted
 title: Self hosting Spliit, a Splitwise alternative
 ---
 

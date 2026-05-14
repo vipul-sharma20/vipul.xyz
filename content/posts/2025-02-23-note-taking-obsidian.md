@@ -5,7 +5,7 @@ excerpt: Exploring my new note-taking workflow using Obsidian and Vimwiki for be
 permalink: /2025/02/note-taking-obsidian/
 status: evergreen
 tags:
-- self-hosting
+- self-hosted
 - llm
 - note-taking
 - productivity

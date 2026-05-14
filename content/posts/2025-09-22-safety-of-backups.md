@@ -4,7 +4,7 @@ excerpt: ''
 status: evergreen
 tags:
 - scribbles
-- self-hosting
+- self-hosted
 title: Safety of backups with self-hosting
 ---
 

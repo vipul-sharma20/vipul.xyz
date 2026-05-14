@@ -5,7 +5,7 @@ permalink: /2025/02/open-webui-all-llms/
 status: evergreen
 tags:
 - scribbles
-- self-hosting
+- self-hosted
 - llm
 title: Using any LLM on Open-WebUI
 type: post

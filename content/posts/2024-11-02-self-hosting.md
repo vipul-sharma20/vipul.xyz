@@ -6,7 +6,7 @@ permalink: /2024/11/self-hosting/
 status: evergreen
 tags:
 - 100daystooffload
-- self-hosting
+- self-hosted
 title: Self hosting
 toc: true
 type: post

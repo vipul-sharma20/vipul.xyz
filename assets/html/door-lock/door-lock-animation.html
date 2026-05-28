@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Door Lock Automation — How It Works</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* Transparent throughout so the embed shows the blog's own background (any reader theme) */
+  :root{
+    --txt:#1e2530; --muted:#5a6577; --line:#d5dae3;
+    --accent:#4a5f8a; --accent-hover:#3a4f7a;
+    --lever:#b8722e; --green:#4a7a5c;
+    --serif:"Literata",Georgia,serif;
+    --sans:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{background:transparent}
+  body{margin:0;font-family:var(--sans);color:var(--txt);line-height:1.55;padding:2px;font-size:15px}
+  .stage{background:transparent;border:0;padding:0;margin-bottom:16px}
+
+  /* Controls — minimal, matching the blog's tag-capsule aesthetic */
+  .controls{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+  button{font-family:var(--sans);font-size:12.5px;font-weight:500;line-height:1.4;
+    padding:0.32em 0.7em;border:1px solid var(--line);border-radius:3px;
+    background:transparent;color:var(--text,var(--txt));cursor:pointer;
+    transition:border-color .15s,color .15s,background .15s}
+  button:hover{border-color:var(--accent);color:var(--accent)}
+  #play{color:var(--accent);border-color:var(--accent)}
+  #play:hover{background:rgba(74,95,138,.07)}
+  button:disabled{opacity:.4;cursor:not-allowed}
+  .status{margin-left:auto;font-size:11px;font-weight:600;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--accent)}
+
+  .legend{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:11.5px;color:var(--muted);margin-top:10px}
+  .legend span{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+  .dot{width:10px;height:10px;border-radius:2px;display:inline-block;flex:0 0 auto}
+
+  /* All 5 steps on one line; horizontal swipe-scroll if the row is wider than the viewport (phone) */
+  .steps{display:flex;gap:8px;margin-top:4px;overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none;scroll-snap-type:x proximity}
+  .steps::-webkit-scrollbar{display:none}
+  .step{flex:1 0 124px;min-width:124px;scroll-snap-align:start;background:rgba(0,0,0,.035);border:1px solid var(--line);border-radius:3px;padding:10px;transition:.2s}
+  .step.active{border-color:var(--green);background:rgba(74,122,92,.12);box-shadow:0 0 0 1px var(--green)}
+  .step b{display:block;color:var(--txt);margin-bottom:3px;font-size:11.5px;font-weight:600;line-height:1.2}
+  .step span{display:block;color:var(--muted);font-size:11.5px;line-height:1.25}
+
+  svg{width:100%;height:auto;display:block}
+  .label{font:600 12px var(--sans)}
+  .labelW{font:600 11px var(--sans);fill:#3f4650}
+
+  /* ---- Phone view ---- */
+  @media (max-width:520px){
+    body{font-size:14px}
+    .controls{gap:6px}
+    button{font-size:12px;padding:0.3em 0.6em}
+    .status{margin-left:0;width:100%;order:3;margin-top:2px}
+    .legend{gap:11px;font-size:10.5px}
+    .steps{gap:7px}
+    .step{flex-basis:128px;min-width:128px}
+    .step b,.step span{font-size:11px}
+  }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="controls">
+      <button id="play">Play unlock cycle</button>
+      <button id="manual" class="ghost">Manual / key pull</button>
+      <button id="reset" class="ghost">Reset</button>
+      <div class="status" id="status">Locked</div>
+    </div>
+
+    <svg viewBox="-50 0 900 440" id="scene" role="img" aria-label="Animated diagram of a linear servo pulling a rim-lock slider lever to unlock a door">
+      <!-- door-open hint (top clear band) -->
+      <text id="openHint" x="335" y="28" text-anchor="middle" style="font:700 18px var(--serif);fill:#3f7a58;opacity:0">&#9664; door opens</text>
+
+      <!-- door panel -->
+      <rect id="door" x="120" y="48" width="430" height="330" rx="6" fill="#8a5a36" stroke="#6b4327" stroke-width="3"/>
+      <rect x="150" y="76" width="370" height="118" rx="4" fill="none" stroke="#6b4327" stroke-width="3"/>
+      <rect x="150" y="212" width="370" height="132" rx="4" fill="none" stroke="#6b4327" stroke-width="3"/>
+
+      <!-- frame jamb (right) -->
+      <rect x="556" y="28" width="40" height="350" fill="#e3e7ee" stroke="#cbd2dd" stroke-width="2"/>
+      <rect x="556" y="190" width="24" height="78" rx="3" fill="#cbd2dd" stroke="#b6bfcc" stroke-width="2"/>
+      <rect x="556" y="204" width="24" height="22" fill="#f1f1f1"/>
+
+      <!-- ===== LOCK BODY ===== -->
+      <g id="lock">
+        <rect x="470" y="150" width="86" height="180" rx="6" fill="#c4c8cf" stroke="#9aa0a8" stroke-width="2"/>
+        <circle cx="492" cy="178" r="9" fill="#9aa0a8" stroke="#7c818a" stroke-width="2"/>
+        <line x1="492" y1="178" x2="492" y2="172" stroke="#5a5f67" stroke-width="2"/>
+        <text x="508" y="182" class="labelW" text-anchor="start">key</text>
+        <circle cx="513" cy="240" r="22" fill="#9aa0a8" stroke="#7c818a" stroke-width="2"/>
+        <text x="513" y="244" class="labelW" text-anchor="middle" style="font-size:9px">knob</text>
+        <rect id="bolt" x="556" y="204" width="38" height="22" rx="2" fill="#d6dae0" stroke="#9aa0a8" stroke-width="1.5"/>
+      </g>
+      <!-- spring latch label (clear area, right of jamb) -->
+      <text x="606" y="219" class="labelW" text-anchor="start">spring latch</text>
+
+      <!-- ===== SERVO + HORIZONTAL LOST-MOTION LINK ===== -->
+      <g id="servoGroup">
+        <rect x="150" y="300" width="120" height="46" rx="6" fill="#e7ebf2" stroke="#4a5f8a" stroke-width="2"/>
+        <text x="210" y="327" text-anchor="middle" style="font:600 12px var(--sans);fill:#4a5f8a">LINEAR SERVO</text>
+        <g id="actuator">
+          <rect id="rod" x="270" y="316" width="92" height="14" rx="3" fill="#4a5f8a"/>
+          <rect id="slot" x="350" y="307" width="118" height="32" rx="16" fill="none" stroke="#4a5f8a" stroke-width="3"/>
+        </g>
+      </g>
+
+      <!-- ===== SLIDER LEVER (target) — horizontal, pull LEFT to open ===== -->
+      <g id="leverGroup">
+        <rect id="lever" x="432" y="314" width="92" height="18" rx="5" fill="#b8722e" stroke="#915a22" stroke-width="2"/>
+        <circle id="leverPin" cx="442" cy="323" r="7" fill="#fff" stroke="#4a7a5c" stroke-width="3"/>
+      </g>
+
+      <!-- ===== LABELS in the clear bottom band (no overlap) ===== -->
+      <line x1="300" y1="402" x2="380" y2="342" stroke="#9fb0cf" stroke-width="1.5"/>
+      <text x="296" y="416" class="label" text-anchor="middle" style="fill:#4a5f8a">slot (lost-motion)</text>
+
+      <line x1="560" y1="402" x2="500" y2="334" stroke="#d3a878" stroke-width="1.5"/>
+      <text x="610" y="416" class="label" text-anchor="middle" style="fill:#b8722e">slider lever (pull &#8592; to open)</text>
+
+      <!-- dynamic pull cue -->
+      <text id="pullArrow" x="296" y="296" text-anchor="middle" class="label" style="fill:#b8722e;opacity:0">&#9664;&#8212; pull</text>
+    </svg>
+
+    <div class="legend">
+      <span><i class="dot" style="background:#b8722e"></i> slider lever</span>
+      <span><i class="dot" style="background:#4a5f8a"></i> servo + link</span>
+      <span><i class="dot" style="background:#4a7a5c"></i> pin (free in slot)</span>
+      <span><i class="dot" style="background:#d6dae0;border:1px solid #9aa0a8"></i> spring latch</span>
+    </div>
+  </div>
+
+  <div class="stage">
+    <div class="steps" id="steps">
+      <div class="step" data-s="0"><b>1 &middot; Locked</b><span>Spring latch holds the door.</span></div>
+      <div class="step" data-s="1"><b>2 &middot; Retract</b><span>Servo pulls the lever left.</span></div>
+      <div class="step" data-s="2"><b>3 &middot; Held open</b><span>Latch held &mdash; you open the door.</span></div>
+      <div class="step" data-s="3"><b>4 &middot; Release</b><span>Door open, servo lets go.</span></div>
+      <div class="step" data-s="4"><b>5 &middot; Auto-lock</b><span>Door shuts, latch re-locks.</span></div>
+    </div>
+  </div>
+
+<script>
+const $ = id => document.getElementById(id);
+const bolt=$('bolt'), leverGroup=$('leverGroup'), actuator=$('actuator'),
+      door=$('door'), status=$('status'), openHint=$('openHint'), pullArrow=$('pullArrow');
+const steps=[...document.querySelectorAll('.step')];
+let busy=false;
+const TRAVEL=70, BOLT=36;
+
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+function setStatus(t,c){status.textContent=t; status.style.color=c||'var(--accent)';}
+function activate(i){
+  steps.forEach((s,k)=>s.classList.toggle('active',k===i));
+  // If the steps row is horizontally scrolled (e.g. phone), bring the active step into view.
+  const el=steps[i];
+  if(el){
+    const c=el.parentElement; // .steps
+    const cRect=c.getBoundingClientRect(), eRect=el.getBoundingClientRect();
+    const delta=(eRect.left-cRect.left)-(c.clientWidth-el.clientWidth)/2; // center it
+    if(c.scrollWidth>c.clientWidth+1 && Math.abs(delta)>1){
+      c.scrollBy({left:delta,behavior:'smooth'});
+    }
+  }
+}
+function mv(el,x,y,dur){el.style.transition=`transform ${dur||0.9}s cubic-bezier(.4,0,.2,1)`;
+  el.style.transform=`translate(${x}px,${y}px)`;}
+
+function resetAll(){
+  busy=false;
+  [bolt,leverGroup,actuator,door].forEach(e=>{e.style.transition='none';e.style.transform='';});
+  openHint.style.opacity=0; pullArrow.style.opacity=0;
+  setStatus('Locked','var(--accent)'); activate(0);
+}
+
+async function playCycle(){
+  if(busy)return; busy=true; $('play').disabled=true; $('manual').disabled=true;
+  resetAll(); busy=true; await sleep(200);
+  activate(1); setStatus('Unlocking');
+  pullArrow.style.transition='opacity .4s'; pullArrow.style.opacity=1;
+  mv(actuator,-TRAVEL,0); mv(leverGroup,-TRAVEL,0); mv(bolt,-BOLT,0);
+  await sleep(1000);
+  activate(2); setStatus('Unlatched — held','#4a7a5c');
+  await sleep(700);
+  mv(door,-70,0); openHint.style.transition='opacity .6s'; openHint.style.opacity=1;
+  await sleep(1000);
+  activate(3); setStatus('Releasing','#b8722e');
+  pullArrow.style.opacity=0;
+  mv(actuator,0,0); mv(leverGroup,0,0);
+  await sleep(900);
+  activate(4); setStatus('Closing','#5a6577');
+  openHint.style.opacity=0; mv(door,0,0);
+  await sleep(900);
+  mv(bolt,0,0,0.4);
+  await sleep(500);
+  setStatus('Locked','var(--accent)'); activate(0);
+  busy=false; $('play').disabled=false; $('manual').disabled=false;
+}
+
+async function manualDemo(){
+  if(busy)return; busy=true; $('play').disabled=true; $('manual').disabled=true;
+  resetAll(); busy=true;
+  setStatus('Manual / key — motor idle','#b8722e');
+  await sleep(300);
+  pullArrow.style.transition='opacity .3s'; pullArrow.style.opacity=1;
+  mv(leverGroup,-TRAVEL,0,0.45); mv(bolt,-BOLT,0,0.45);
+  await sleep(550);
+  mv(door,-70,0,0.5); openHint.style.transition='opacity .4s'; openHint.style.opacity=1;
+  await sleep(850);
+  mv(door,0,0,0.5); openHint.style.opacity=0; pullArrow.style.opacity=0;
+  await sleep(500);
+  mv(leverGroup,0,0,0.45); mv(bolt,0,0,0.45);
+  await sleep(500);
+  setStatus('Locked','var(--accent)'); activate(0);
+  busy=false; $('play').disabled=false; $('manual').disabled=false;
+}
+
+$('play').onclick=playCycle;
+$('manual').onclick=manualDemo;
+$('reset').onclick=()=>{if(!busy)resetAll();};
+resetAll();
+
+// Same-origin embed: auto-fit the iframe to content height so there's no gap/clipping
+// across desktop and phone widths (no fixed height guesswork).
+function fitFrame(){
+  try{
+    const fe=window.frameElement;
+    if(!fe) return;
+    const stages=document.querySelectorAll('.stage');
+    const last=stages[stages.length-1];
+    if(!last) return;
+    // Measure the bottom of the actual content. NOT documentElement.scrollHeight —
+    // <html> stretches to fill the iframe viewport, so that value never shrinks.
+    // (And not body's last child — that's the <script>, which has zero layout height.)
+    const h=Math.ceil(last.getBoundingClientRect().bottom)+2;
+    fe.style.height=h+'px';
+  }catch(e){/* cross-origin: fall back to the iframe's height attribute */}
+}
+window.addEventListener('load',fitFrame);
+window.addEventListener('resize',fitFrame);
+if(document.fonts&&document.fonts.ready){document.fonts.ready.then(fitFrame);}
+setTimeout(fitFrame,300);
+</script>
+</body>
+</html>

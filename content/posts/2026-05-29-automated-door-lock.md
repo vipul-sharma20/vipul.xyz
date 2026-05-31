@@ -4,7 +4,6 @@ draft: false
 excerpt: Planning a linear-servo door opener that retracts my rim lock's slider
 status: evergreen
 tags:
-    - scribbles
     - hardware
     - home-automation
 author_profile: false

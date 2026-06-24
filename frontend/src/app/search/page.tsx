@@ -12,19 +12,12 @@ interface SearchEntry {
   tags: string[];
   date: string | null;
   permalink: string | null;
+  url: string;
   body: string;
 }
 
 function resultUrl(result: SearchEntry): string {
-  if (result.permalink) return result.permalink;
-  if (result.collection === 'posts' && result.date) {
-    const d = new Date(result.date);
-    return `/${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, '0')}/${result.slug}`;
-  }
-  if (result.collection === 'music') return `/music/${result.slug}`;
-  if (result.collection === 'printing') return `/threedee/${result.slug}`;
-  if (result.collection === 'albums') return `/gallery/${result.slug}`;
-  return `/${result.slug}`;
+  return result.url;
 }
 
 export default function SearchPage() {

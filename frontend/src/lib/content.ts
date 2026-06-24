@@ -45,6 +45,7 @@ export interface SearchEntry {
   tags: string[];
   date: string | null;
   permalink: string | null;
+  url: string;
   body: string;
 }
 
@@ -254,7 +255,10 @@ export function getAllPostPaths(): { slug: string[] }[] {
     if (item.collection !== 'posts') continue;
     const urlPath = getUrlPath(item);
     // Split path into segments, filter empty strings
-    const segments = urlPath.replace(/^\//, '').replace(/\/$/, '').split('/');
+    const segments = urlPath.replace(/^\//, '').replace(/\/$/, '').split('/').filter(Boolean);
+
+    if (segments.length === 0) continue;
+
     results.push({ slug: segments });
   }
 
@@ -304,6 +308,7 @@ export function getSearchIndex(): SearchEntry[] {
     slug: i.slug, title: i.title, excerpt: i.excerpt,
     collection: i.collection, tags: i.tags, date: i.date,
     permalink: i.permalink,
+    url: getUrlPath(i),
     body: stripMarkdown(i.raw_markdown).slice(0, 500),
   }));
 }

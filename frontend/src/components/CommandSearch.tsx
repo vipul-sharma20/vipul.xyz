@@ -12,6 +12,7 @@ interface SearchEntry {
   tags: string[];
   date: string | null;
   permalink: string | null;
+  url: string;
   body: string;
 }
 
@@ -140,17 +141,7 @@ export default function CommandSearch() {
   }
 
   function getResultUrl(result: SearchEntry): string {
-    if (result.permalink) return result.permalink;
-    if (result.collection === 'posts' && result.date) {
-      const d = new Date(result.date);
-      const year = d.getFullYear();
-      const month = String(d.getMonth() + 1).padStart(2, '0');
-      return `/${year}/${month}/${result.slug}`;
-    }
-    if (result.collection === 'music') return `/music/${result.slug}`;
-    if (result.collection === 'printing') return `/threedee/${result.slug}`;
-    if (result.collection === 'albums') return `/gallery/${result.slug}`;
-    return `/${result.slug}`;
+    return result.url;
   }
 
   function navigateToResult(result: SearchEntry) {

@@ -16,6 +16,5 @@ tags:
 - the beatles
 - liverpool
 - band
-permalink: /gallery/2025-07-03-the-beatles-story-museum-liverpool/
 title: The Beatles Story Museum, Liverpool
 ---

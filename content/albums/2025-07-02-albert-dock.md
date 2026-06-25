@@ -21,6 +21,5 @@ photos:
 - image: /assets/images/photos/full/2025/07/20250703-20250703-162430-1-.jpg
 tags:
 - liverpool
-permalink: /gallery/2025-07-02-albert-dock/
 title: Royal Albert Dock, Liverpool
 ---

@@ -1,57 +1,31 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import Fuse from 'fuse.js';
-
-interface SearchEntry {
-  slug: string;
-  title: string;
-  excerpt: string;
-  collection: string;
-  tags: string[];
-  date: string | null;
-  permalink: string | null;
-  url: string;
-  body: string;
-}
+import { search as runSearch, warmSearch, type SearchEntry } from '@/lib/search';
 
 function resultUrl(result: SearchEntry): string {
   return result.url;
 }
 
 export default function SearchPage() {
-  const [index, setIndex] = useState<SearchEntry[]>([]);
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchEntry[]>([]);
+  const searchSeq = useRef(0);
 
+  // Warm the shared index/Fuse once the page mounts (the user is here to search).
   useEffect(() => {
-    fetch('/search-index.json')
-      .then(r => r.json())
-      .then(data => setIndex(data))
-      .catch(() => {});
+    warmSearch();
   }, []);
 
-  const fuse = useMemo(() => {
-    if (index.length === 0) return null;
-    return new Fuse(index, {
-      keys: [
-        { name: 'title', weight: 3 },
-        { name: 'tags', weight: 2 },
-        { name: 'excerpt', weight: 1.5 },
-        { name: 'body', weight: 1 },
-      ],
-      threshold: 0.35,
-      ignoreLocation: true,
-      minMatchCharLength: 2,
-    });
-  }, [index]);
-
   useEffect(() => {
-    if (query.trim().length < 2 || !fuse) { setResults([]); return; }
-    const matched = fuse.search(query, { limit: 20 }).map(r => r.item);
-    setResults(matched);
-  }, [query, fuse]);
+    if (query.trim().length < 2) { setResults([]); return; }
+    const seq = ++searchSeq.current;
+    runSearch(query, 20).then(matched => {
+      if (seq !== searchSeq.current) return;
+      setResults(matched);
+    });
+  }, [query]);
 
   return (
     <>

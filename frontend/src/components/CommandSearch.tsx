@@ -1,20 +1,8 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import Fuse from 'fuse.js';
-
-interface SearchEntry {
-  slug: string;
-  title: string;
-  excerpt: string;
-  collection: string;
-  tags: string[];
-  date: string | null;
-  permalink: string | null;
-  url: string;
-  body: string;
-}
+import { search as runSearch, warmSearch, type SearchEntry } from '@/lib/search';
 
 interface PreviewData {
   title: string;
@@ -31,35 +19,11 @@ export default function CommandSearch() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState<PreviewData | null>(null);
-  const [searchIndex, setSearchIndex] = useState<SearchEntry[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
+  const searchSeq = useRef(0);
   const router = useRouter();
-
-  // Load search index once
-  useEffect(() => {
-    fetch('/search-index.json')
-      .then(r => r.json())
-      .then(data => setSearchIndex(data))
-      .catch(() => {});
-  }, []);
-
-  // Build Fuse instance when index loads
-  const fuse = useMemo(() => {
-    if (searchIndex.length === 0) return null;
-    return new Fuse(searchIndex, {
-      keys: [
-        { name: 'title', weight: 3 },
-        { name: 'tags', weight: 2 },
-        { name: 'excerpt', weight: 1.5 },
-        { name: 'body', weight: 1 },
-      ],
-      threshold: 0.35,
-      ignoreLocation: true,
-      minMatchCharLength: 2,
-    });
-  }, [searchIndex]);
 
   // Open/close with Cmd+K / Ctrl+K or custom event from nav
   useEffect(() => {
@@ -83,13 +47,15 @@ export default function CommandSearch() {
     };
   }, []);
 
-  // Focus input when opened
+  // Focus input when opened; warm the search index so the first keystroke
+  // doesn't wait on the fetch + Fuse load.
   useEffect(() => {
     if (open) {
       setQuery('');
       setResults([]);
       setSelectedIndex(0);
       setPreview(null);
+      warmSearch();
       setTimeout(() => inputRef.current?.focus(), 50);
     }
   }, [open]);
@@ -120,19 +86,23 @@ export default function CommandSearch() {
     }
   }, [selectedIndex]);
 
-  // Fuzzy search with Fuse.js
+  // Fuzzy search via the shared lazy loader (fetches index + Fuse on first use).
   const doSearch = useCallback((q: string) => {
-    if (q.trim().length < 2 || !fuse) {
+    if (q.trim().length < 2) {
       setResults([]);
       setPreview(null);
       return;
     }
     setLoading(true);
-    const matched = fuse.search(q, { limit: 10 }).map(r => r.item);
-    setResults(matched);
-    setSelectedIndex(0);
-    setLoading(false);
-  }, [fuse]);
+    const seq = ++searchSeq.current;
+    runSearch(q, 10).then(matched => {
+      // Ignore results from a stale (superseded) query.
+      if (seq !== searchSeq.current) return;
+      setResults(matched);
+      setSelectedIndex(0);
+      setLoading(false);
+    });
+  }, []);
 
   function handleInputChange(value: string) {
     setQuery(value);

@@ -1,12 +1,21 @@
 import type { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 import { Literata, IBM_Plex_Sans, Fira_Code } from 'next/font/google';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import CommandSearch from '@/components/CommandSearch';
 import ThemeProvider from '@/components/ThemeProvider';
-import DevPanel from '@/components/DevPanel';
 import { getConfig } from '@/lib/config';
 import '@/styles/globals.css';
+
+// The theme/font playground is a local design tool only. Gating the import on a
+// build-time-inlined literal lets the bundler drop DevPanel — and its themes /
+// fontPairings / chartPalettes catalog imports — from the production bundle
+// entirely. In dev it loads normally.
+const DevPanel =
+  process.env.NODE_ENV === 'development'
+    ? dynamic(() => import('@/components/DevPanel'))
+    : () => null;
 
 const literata = Literata({
   subsets: ['latin'],

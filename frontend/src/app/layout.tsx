@@ -17,9 +17,13 @@ const DevPanel =
     ? dynamic(() => import('@/components/DevPanel'))
     : () => null;
 
+// Weights are trimmed to what globals.css actually references:
+//   Literata (serif) — 600 (headings, post titles) + 700 (nav name, author, cmdk)
+//   IBM Plex Sans (sans) — 400 (body), 500 (nav/links), 700 (callouts)
+//   Fira Code (mono) — 400 (code), 700 (not-found glyph)
 const literata = Literata({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+  weight: ['600', '700'],
   display: 'swap',
   variable: '--font-literata',
 });
@@ -31,11 +35,14 @@ const ibmPlexSans = IBM_Plex_Sans({
   variable: '--font-ibm-plex-sans',
 });
 
+// Mono is only used in code blocks, never above the fold — skip preloading it so
+// it doesn't compete for bandwidth during first paint on pages with no code.
 const firaCode = Fira_Code({
   subsets: ['latin'],
-  weight: ['400', '500', '700'],
+  weight: ['400', '700'],
   display: 'swap',
   variable: '--font-fira-code',
+  preload: false,
 });
 
 const config = getConfig();

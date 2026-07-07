@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Literata, IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google';
+import { Literata, IBM_Plex_Sans, Fira_Code } from 'next/font/google';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import CommandSearch from '@/components/CommandSearch';
@@ -22,11 +22,11 @@ const ibmPlexSans = IBM_Plex_Sans({
   variable: '--font-ibm-plex-sans',
 });
 
-const ibmPlexMono = IBM_Plex_Mono({
+const firaCode = Fira_Code({
   subsets: ['latin'],
-  weight: ['400'],
+  weight: ['400', '500', '700'],
   display: 'swap',
-  variable: '--font-ibm-plex-mono',
+  variable: '--font-fira-code',
 });
 
 const config = getConfig();
@@ -248,7 +248,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang={config.site.language || 'en'} className={`${literata.variable} ${ibmPlexSans.variable} ${ibmPlexMono.variable}`}>
+    <html lang={config.site.language || 'en'} className={`${literata.variable} ${ibmPlexSans.variable} ${firaCode.variable}`}>
       <head>
         {config.analytics?.plausible_domain && (
           <script

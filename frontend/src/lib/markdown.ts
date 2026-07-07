@@ -81,10 +81,17 @@ export async function renderMarkdown(content: string): Promise<string> {
     try {
       const loadedLangs = highlighter.getLoadedLanguages();
       if (loadedLangs.includes(language as never)) {
-        return highlighter.codeToHtml(code, {
+        const highlighted = highlighter.codeToHtml(code, {
           lang: language,
           theme: 'github-light',
         });
+        // Strip Shiki's inline background/color on the <pre> so the code block
+        // inherits the site's themed card background from globals.css instead of
+        // Shiki's hard-coded white. Token colors (on the spans) are left intact.
+        return highlighted.replace(
+          /(<pre class="shiki[^"]*")[^>]*style="[^"]*"/,
+          '$1',
+        );
       }
     } catch {
       // fall through to default

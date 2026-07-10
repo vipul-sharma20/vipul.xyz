@@ -35,7 +35,10 @@ I'll share whatever feels worth writing about, whenever motivation strikes.
 
 {% include image.html url="/assets/images/self1.png" alt="pcb" size="700" caption="Me working hard" %}
 
-E-mail: *vipul.sharma20 [AT] gmail [DOT] com*
+## Contact
+
+- E-mail: *vipul.sharma20 [AT] gmail [DOT] com*
+- Schedule Meeting: [https://calendar.vipul.xyz/meet](https://calendar.vipul.xyz/meet)
 
 If you have received a 3D printed business card like thing from me, please
 check [this][business-card] post for the assembly guide

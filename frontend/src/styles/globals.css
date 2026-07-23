@@ -145,11 +145,22 @@ hr {
 }
 
 /* Tables */
+/* Wide tables scroll within this container instead of the whole page */
+.table-wrapper {
+  overflow-x: auto;
+  max-width: 100%;
+  margin-bottom: 1.2em;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 1.2em;
   font-size: 15px;
+}
+
+.table-wrapper table {
+  margin-bottom: 0;
 }
 
 th, td {
@@ -244,6 +255,9 @@ figcaption, .image-caption {
 
 /* Layout */
 .site-wrapper {
+  /* Laptop and below keep the original column width;
+     only large external monitors widen (see media query below).
+     Mobile stays padding-bounded (100vw - padding) as before. */
   max-width: 680px;
   margin: 0 auto;
   padding: 0 1.25em;
@@ -251,6 +265,14 @@ figcaption, .image-caption {
   display: flex;
   flex-direction: column;
   overflow: visible;
+}
+
+/* External monitors only: give the column more room.
+   Laptops (≤~1512px logical) keep the original 680px width. */
+@media (min-width: 1600px) {
+  .site-wrapper {
+    max-width: 880px;
+  }
 }
 
 .site-main {
@@ -1869,4 +1891,66 @@ aside.sidebar__right {
   font-size: 15px;
   color: var(--text-secondary);
   font-style: italic;
+}
+
+/* Notion-style collapsible toggles (<details>/<summary>) in post content */
+.prose details {
+  margin-top: 1.5em;
+  margin-bottom: 0.3em;
+}
+.prose details > summary {
+  list-style: none; /* hide default marker (Firefox) */
+  cursor: pointer;
+  display: flex;
+  align-items: baseline;
+  gap: 0.4em;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.4;
+  color: var(--text);
+  user-select: none;
+}
+.prose details > summary::-webkit-details-marker {
+  display: none; /* hide default marker (Safari/Chrome) */
+}
+/* Custom disclosure triangle that rotates on open */
+.prose details > summary::before {
+  content: '';
+  flex: 0 0 auto;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0.32em 0 0.32em 0.5em;
+  border-color: transparent transparent transparent var(--text-secondary);
+  transform: translateY(0.05em);
+  transition: transform 0.15s ease;
+}
+.prose details[open] > summary::before {
+  transform: translateY(0.05em) rotate(90deg);
+}
+.prose details > summary:hover::before {
+  border-left-color: var(--accent);
+}
+.prose details > summary:hover {
+  color: var(--accent);
+}
+/* Content inside the toggle: indent to line up under the summary text */
+.prose details[open] > :not(summary) {
+  margin-left: 0.9em;
+}
+.prose details > summary + * {
+  margin-top: 0.6em;
+}
+
+/* Section-level toggle: summary reads as an h2 heading */
+.prose details.section-toggle {
+  margin-top: 1.8em;
+}
+.prose details.section-toggle > summary {
+  font-size: 22px;
+  line-height: 1.3;
+}
+.prose details.section-toggle > summary::before {
+  border-width: 0.36em 0 0.36em 0.56em;
 }

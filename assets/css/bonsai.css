@@ -1,0 +1,24 @@
+/* Post-specific styles for "Running 1-bit Bonsai 27B LLM"
+ * (loaded via a <link> tag in content/posts/2026-07-04-bonsai-llm.md).
+ * Scoped to images inside the collapsible <details> toggles so nothing
+ * here affects any other post. */
+
+/* Screenshots inside toggles fill the content column at a uniform width, so
+ * every image shares the same left/right edges instead of stopping short at
+ * its natural width (which looked ragged while scrolling). The global
+ * standalone-image break-out rules don't reach into <details>, hence this.
+ *
+ * The Grafana/Modal sources are exported at 2x (~1170px+ intrinsic), so at
+ * this display width they render sharp on retina rather than upscaling. */
+.prose details > p:has(> img:only-child) {
+  margin-left: 0; /* cancel the toggle-content indent so edges are flush */
+}
+
+.prose details > p > img {
+  display: block;
+  width: 100%;
+  max-height: 75vh;
+  margin-left: auto;
+  margin-right: auto;
+  object-fit: contain;
+}

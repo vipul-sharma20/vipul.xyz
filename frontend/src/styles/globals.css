@@ -1367,6 +1367,31 @@ aside.sidebar__right {
   margin-bottom: 1em;
 }
 
+/* About page: social icons beside the "About" header on mobile */
+.page-title-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1em;
+  margin-bottom: 1em;
+}
+
+.page-title-row .page-title {
+  margin-bottom: 0;
+}
+
+.author-socials-inline {
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* Hide the inline socials once the desktop author sidebar is shown */
+@media (min-width: 1080px) {
+  .author-socials-inline {
+    display: none;
+  }
+}
+
 /* Scribbles - denser */
 
 /* Command Search (Cmd+K) */

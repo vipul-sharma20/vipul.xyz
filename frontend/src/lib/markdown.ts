@@ -75,6 +75,11 @@ export async function renderMarkdown(content: string): Promise<string> {
   // Enable tables (built-in)
   md.enable('table');
 
+  // Wrap each table in a scroll container so wide tables scroll horizontally
+  // within their own box instead of forcing the whole page to scroll.
+  md.renderer.rules.table_open = () => '<div class="table-wrapper"><table>\n';
+  md.renderer.rules.table_close = () => '</table></div>\n';
+
   // Custom code block renderer using Shiki
   md.options.highlight = (code: string, lang: string) => {
     const language = lang || 'plaintext';

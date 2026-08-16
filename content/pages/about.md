@@ -3,6 +3,10 @@ permalink: /about/
 title: About
 ---
 
+After ~8.5 years at Skit.ai, I have decided to quit and I am now open to work.
+Please check the [contact](#contact) section for ways to reach out to me.
+{: .notice--info}
+
 Hello, I am Vipul. I am a programmer based out of Bengaluru, India. I work in
 the Engineering team at [Skit.ai][skit-ai]. My work involves leading and
 managing the Engineering team.
@@ -40,9 +44,6 @@ I'll share whatever feels worth writing about, whenever motivation strikes.
 - E-mail: *vipul.sharma20 [AT] gmail [DOT] com*
 - Schedule Meeting: [https://calendar.vipul.xyz/meet](https://calendar.vipul.xyz/meet)
 
-If you have received a 3D printed business card like thing from me, please
-check [this][business-card] post for the assembly guide
-{: .notice--info}
 
 [skit-ai]: https://tech.skit.ai/
 [github]: https://github.com/vipul-sharma20/

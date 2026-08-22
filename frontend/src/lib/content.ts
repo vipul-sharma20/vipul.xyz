@@ -4,8 +4,47 @@ import matter from 'gray-matter';
 import { getConfig } from './config';
 
 const CONTENT_DIR = path.join(process.cwd(), '..', 'content');
-const KNOWN_COLLECTIONS = new Set(['posts', 'music', 'printing', 'albums', 'journal', 'pages']);
+const KNOWN_COLLECTIONS = new Set(['posts', 'music', 'printing', 'albums', 'journal', 'micro', 'pages']);
 const DATE_PREFIX_RE = /^\d{4}-\d{2}-\d{2}-/;
+
+// Notes are timestamped to the minute, so their URLs and displayed times are
+// formatted in a fixed zone. Deriving them from the build machine's local time
+// would move a late-night note to the previous day depending on where it built.
+const SITE_TIME_ZONE = 'Asia/Kolkata';
+
+const siteDayFormatter = new Intl.DateTimeFormat('en-CA', {
+  timeZone: SITE_TIME_ZONE,
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+});
+
+function siteDayParts(iso: string): { year: string; month: string; day: string } {
+  const [year, month, day] = siteDayFormatter.format(new Date(iso)).split('-');
+  return { year, month, day };
+}
+
+/** "21 Aug 2026, 09:12" in the site's timezone. */
+export function formatMicroTimestamp(iso: string): string {
+  return new Intl.DateTimeFormat('en-GB', {
+    timeZone: SITE_TIME_ZONE,
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(new Date(iso));
+}
+
+/** "August 2026" in the site's timezone, used as the stream's margin marker. */
+export function formatMicroMonth(iso: string): string {
+  return new Intl.DateTimeFormat('en-GB', {
+    timeZone: SITE_TIME_ZONE,
+    month: 'long',
+    year: 'numeric',
+  }).format(new Date(iso));
+}
 
 export interface ContentItem {
   slug: string;
@@ -30,11 +69,26 @@ export interface PostListItem {
   permalink: string | null;
   thumbnail: string | null;
   collection: string;
+  /**
+   * Resolved once here rather than recomputed by each list view. Listings mix
+   * collections (tag pages especially), and every collection routes
+   * differently, so a caller guessing at the post convention gets 404s for
+   * anything that is not a post.
+   */
+  url: string;
 }
 
 export interface TagInfo {
   name: string;
   count: number;
+}
+
+export interface MicroImage {
+  src: string;
+  alt: string;
+  /** Intrinsic size when the publisher knew it. Reserves the box before load. */
+  width?: number;
+  height?: number;
 }
 
 export interface SearchEntry {
@@ -52,6 +106,20 @@ export interface SearchEntry {
 function slugFromFilename(filename: string): string {
   const name = filename.replace(/\.md$/, '');
   return name.replace(DATE_PREFIX_RE, '');
+}
+
+/**
+ * Notes are written without a title. Everything that lists content by name
+ * (tag pages, search results, RSS) still needs one, so derive a short label
+ * from the opening words of the body.
+ */
+function deriveMicroTitle(markdown: string): string {
+  const text = stripMarkdown(markdown).replace(/\s+/g, ' ').trim();
+  if (!text) return 'Note';
+  if (text.length <= 70) return text;
+  const cut = text.slice(0, 70);
+  const lastSpace = cut.lastIndexOf(' ');
+  return `${lastSpace > 40 ? cut.slice(0, lastSpace) : cut}…`;
 }
 
 function parseDate(value: unknown): string | null {
@@ -91,7 +159,10 @@ function parseFile(filePath: string): ContentItem | null {
   if (!KNOWN_COLLECTIONS.has(collection)) collection = 'pages';
 
   const slug = slugFromFilename(path.basename(filePath));
-  const title = (data.title as string) || slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  const title = (data.title as string)
+    || (collection === 'micro'
+      ? deriveMicroTitle(content)
+      : slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()));
   const date = parseDate(data.date);
 
   let tags: string[] = [];
@@ -148,6 +219,7 @@ function toListItem(item: ContentItem): PostListItem {
     slug: item.slug, title: item.title, date: item.date,
     tags: item.tags, excerpt: item.excerpt, permalink: item.permalink,
     thumbnail: item.thumbnail, collection: item.collection,
+    url: getUrlPath(item),
   };
 }
 
@@ -163,6 +235,66 @@ export function getScribbles(): PostListItem[] {
   const all = loadAll();
   const scribbles = all.filter(i => i.collection === 'posts' && i.tags.some(t => t.toLowerCase() === 'scribbles'));
   return sortByDate(scribbles).map(toListItem) as PostListItem[];
+}
+
+/**
+ * Microblog entries, newest first. Full ContentItems because the stream renders
+ * every body inline and needs the frontmatter images.
+ */
+export function getMicro(): ContentItem[] {
+  return sortByDate(loadAll().filter(i => i.collection === 'micro'));
+}
+
+/**
+ * Normalize the `images` frontmatter list. Accepts a bare string or an object
+ * keyed by src/url/path/image, matching the shapes already used by albums.
+ */
+export function getMicroImages(item: ContentItem): MicroImage[] {
+  const raw = item.meta.images;
+  if (!Array.isArray(raw)) return [];
+
+  const images: MicroImage[] = [];
+  for (const entry of raw) {
+    if (typeof entry === 'string') {
+      if (entry) images.push({ src: entry, alt: '' });
+      continue;
+    }
+    if (!entry || typeof entry !== 'object') continue;
+
+    const fields = entry as Record<string, unknown>;
+    const src = fields.src ?? fields.url ?? fields.path ?? fields.image;
+    if (typeof src !== 'string' || !src) continue;
+
+    const width = positiveInt(fields.width);
+    const height = positiveInt(fields.height);
+    images.push({
+      src,
+      alt: typeof fields.alt === 'string' ? fields.alt : '',
+      // Only useful as a pair; one alone tells the layout nothing.
+      ...(width && height ? { width, height } : {}),
+    });
+  }
+  return images;
+}
+
+function positiveInt(value: unknown): number | undefined {
+  const parsed = typeof value === 'number' ? value : Number(value);
+  return Number.isFinite(parsed) && parsed > 0 ? Math.round(parsed) : undefined;
+}
+
+export function getAllMicroPaths(): { slug: string[] }[] {
+  const paths: { slug: string[] }[] = [];
+  for (const note of getMicro()) {
+    const url = getUrlPath(note);
+    if (!url.startsWith('/micro/')) continue;
+    paths.push({ slug: url.slice('/micro/'.length).replace(/\/$/, '').split('/').filter(Boolean) });
+  }
+  return paths;
+}
+
+export function getMicroByPath(segments: string[]): ContentItem | undefined {
+  const target = `/micro/${segments.join('/')}`;
+  return getMicro().find(note => getUrlPath(note) === target);
 }
 
 export function getPost(slug: string): ContentItem | undefined {
@@ -236,6 +368,10 @@ export function getUrlPath(item: ContentItem | PostListItem & { collection: stri
         return `/gallery/${item.slug}`;
       case 'journal':
         return `/journal/${item.slug}`;
+      case 'micro': {
+        const local = siteDayParts(item.date);
+        return `/micro/${local.year}/${local.month}/${local.day}/${item.slug}`;
+      }
       case 'pages':
         return `/${item.slug}`;
     }
@@ -313,35 +449,70 @@ export function getSearchIndex(): SearchEntry[] {
   }));
 }
 
-export function generateRssFeed(): string {
-  const config = getConfig();
-  const siteUrl = config.build.site_url;
-  const limit = config.build.rss_limit;
-  const all = loadAll();
-  const sorted = sortByDate(all).slice(0, limit);
-
-  const items = sorted.map(item => {
+function renderRssItems(items: ContentItem[], siteUrl: string): string {
+  return items.map(item => {
     const link = getUrlPath(item);
     const pubDate = item.date ? new Date(item.date).toUTCString() : '';
+    // Notes carry no excerpt and their title is only the opening words, so the
+    // feed would otherwise show a truncated fragment and nothing else.
+    const description = item.excerpt
+      || (item.collection === 'micro' ? stripMarkdown(item.raw_markdown).slice(0, 500) : '');
     return `    <item>
       <title>${escapeXml(item.title)}</title>
       <link>${siteUrl}${link}</link>
       <guid>${siteUrl}${link}</guid>
-      <description>${escapeXml(item.excerpt || '')}</description>
+      <description>${escapeXml(description)}</description>
       ${pubDate ? `<pubDate>${pubDate}</pubDate>` : ''}
     </item>`;
   }).join('\n');
+}
 
+function renderRssChannel(
+  { title, description, selfPath, items }:
+  { title: string; description: string; selfPath: string; items: string },
+): string {
+  const siteUrl = getConfig().build.site_url;
   return `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>${config.site.title}</title>
+    <title>${escapeXml(title)}</title>
     <link>${siteUrl}</link>
-    <description>${config.site.description}</description>
-    <atom:link href="${siteUrl}/feed.xml" rel="self" type="application/rss+xml"/>
+    <description>${escapeXml(description)}</description>
+    <atom:link href="${siteUrl}${selfPath}" rel="self" type="application/rss+xml"/>
 ${items}
   </channel>
 </rss>`;
+}
+
+/**
+ * Main feed. Notes are deliberately excluded — a stream of one-liners would
+ * push long-form posts out of a 30-item feed. They get their own channel.
+ */
+export function generateRssFeed(): string {
+  const config = getConfig();
+  const siteUrl = config.build.site_url;
+  const items = sortByDate(loadAll().filter(i => i.collection !== 'micro'))
+    .slice(0, config.build.rss_limit);
+
+  return renderRssChannel({
+    title: config.site.title,
+    description: config.site.description,
+    selfPath: '/feed.xml',
+    items: renderRssItems(items, siteUrl),
+  });
+}
+
+export function generateMicroFeed(): string {
+  const config = getConfig();
+  const siteUrl = config.build.site_url;
+  const items = getMicro().slice(0, config.build.rss_limit);
+
+  return renderRssChannel({
+    title: `${config.site.title} — Micro`,
+    description: 'Short posts, photos and passing thoughts.',
+    selfPath: '/micro/feed.xml',
+    items: renderRssItems(items, siteUrl),
+  });
 }
 
 /**
@@ -362,4 +533,9 @@ export function writeStaticFiles(): void {
   const rss = generateRssFeed();
   fs.writeFileSync(path.join(publicDir, 'feed.xml'), rss);
   console.log('Generated feed.xml');
+
+  const microDir = path.join(publicDir, 'micro');
+  fs.mkdirSync(microDir, { recursive: true });
+  fs.writeFileSync(path.join(microDir, 'feed.xml'), generateMicroFeed());
+  console.log('Generated micro/feed.xml');
 }

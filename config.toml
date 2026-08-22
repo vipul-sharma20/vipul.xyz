@@ -26,12 +26,18 @@ linkedin = "https://www.linkedin.com/in/vipul20/"
 # label = path
 [navigation.links]
 Posts = "/"
+Micro = "/micro"
 Scribbles = "/scribbles"
 Music = "/music"
 Listening = "/listening"
 Gallery = "/gallery"
 "3D Printing" = "/threedee"
 About = "/about"
+
+# Nav items rendered as a symbol instead of their name. The name above is kept
+# as the accessible label and the hover tooltip.
+[navigation.glyphs]
+"/micro" = "µ"
 
 [content]
 # Directory containing markdown files (relative to project root)

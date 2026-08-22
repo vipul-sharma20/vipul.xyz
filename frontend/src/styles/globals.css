@@ -454,6 +454,32 @@ figcaption, .image-caption {
   opacity: 1;
 }
 
+/* Nav items shown as a symbol (µ for the microblog) rather than a word.
+   The glyph needs a larger size than its neighbours to carry the same optical
+   weight, and it sits low because of the descender, so it is nudged up. */
+.site-nav-desktop a.site-nav-glyph {
+  font-size: 21px;
+  line-height: 1;
+  display: inline-block;
+  transform: translateY(-0.05em);
+}
+
+.site-nav-mobile-link.site-nav-glyph {
+  font-size: 19px;
+  line-height: 1;
+  display: inline-block;
+  transform: translateY(-0.05em);
+}
+
+/* An underline beneath a lone glyph reads as a typo, so the active state
+   switches to the accent colour instead. */
+.site-nav-desktop a.site-nav-glyph.active,
+.site-nav-mobile-link.site-nav-glyph.active {
+  color: var(--accent);
+  opacity: 1;
+  text-decoration: none;
+}
+
 .site-nav-hamburger {
   cursor: pointer;
   color: var(--text);
@@ -1253,6 +1279,19 @@ aside.sidebar__right {
   white-space: nowrap;
 }
 
+/* Album body text, rendered above the photo grid */
+.album-intro {
+  margin-bottom: 2.5em;
+}
+
+.album-intro .prose > :first-child {
+  margin-top: 0;
+}
+
+.album-intro .prose > :last-child {
+  margin-bottom: 0;
+}
+
 /* Lightbox */
 .lightbox-overlay[hidden] {
   display: none !important;
@@ -1325,6 +1364,190 @@ aside.sidebar__right {
 
 .lightbox-next {
   right: 0.5em;
+}
+
+/* Notes (microblog stream) */
+.micro-stream {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.note {
+  position: relative;
+  padding-bottom: 1.8em;
+  margin-bottom: 1.8em;
+  border-bottom: 1px solid var(--border);
+}
+
+.note:last-child {
+  padding-bottom: 0;
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.micro-single {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+/* Month marker floats in the left margin on desktop, sits inline on mobile —
+   same treatment as the year marker in the post list. */
+.micro-month-marker {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: color-mix(in srgb, var(--text-secondary) 30%, var(--border));
+  user-select: none;
+}
+
+@media (min-width: 800px) {
+  .micro-month-marker {
+    position: absolute;
+    right: calc(100% + 1.5em);
+    top: 0.3em;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 799px) {
+  .micro-month-marker {
+    margin-bottom: 0.5em;
+    padding-bottom: 0.2em;
+    border-bottom: 1px solid var(--border);
+    display: inline-block;
+  }
+
+  .note:not(:first-child) .micro-month-marker {
+    margin-top: 1em;
+  }
+}
+
+.micro-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4em;
+  margin-bottom: 0.4em;
+}
+
+.micro-time {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+
+.micro-time:visited {
+  color: var(--text-secondary);
+}
+
+a.micro-time:hover {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.micro-body {
+  line-height: 1.6;
+}
+
+.micro-body > :last-child {
+  margin-bottom: 0;
+}
+
+.micro-body img {
+  border: 1px solid var(--text);
+  border-radius: 4px;
+  cursor: zoom-in;
+}
+
+.micro-empty {
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+/* Media grid: tight gaps so a set of photos reads as one attachment */
+.micro-media {
+  display: grid;
+  gap: 8px;
+  margin-top: 0.7em;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.micro-media[data-count='1'] {
+  grid-template-columns: 1fr;
+}
+
+.micro-media[data-count='3'] {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.micro-media-item {
+  appearance: none;
+  display: block;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  color: inherit;
+  cursor: zoom-in;
+  min-width: 0;
+}
+
+.micro-media-item img {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border: 1px solid var(--text);
+  border-radius: 4px;
+  transition: border-color 0.15s;
+}
+
+.micro-media-item:hover img {
+  border-color: var(--accent);
+}
+
+.micro-media-item:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* A lone photo keeps its own proportions instead of being cropped to the grid */
+.micro-media[data-count='1'] .micro-media-item img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 60vh;
+  aspect-ratio: auto;
+  object-fit: contain;
+}
+
+/*
+ * A phone portrait is roughly 3:4 or taller, so at 60vh it fills the screen and
+ * pushes the rest of the stream out of view. Hold it to half the viewport and
+ * let the width follow; the lightbox still shows the full frame.
+ */
+.micro-media[data-count='1'] .micro-media-item[data-orientation='portrait'] img {
+  max-height: 50vh;
+}
+
+@media (max-width: 600px) {
+  .micro-media,
+  .micro-media[data-count='3'] {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Three photos: first one spans the row so the pair below stays square-ish */
+  .micro-media[data-count='3'] .micro-media-item:first-child {
+    grid-column: span 2;
+  }
+
+  .micro-media[data-count='3'] .micro-media-item:first-child img {
+    aspect-ratio: 16 / 9;
+  }
 }
 
 /* Tag capsules */

@@ -46,7 +46,16 @@ const firaCode = Fira_Code({
 });
 
 const config = getConfig();
-const navLinks = Object.entries(config.navigation.links).map(([label, href]) => ({ label, href }));
+// Built per render rather than at module scope so a config.toml edit shows up on
+// refresh in dev. In production getConfig() is cached, so this is a no-op cost.
+function getNavLinks() {
+  const { links, glyphs } = getConfig().navigation;
+  return Object.entries(links).map(([label, href]) => ({
+    label,
+    href,
+    glyph: glyphs?.[href],
+  }));
+}
 const imageModalScript = `
 (() => {
   if (window.__vipulImageModalSetup) {
@@ -73,7 +82,7 @@ const imageModalScript = `
 
   function getTargetImage(target) {
     if (!(target instanceof Element)) return null;
-    const image = target.closest('.prose img');
+    const image = target.closest('.prose img, .micro-body img');
     if (!(image instanceof HTMLImageElement)) return null;
     if (image.closest('.instagram-media')) return null;
     return image;
@@ -81,7 +90,7 @@ const imageModalScript = `
 
   function getGalleryTrigger(target) {
     if (!(target instanceof Element)) return null;
-    const trigger = target.closest('.photo-grid .polaroid[data-lightbox-src]');
+    const trigger = target.closest('[data-lightbox-group] [data-lightbox-src]');
     return trigger instanceof HTMLElement ? trigger : null;
   }
 
@@ -128,9 +137,9 @@ const imageModalScript = `
 
   function openGallery(trigger) {
     if (!galleryModal || !galleryImage) return;
-    const grid = trigger.closest('.photo-grid');
+    const grid = trigger.closest('[data-lightbox-group]');
     if (!grid) return;
-    galleryItems = Array.from(grid.querySelectorAll('.polaroid[data-lightbox-src]'));
+    galleryItems = Array.from(grid.querySelectorAll('[data-lightbox-src]'));
     galleryIndex = galleryItems.indexOf(trigger);
     if (galleryIndex === -1) return;
 
@@ -279,7 +288,7 @@ export default function RootLayout({
           <CommandSearch />
           <DevPanel />
           <div className="site-wrapper">
-            <Nav links={navLinks} />
+            <Nav links={getNavLinks()} />
             <main className="site-main">
               {children}
             </main>

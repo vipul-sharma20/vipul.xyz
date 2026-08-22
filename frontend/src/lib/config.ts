@@ -18,6 +18,8 @@ export interface SiteConfig {
   };
   navigation: {
     links: Record<string, string>;
+    /** Path -> symbol, for nav items shown as a glyph rather than a word. */
+    glyphs?: Record<string, string>;
   };
   content: {
     content_dir: string;
@@ -43,7 +45,10 @@ export interface SiteConfig {
 let _config: SiteConfig | null = null;
 
 export function getConfig(): SiteConfig {
-  if (_config) return _config;
+  // config.toml is read through fs, so it is not part of the dev server's module
+  // graph and editing it triggers no reload. Skip the cache in development so
+  // changes land on refresh, the same way content.ts handles markdown.
+  if (_config && process.env.NODE_ENV !== 'development') return _config;
 
   const configPath = path.join(process.cwd(), '..', 'config.toml');
   const raw = fs.readFileSync(configPath, 'utf-8');

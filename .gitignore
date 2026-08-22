@@ -6,6 +6,7 @@ frontend/out/
 # Generated files
 frontend/public/search-index.json
 frontend/public/feed.xml
+frontend/public/micro/feed.xml
 
 # Build
 *.tsbuildinfo

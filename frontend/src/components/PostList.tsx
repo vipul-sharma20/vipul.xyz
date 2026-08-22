@@ -16,16 +16,6 @@ function getYear(dateString: string | null): string | null {
   return String(new Date(dateString).getUTCFullYear());
 }
 
-function postUrl(post: PostListItem): string {
-  if (post.permalink) return post.permalink;
-  if (!post.date) return `/${post.slug}`;
-  const date = new Date(post.date);
-  const year = date.getUTCFullYear();
-  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-  const day = String(date.getUTCDate()).padStart(2, '0');
-  return `/${year}/${month}/${day}/${post.slug}`;
-}
-
 interface PostListProps {
   posts: PostListItem[];
 }
@@ -44,7 +34,7 @@ export default function PostList({ posts }: PostListProps) {
           <li key={post.slug} className={`post-list-item ${showYear ? 'post-list-year-first' : ''}`}>
             {showYear && <div className="post-list-year-marker">{year}</div>}
             <div className="post-list-title">
-              <Link href={postUrl(post)}>{post.title}</Link>
+              <Link href={post.url}>{post.title}</Link>
             </div>
             {post.date && (
               <div className="post-list-date">

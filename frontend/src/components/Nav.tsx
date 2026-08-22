@@ -3,12 +3,25 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-interface NavProps {
-  links: { href: string; label: string }[];
+interface NavLink {
+  href: string;
+  label: string;
+  /** Symbol shown instead of the label; the label becomes the accessible name. */
+  glyph?: string;
 }
 
-// Mobile: these 3 shown inline, rest go in hamburger
+interface NavProps {
+  links: NavLink[];
+}
+
+// Mobile: these word links shown inline, rest go in hamburger. Glyph links are
+// always inline — they sit with the icons and cost almost no width.
 const MOBILE_PRIMARY = ['/', '/scribbles', '/about'];
+
+function classes(...values: (string | false | undefined)[]): string | undefined {
+  const joined = values.filter(Boolean).join(' ');
+  return joined || undefined;
+}
 
 export default function Nav({ links }: NavProps) {
   const pathname = usePathname();
@@ -17,8 +30,24 @@ export default function Nav({ links }: NavProps) {
     return href === '/' ? pathname === '/' : pathname.startsWith(href);
   }
 
-  const mobilePrimary = links.filter(l => MOBILE_PRIMARY.includes(l.href));
-  const mobileOverflow = links.filter(l => !MOBILE_PRIMARY.includes(l.href));
+  // Glyph links are grouped with the search and RSS icons rather than sitting in
+  // the run of words, so they read as part of the icon cluster.
+  const wordLinks = links.filter(l => !l.glyph);
+  const glyphLinks = links.filter(l => l.glyph);
+  const mobilePrimary = wordLinks.filter(l => MOBILE_PRIMARY.includes(l.href));
+  const mobileOverflow = wordLinks.filter(l => !MOBILE_PRIMARY.includes(l.href));
+
+  const glyphNav = (className?: string) => glyphLinks.map(({ href, label, glyph }) => (
+    <Link
+      key={href}
+      href={href}
+      className={classes(className, 'site-nav-glyph', isActive(href) && 'active')}
+      aria-label={label}
+      title={label}
+    >
+      {glyph}
+    </Link>
+  ));
 
   return (
     <nav className="site-nav">
@@ -28,10 +57,11 @@ export default function Nav({ links }: NavProps) {
 
       {/* Desktop nav */}
       <div className="site-nav-desktop">
-        {links.map(({ href, label }) => (
+        {wordLinks.map(({ href, label }) => (
           <Link key={href} href={href} className={isActive(href) ? 'active' : undefined}>{label}</Link>
         ))}
         <span className="site-nav-sep" aria-hidden="true" />
+        {glyphNav()}
         <button
           className="site-nav-rss"
           title="Search (⌘K)"
@@ -55,8 +85,15 @@ export default function Nav({ links }: NavProps) {
       {/* Mobile nav */}
       <div className="site-nav-mobile">
         {mobilePrimary.map(({ href, label }) => (
-          <Link key={href} href={href} className={`site-nav-mobile-link ${isActive(href) ? 'active' : ''}`}>{label}</Link>
+          <Link
+            key={href}
+            href={href}
+            className={classes('site-nav-mobile-link', isActive(href) && 'active')}
+          >
+            {label}
+          </Link>
         ))}
+        {glyphNav('site-nav-mobile-link')}
         <button
           className="site-nav-rss"
           title="Search"

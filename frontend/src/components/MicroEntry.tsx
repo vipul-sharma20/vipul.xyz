@@ -1,53 +1,27 @@
-import type { Metadata } from 'next';
 import Link from 'next/link';
 import MicroMedia from '@/components/MicroMedia';
 import {
+  type ContentItem,
   formatMicroTimestamp,
-  getAllMicroPaths,
-  getMicroByPath,
-  getMicroImages,
   getMicro,
+  getMicroImages,
   getUrlPath,
 } from '@/lib/content';
 import { renderMarkdown } from '@/lib/markdown';
 
-type Props = {
-  params: Promise<{ slug: string[] }>;
-};
-
-export function generateStaticParams() {
-  return getAllMicroPaths();
-}
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
-  const note = getMicroByPath(slug);
-  if (!note) return { title: 'Note Not Found' };
-
-  const image = getMicroImages(note)[0]?.src;
-
-  return {
-    title: note.title,
-    description: note.title,
-    openGraph: {
-      title: `Note — ${formatMicroTimestamp(note.date as string)}`,
-      description: note.title,
-      type: 'article',
-      ...(image && { images: [{ url: image }] }),
-      ...(note.date && { publishedTime: note.date }),
-    },
-  };
-}
-
-export default async function MicroPage({ params }: Props) {
-  const { slug } = await params;
-  const note = getMicroByPath(slug);
-  if (!note) return <p>Note not found.</p>;
-
+/**
+ * A single micro entry on its own page, with older/newer navigation.
+ *
+ * Rendered from the top-level `[...slug]` catch-all rather than a dedicated
+ * `micro/[...slug]` route. A dedicated dynamic route would need at least one
+ * param to satisfy `output: 'export'`, which made an empty `content/micro/`
+ * fail the build; the top-level route always has posts to generate.
+ */
+export default async function MicroEntry({ note }: { note: ContentItem }) {
   const html = await renderMarkdown(note.raw_markdown);
   const images = getMicroImages(note);
 
-  // getMicro() is newest first, so the previous index is the newer note.
+  // getMicro() is newest first, so the previous index is the newer entry.
   const all = getMicro();
   const index = all.findIndex(n => n.slug === note.slug);
   const newer = index > 0 ? all[index - 1] : null;

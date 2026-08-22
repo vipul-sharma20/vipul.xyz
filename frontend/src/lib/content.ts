@@ -383,12 +383,22 @@ export function getUrlPath(item: ContentItem | PostListItem & { collection: stri
 /**
  * Get all post URL paths as segment arrays for generateStaticParams.
  */
+/**
+ * Collections served by the top-level `[...slug]` catch-all.
+ *
+ * Micro entries are here rather than under their own `micro/[...slug]` route so
+ * that an empty `content/micro/` cannot fail the build: `output: 'export'`
+ * requires every dynamic route to yield at least one param, and this route
+ * always has posts.
+ */
+const CATCH_ALL_COLLECTIONS = new Set(['posts', 'micro']);
+
 export function getAllPostPaths(): { slug: string[] }[] {
   const all = loadAll();
   const results: { slug: string[] }[] = [];
 
   for (const item of all) {
-    if (item.collection !== 'posts') continue;
+    if (!CATCH_ALL_COLLECTIONS.has(item.collection)) continue;
     const urlPath = getUrlPath(item);
     // Split path into segments, filter empty strings
     const segments = urlPath.replace(/^\//, '').replace(/\/$/, '').split('/').filter(Boolean);
@@ -406,7 +416,7 @@ export function getPostByPath(segments: string[]): ContentItem | undefined {
   const targetPath = '/' + segments.join('/');
 
   for (const item of all) {
-    if (item.collection !== 'posts') continue;
+    if (!CATCH_ALL_COLLECTIONS.has(item.collection)) continue;
     const itemPath = getUrlPath(item);
     // Compare with and without trailing slash, and with .html
     if (itemPath === targetPath || itemPath === targetPath + '/' || itemPath + '/' === targetPath) {
@@ -414,7 +424,8 @@ export function getPostByPath(segments: string[]): ContentItem | undefined {
     }
   }
 
-  // Fallback: try matching by slug (last segment)
+  // Fallback: match on the last segment. Posts only — a micro slug is a bare
+  // time like "1432", which is far too collidable to match loosely.
   const slug = segments[segments.length - 1].replace(/\.html$/, '');
   return all.find(i => i.collection === 'posts' && i.slug === slug);
 }

@@ -1,8 +1,14 @@
 import type { Metadata } from 'next';
-import { getAllPostPaths, getPostByPath } from '@/lib/content';
+import {
+  formatMicroTimestamp,
+  getAllPostPaths,
+  getMicroImages,
+  getPostByPath,
+} from '@/lib/content';
 import { renderMarkdown } from '@/lib/markdown';
 import PostContent from '@/components/PostContent';
 import AuthorSidebar from '@/components/AuthorSidebar';
+import MicroEntry from '@/components/MicroEntry';
 import Link from 'next/link';
 
 type Props = {
@@ -17,6 +23,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = getPostByPath(slug);
   if (!post) return { title: 'Post Not Found' };
+
+  // Micro entries have no title of their own, so the derived opening words act
+  // as both title and description.
+  if (post.collection === 'micro') {
+    const image = getMicroImages(post)[0]?.src;
+    return {
+      title: post.title,
+      description: post.title,
+      openGraph: {
+        title: `Note — ${formatMicroTimestamp(post.date as string)}`,
+        description: post.title,
+        type: 'article',
+        ...(image && { images: [{ url: image }] }),
+        ...(post.date && { publishedTime: post.date }),
+      },
+    };
+  }
 
   const description = post.excerpt || `${post.title} — Vipul Sharma`;
   const ogImage = (post.meta.image as string) || post.thumbnail || undefined;
@@ -50,6 +73,9 @@ export default async function PostPage({ params }: Props) {
   const { slug } = await params;
   const post = getPostByPath(slug);
   if (!post) return <p>Post not found.</p>;
+
+  // Micro entries are titleless and get their own layout, no author sidebar.
+  if (post.collection === 'micro') return <MicroEntry note={post} />;
 
   const html = await renderMarkdown(post.raw_markdown);
   const showAuthor = post.meta.author_profile !== false;

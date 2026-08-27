@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import { Literata, IBM_Plex_Sans, Fira_Code } from 'next/font/google';
+import Announcement from '@/components/Announcement';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import CommandSearch from '@/components/CommandSearch';
@@ -287,6 +288,7 @@ export default function RootLayout({
         <ThemeProvider>
           <CommandSearch />
           <DevPanel />
+          <Announcement announcement={getConfig().announcement} />
           <div className="site-wrapper">
             <Nav links={getNavLinks()} />
             <main className="site-main">

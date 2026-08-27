@@ -39,6 +39,15 @@ About = "/about"
 [navigation.glyphs]
 "/micro" = "µ"
 
+[announcement]
+enabled = true
+text = "I am open to work."
+short = "Open to work."
+link = "/about#contact"
+link_label = "Get in touch"
+# Paths that skip the strip — /about already says all this in full.
+hide_on = ["/about"]
+
 [content]
 # Directory containing markdown files (relative to project root)
 content_dir = "content"

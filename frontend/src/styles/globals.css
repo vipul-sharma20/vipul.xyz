@@ -253,6 +253,83 @@ figcaption, .image-caption {
 .notice-warning .callout-title { color: #b8860b; }
 .notice-danger .callout-title { color: #a03030; }
 
+/* Announcement strip (see [announcement] in config.toml)
+   Tinted from --accent rather than a fixed color, so it follows every theme
+   preset. The inner span keeps .site-wrapper's max-width and padding so the
+   line can't run the full width of a wide monitor, but sits centered inside
+   it rather than aligning to the content column. */
+.site-announcement {
+  display: block;
+  background: color-mix(in srgb, var(--accent) 7%, var(--bg));
+  border-bottom: 1px solid var(--border);
+}
+
+/* The strip is a link, so hovering it anywhere — including the CTA — would
+   otherwise tint the whole bar and drag the global a:hover underline across
+   its full width. Only the CTA reacts (see below). */
+.site-announcement:hover {
+  text-decoration: none;
+}
+
+.site-announcement-inner {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.45em;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0.25em 1.25em;
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  line-height: 1.3;
+  color: var(--text-secondary);
+}
+
+@media (min-width: 1600px) {
+  .site-announcement-inner {
+    max-width: 880px;
+  }
+}
+
+/* Pinned across every link state: the strip is a standing notice, so it
+   shouldn't look spent once someone has opened /about. */
+.site-announcement-cta,
+.site-announcement:visited .site-announcement-cta,
+.site-announcement:hover .site-announcement-cta,
+.site-announcement:active .site-announcement-cta {
+  color: var(--accent);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.site-announcement:visited .site-announcement-text,
+.site-announcement:visited .site-announcement-text-short {
+  color: var(--text-secondary);
+}
+
+.site-announcement:hover .site-announcement-cta {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.site-announcement-text-short {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .site-announcement-inner {
+    font-size: 12px;
+  }
+
+  .site-announcement-text {
+    display: none;
+  }
+
+  .site-announcement-text-short {
+    display: inline;
+  }
+}
+
 /* Layout */
 .site-wrapper {
   /* Laptop and below keep the original column width;

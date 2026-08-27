@@ -33,7 +33,6 @@ export interface SiteConfig {
   };
   build: {
     site_url: string;
-    rss_limit: number;
     search_body_limit: number;
   };
   analytics?: {

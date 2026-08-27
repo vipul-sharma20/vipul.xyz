@@ -61,9 +61,6 @@ default_font = "literata-plex"
 # Site URL used for RSS feed and meta tags
 site_url = "https://vipul.xyz"
 
-# Number of items in RSS feed
-rss_limit = 30
-
 # Search index body text limit (characters)
 search_body_limit = 500
 

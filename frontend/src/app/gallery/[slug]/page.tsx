@@ -79,8 +79,12 @@ export default async function GalleryItemPage({ params }: Props) {
         </div>
       </header>
 
+      {html.trim() && (
+        <div className="album-intro">
+          <PostContent html={html} />
+        </div>
+      )}
       {photos.length > 0 && <PhotoGrid photos={photos} />}
-      {html.trim() && <PostContent html={html} />}
     </>
   );
 }

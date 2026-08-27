@@ -9,7 +9,7 @@ interface PhotoGridProps {
 
 export default function PhotoGrid({ photos }: PhotoGridProps) {
   return (
-    <div className="photo-grid">
+    <div className="photo-grid" data-lightbox-group="">
       {photos.map((photo, i) => (
         <button
           key={i}

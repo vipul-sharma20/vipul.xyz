@@ -496,14 +496,17 @@ ${items}
 }
 
 /**
- * Main feed. Notes are deliberately excluded — a stream of one-liners would
- * push long-form posts out of a 30-item feed. They get their own channel.
+ * Main feed. Carries every dated item — posts, albums, music, printing — with
+ * no cap. Notes are deliberately excluded; they have their own channel so
+ * subscribers can take the long-form posts without the short ones. Static
+ * pages are excluded too, having no date to sort by.
  */
 export function generateRssFeed(): string {
   const config = getConfig();
   const siteUrl = config.build.site_url;
-  const items = sortByDate(loadAll().filter(i => i.collection !== 'micro'))
-    .slice(0, config.build.rss_limit);
+  const items = sortByDate(
+    loadAll().filter(i => i.collection !== 'micro' && i.collection !== 'pages')
+  );
 
   return renderRssChannel({
     title: config.site.title,
@@ -516,7 +519,7 @@ export function generateRssFeed(): string {
 export function generateMicroFeed(): string {
   const config = getConfig();
   const siteUrl = config.build.site_url;
-  const items = getMicro().slice(0, config.build.rss_limit);
+  const items = getMicro();
 
   return renderRssChannel({
     title: `${config.site.title} — Micro`,

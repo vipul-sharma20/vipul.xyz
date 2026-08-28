@@ -24,16 +24,13 @@ function siteDayParts(iso: string): { year: string; month: string; day: string }
   return { year, month, day };
 }
 
-/** "21 Aug 2026, 09:12" in the site's timezone. */
+/** "21 Aug 2026" in the site's timezone. */
 export function formatMicroTimestamp(iso: string): string {
   return new Intl.DateTimeFormat('en-GB', {
     timeZone: SITE_TIME_ZONE,
     day: 'numeric',
     month: 'short',
     year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
   }).format(new Date(iso));
 }
 

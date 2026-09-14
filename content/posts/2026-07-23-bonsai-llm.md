@@ -5,7 +5,7 @@ excerpt: I put the 1-bit Bonsai 27B on almost every hardware that I use for self
 status: evergreen
 tags:
 - llm
-- self-hosting
+- self-hosted
 title: Running 1-bit Bonsai 27B LLM
 author_profile: false
 ---

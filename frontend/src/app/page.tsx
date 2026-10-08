@@ -11,7 +11,9 @@ export default function HomePage() {
         Longer, supposedly more thought-out posts about things I build or text
         that I want to share. Mostly technical, sometimes not. Look at
         {' '}<Link href="/scribbles">/scribbles</Link>{' '}
-        where I post more frequently.
+        for less polished writing, and at my microblog,
+        {' '}<Link href="/micro">/micro</Link>,
+        where I post frequently.
       </p>
       <PostList posts={posts} />
     </>

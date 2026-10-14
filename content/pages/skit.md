@@ -96,7 +96,10 @@ To put things in perspective about the years that have gone by:
 3. Got married.
 4. [Ejipura Flyover][ejipura] is still under construction.
 
-
+<figure style="text-align:center">
+  <img src="https://images.vipul.xyz/pages/skit/ab9b934d30748985.webp" alt="Farewell messages and photos at Vipul's Skit.ai desk" style="max-width:900px;" />
+  <figcaption>Thanks for everything</figcaption>
+</figure>
 
 [skit.ai]: https://skit.ai/
 [vernacular.ai]: https://web.archive.org/web/20180224064016/https://vernacular.ai/

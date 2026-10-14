@@ -89,9 +89,9 @@ Look [here][contact] for ways to contact me.
 
 ## Postscript
 
-To put things in perspective about the years that have gone by:
+To put things into perspective on what has happened in all these years:
 
-1. I worked here for more than 2 Bachelor's degree in Engineering.
+1. I worked here for (3124 days) more than 2 Bachelor's degree in Engineering.
 2. Bought a house.
 3. Got married.
 4. [Ejipura Flyover][ejipura] is still under construction.

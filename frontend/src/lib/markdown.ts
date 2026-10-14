@@ -112,6 +112,10 @@ export async function renderMarkdown(content: string): Promise<string> {
     typographer: true,
   });
 
+  // Only autolink text that carries a scheme (https://). Fuzzy matching turns
+  // any domain-shaped word (Skit.ai, Amazon.in) into a link.
+  md.linkify.set({ fuzzyLink: false });
+
   // Enable tables (built-in)
   md.enable('table');
 

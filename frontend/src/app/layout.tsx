@@ -19,12 +19,14 @@ const DevPanel =
     : () => null;
 
 // Weights are trimmed to what globals.css actually references:
-//   Literata (serif) — 600 (headings, post titles) + 700 (nav name, author, cmdk)
+//   Literata (serif) — 400 (listening chart labels), 600 (headings, post titles)
+//     + 700 (nav name, author, cmdk). It is a variable font, so all three
+//     weights resolve to the same files.
 //   IBM Plex Sans (sans) — 400 (body), 500 (nav/links), 700 (callouts)
 //   Fira Code (mono) — 400 (code), 700 (not-found glyph)
 const literata = Literata({
   subsets: ['latin'],
-  weight: ['600', '700'],
+  weight: ['400', '600', '700'],
   display: 'swap',
   variable: '--font-literata',
 });

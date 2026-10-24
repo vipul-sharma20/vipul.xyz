@@ -1548,6 +1548,42 @@ a.micro-time:hover {
   font-size: 15px;
 }
 
+/* "Load older notes": a link to the next page that MicroLoadMore turns into
+   an in-place append. Styled after the tag capsules, one size up. */
+.micro-more {
+  display: block;
+  width: fit-content;
+  margin: 2.4em auto 0;
+  padding: 0.5em 1.4em;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.micro-more:visited {
+  color: var(--text-secondary);
+}
+
+.micro-more:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+.micro-more:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.micro-more[aria-busy='true'] {
+  cursor: progress;
+  color: var(--text-secondary);
+  border-color: var(--border);
+}
+
 /* Media grid: tight gaps so a set of photos reads as one attachment */
 .micro-media {
   display: grid;

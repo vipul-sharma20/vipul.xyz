@@ -243,6 +243,32 @@ export function getMicro(): ContentItem[] {
 }
 
 /**
+ * The /micro stream is split into pages of `posts_per_page` so the index stays
+ * the same size however many notes exist. Page 1 is /micro/, older pages are
+ * /micro/page/N/, and the stream's "Load older notes" button appends them.
+ */
+function microPerPage(): number {
+  return getConfig().content.posts_per_page || 20;
+}
+
+/** Always at least 1, so the page route never yields an empty param list. */
+export function getMicroPageCount(): number {
+  const dated = getMicro().filter(note => note.date).length;
+  return Math.max(1, Math.ceil(dated / microPerPage()));
+}
+
+export function getMicroPage(page: number): ContentItem[] {
+  const perPage = microPerPage();
+  return getMicro()
+    .filter(note => note.date)
+    .slice((page - 1) * perPage, page * perPage);
+}
+
+export function getMicroPageUrl(page: number): string {
+  return page <= 1 ? '/micro/' : `/micro/page/${page}/`;
+}
+
+/**
  * Normalize the `images` frontmatter list. Accepts a bare string or an object
  * keyed by src/url/path/image, matching the shapes already used by albums.
  */

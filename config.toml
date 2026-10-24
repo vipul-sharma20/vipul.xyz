@@ -53,7 +53,8 @@ hide_on = ["/about"]
 content_dir = "content"
 assets_dir = "assets"
 
-# Posts per page (if pagination is added later)
+# Notes per page on /micro. Older pages are /micro/page/N/, appended in place by
+# the stream's "Load older notes" button.
 posts_per_page = 20
 
 # Default author_profile visibility on posts

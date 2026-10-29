@@ -127,6 +127,12 @@ pre {
   line-height: 1.5;
 }
 
+/* Opt-in per fence: ```json scroll */
+pre.code-scroll {
+  max-height: min(640px, 70vh);
+  overflow-y: auto;
+}
+
 pre code {
   background: none;
   padding: 0;

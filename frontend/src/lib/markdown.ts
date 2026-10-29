@@ -137,9 +137,11 @@ export async function renderMarkdown(content: string): Promise<string> {
   md.renderer.rules.table_open = () => '<div class="table-wrapper"><table>\n';
   md.renderer.rules.table_close = () => '</table></div>\n';
 
-  // Custom code block renderer using Shiki
-  md.options.highlight = (code: string, lang: string) => {
+  // Custom code block renderer using Shiki. A `scroll` word after the language
+  // (```json scroll) caps the block's height so a long listing scrolls in place.
+  md.options.highlight = (code: string, lang: string, attrs: string) => {
     const language = lang || 'plaintext';
+    const scrollClass = /\bscroll\b/.test(attrs) ? ' code-scroll' : '';
     try {
       const loadedLangs = highlighter.getLoadedLanguages();
       if (loadedLangs.includes(language as never)) {
@@ -151,8 +153,8 @@ export async function renderMarkdown(content: string): Promise<string> {
         // inherits the site's themed card background from globals.css instead of
         // Shiki's hard-coded white. Token colors (on the spans) are left intact.
         return highlighted.replace(
-          /(<pre class="shiki[^"]*")[^>]*style="[^"]*"/,
-          '$1',
+          /<pre class="(shiki[^"]*)"[^>]*style="[^"]*"/,
+          `<pre class="$1${scrollClass}"`,
         );
       }
     } catch {
@@ -160,7 +162,7 @@ export async function renderMarkdown(content: string): Promise<string> {
     }
     // Fallback: escape and wrap in pre/code
     const escaped = md.utils.escapeHtml(code);
-    return `<pre><code class="language-${language}">${escaped}</code></pre>`;
+    return `<pre${scrollClass ? ` class="${scrollClass.trim()}"` : ''}><code class="language-${language}">${escaped}</code></pre>`;
   };
 
   let html = md.render(content);

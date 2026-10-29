@@ -27,7 +27,7 @@ release.
 I have got a triple pedal setup. I went with _the more the merrier_ philosophy.
 
 <div style="text-align: center">
-<img src="https://gist.github.com/vipul-sharma20/4bcbb1cd077674c941c3b9841d4ea5cc/raw/0287b22c249a44be89357922845ddcf479a52423/20240425_175539.jpg" alt="pedal" style="width:400px;"/>
+<img src="https://images.vipul.xyz/posts/2024/usb-footswitch/3338faeaca1a2f99.webp" alt="pedal" style="width:400px;"/>
 <p style="text-align:center;padding:5px;font-size:0.7em;margin-top:5px;margin-left:25px;margin-right:15px"></p>
 </div>
 
@@ -37,7 +37,7 @@ Mode active as long as the pedal is pressed and return to Normal Mode as soon
 as it is released.
 
 <div style="text-align: center">
-<img src="https://gist.github.com/vipul-sharma20/4bcbb1cd077674c941c3b9841d4ea5cc/raw/0287b22c249a44be89357922845ddcf479a52423/20240425_175534.jpg" alt="pedal" style="width:400px;"/>
+<img src="https://images.vipul.xyz/posts/2024/usb-footswitch/10aae28fc188acd5.webp" alt="pedal" style="width:400px;"/>
 <p style="text-align:center;padding:5px;font-size:0.7em;margin-top:5px;margin-left:25px;margin-right:15px">From left to right, it's configured as <i>i</i> for Insert Mode, <i>ESC</i> for Normal Mode & <i>x</i> to trigger ultimate ability in Valorant</p>
 </div>
 

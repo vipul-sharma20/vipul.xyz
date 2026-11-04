@@ -5,18 +5,82 @@ excerpt: "An interactive map of Bengaluru's tree census, and a closer look at wh
 tags: [bengaluru, trees, maps, data]
 author_profile: false
 permalink: /2026/11/bengaluru-trees
-draft: true
 ---
 
-I built [Bengaluru trees](https://trees.vipul.xyz/) to explore the city's
-tree census. Instead of only describing it here, I wanted to put the actual
-map in the post. You can search and explore it below without opening another
-tab.
+You can also view this at [trees.vipul.xyz][trees]. This blog post has more
+content + some background on how it came about. You can visit/share the website
+directly if you want to skip all that.
+<br></br>
+LLM was heavily used to write code (source [here][bengaluru-trees]) &
+visualizations but not for any content writing or refining.
+{: .notice--info}
 
-## Explore the map
+I made [trees.vipul.xyz][trees], a map-based explorer and analytics for
+Bengaluru's July 2026 BBMP tree census.
 
-Try searching for a place you know or a tree species. Zoom into a neighbourhood
-and select a tree to see its recorded details.
+---
+
+I developed an interest in knowing about trees of Bengaluru. I searched about
+it and found a webpage about prominant [trees of Bengaluru by IISC][trees-archive] 
+which I found interesting.
+
+I notice in almost all the parks of Bengaluru each tree (almost all) of them
+are marked/painted with codes to ID them like in the image below.
+
+<figure style="text-align:center">
+  <img
+    src="https://images.vipul.xyz/uploads/b9f97972f9d05029.webp"
+    alt=""
+    style="max-width:700px;"
+    loading="lazy"
+  />
+  <figcaption>Photo of a tree ID/label from a park in Indiranagar.</figcaption>
+</figure>
+
+I tried to find about there was any formal census data of all these marked
+trees and was I able to find a census dataset at [OpenCity][opencity]. However,
+in the data I couldn't find this particular tree ID or any other tree marked
+with similar pattern of IDs. The census had different way to ID trees. For
+example, `GN8535GA1RAK001` is one of the example of how tree IDs are stored in
+the dataset. _(This tree ID is BTW for the [Pink Trumpet Tree][trumpet-tree]
+that we all love)_.
+
+For the image above, I could interpret it as ID 371 for a tree in _Hoysala
+Nagar_. But I am not too sure.
+
+---
+
+Since I quit my job in October, every morning I go to [Cubbon Park][cubbon-park], walk around a bit,
+sit on a bench and do nothing for some time. The sounds are nice, topped with
+some early morning honking.
+
+I carry my tablet along with me to write my thoughts, respond to
+emails/messages from the previous day and some vibe-coding. I stay there doing
+this until I feel like having a second round of breakfast which is usually
+around 11:00 AM.
+
+During one of these Cubbon Park sessions, I decided to use the census dataset
+by [OpenCity][opencity] and build a map-based explorer and probably some
+analytics.
+
+## Explore
+
+Below is a map view of Bengaluru with all the trees from the census data mapped
+to their reported coordinates. You can try searching for a place you know or a
+tree species. 
+
+I wanted to keep it more searchable by how they are colloquially called but it
+is what is for now. I'll need some time and help to do it.
+
+A note that the census data seems to be not 100% complete/accurate as you'll
+see in the coverage per area visualization. There are some areas where you
+won't see any/much coverage or areas that may have trees but their species as
+unidentified.
+
+Photographs of trees were not available in the census data. They are sourced
+from multiple sources and appropriate attribution and license information have
+been specified. So they are reference images, not photographs of the individual
+mapped tree or verification of the census identification.
 
 <iframe
   src="https://trees.vipul.xyz/?embed=1"
@@ -31,21 +95,25 @@ and select a tree to see its recorded details.
 
 [Open the map in its own page](https://trees.vipul.xyz/).
 
-## From individual trees to the census
+The census data didn't have Cubbon Park, Lalbagh (and other) park's data. It
+would've felt bad if I couldn't get Cubbon Park's data in this exploration
+while I got inspired and literally built it sitting on a bench there.
 
-The map is useful for looking around a particular place. The analytics view
-looks at the census in aggregate: a way to move from individual records to
-broader patterns, and to ask different questions of the same data.
+Fortunately, there is a report submitted by [MovingUp Products (FlippAR)][flippar] 
+(_who btw make amazing postcards, highly recommended_) in May 2022, 
+[Tree Mapping & Inventory Project][cubbon-report]. I have used this report to
+extract information about Cubbon Park's trees. Since it was not a detailed
+dataset, when you go to Cubbon Park on the map, it gives you a summary view. I couldn't find any equivalent study about Lalbagh
 
-A census is a record of what was surveyed, not a guarantee that every tree is
-represented or that every entry is correct. Keep the coverage and methodology
-in mind when comparing places or interpreting the charts.
 
-## Explore the analytics
+## Analytics
 
-The charts below are interactive too. Use their controls to explore the data;
-the embedded page expands with its contents so you can keep scrolling through
-the article.
+Below is some region based aggregation of the data so you could see which
+region report how many trees and kind of species. Again, not that the census is
+not complete and may have incomplete and inaccurate information.
+
+You can click on individual regions and look at some stats
+
 
 <iframe
   src="https://trees.vipul.xyz/analytics?embed=1"
@@ -67,3 +135,13 @@ The app's [source code is on GitHub](https://github.com/vipul-sharma20/bengaluru
 
 <!-- Draft: add the story behind the project, implementation notes, and any
 specific findings after checking them against the data and methodology. -->
+
+
+[trees]: https://trees.vipul.xyz
+[bengaluru-trees]: https://github.com/vipul-sharma20/bengaluru-trees
+[cubbon-park]: https://en.wikipedia.org/wiki/Cubbon_Park
+[opencity]: https://data.opencity.in/dataset/bengaluru-tree-census-data
+[trees-archive]: https://web.archive.org/web/20250818222309/https://wgbis.ces.iisc.ac.in/biodiversity/pubs/ETR/ETR75/annex3.html
+[trumpet-tree]: https://en.wikipedia.org/wiki/Tabebuia_rosea
+[flippar]: https://shops.arpostcards.in/
+[cubbon-report]: https://cubbonpark.in/tree-info/assets/report/Tree_Mapping_Report_Cubbon_Park_compressed.pdf

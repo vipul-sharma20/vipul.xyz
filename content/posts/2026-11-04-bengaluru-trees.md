@@ -23,7 +23,8 @@ and select a tree to see its recorded details.
   title="Interactive map of Bengaluru's trees"
   data-tree-census-embed="map"
   width="100%"
-  height="650"
+  height="1000"
+  scrolling="no"
   loading="lazy"
   allow="geolocation https://trees.vipul.xyz"
 ></iframe>
@@ -52,6 +53,7 @@ the article.
   data-tree-census-embed="analytics"
   width="100%"
   height="1000"
+  scrolling="no"
   loading="lazy"
 ></iframe>
 

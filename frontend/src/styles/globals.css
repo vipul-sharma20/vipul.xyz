@@ -964,12 +964,17 @@ figcaption, .image-caption {
 
 .prose iframe[data-tree-census-embed] {
   display: block;
-  width: 100%;
-  border: 0;
+  /* Only embeds break out of the text column; mobile keeps the page gutters. */
+  width: calc(min(960px, 100vw - 2.5em) - 2px);
+  margin-left: 50%;
+  transform: translateX(-50%);
+  /* Resize messages describe the content height, excluding this border. */
+  box-sizing: content-box;
+  border: 1px solid #000;
 }
 
 .prose iframe[data-tree-census-embed="map"] {
-  height: clamp(480px, 75svh, 700px);
+  height: 1000px;
 }
 
 /* Article prose */

@@ -41,6 +41,8 @@ export default function PostContent({ html }: PostContentProps) {
         const src = new URL(frame.src);
         if (src.searchParams.get('parentOrigin') !== window.location.origin) {
           src.searchParams.set('parentOrigin', window.location.origin);
+          // Cancel a pending lazy navigation before replacing its target URL.
+          frame.loading = 'eager';
           frame.src = src.href;
         }
       }

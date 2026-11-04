@@ -977,6 +977,17 @@ figcaption, .image-caption {
   height: 1000px;
 }
 
+.prose iframe[data-tree-census-embed="analytics"] {
+  width: min(1160px, calc(100vw - 2.5em));
+  border: 0;
+}
+
+@media (min-width: 800px) {
+  .prose iframe[data-tree-census-embed="map"] {
+    height: min(760px, calc(100svh - 64px));
+  }
+}
+
 /* Article prose */
 .prose {
   line-height: 1.6;

@@ -13,6 +13,26 @@ export default function PostContent({ html }: PostContentProps) {
     const root = ref.current;
     if (!root) return;
 
+    // The analytics page grows as charts and filters change. Only the matching
+    // embedded window may resize its own frame, never another post element.
+    const resizeAnalytics = (event: MessageEvent) => {
+      if (event.data?.type !== 'tree-census:resize'
+        || typeof event.data.height !== 'number'
+        || !Number.isFinite(event.data.height)
+        || event.data.height <= 0) return;
+
+      const frames = root.querySelectorAll<HTMLIFrameElement>(
+        'iframe[data-tree-census-embed="analytics"]',
+      );
+      for (const frame of frames) {
+        if (event.source === frame.contentWindow
+          && event.origin === new URL(frame.src).origin) {
+          frame.style.height = `${Math.ceil(event.data.height)}px`;
+        }
+      }
+    };
+    window.addEventListener('message', resizeAnalytics);
+
     // Execute any script tags in the rendered HTML
     const scripts = root.querySelectorAll('script');
     scripts.forEach((oldScript) => {
@@ -36,6 +56,8 @@ export default function PostContent({ html }: PostContentProps) {
     } else if (win.instgrm?.Embeds?.process) {
       win.instgrm.Embeds.process();
     }
+
+    return () => window.removeEventListener('message', resizeAnalytics);
   }, [html]);
 
   return (

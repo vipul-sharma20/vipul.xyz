@@ -962,6 +962,16 @@ figcaption, .image-caption {
   color-scheme: light;
 }
 
+.prose iframe[data-tree-census-embed] {
+  display: block;
+  width: 100%;
+  border: 0;
+}
+
+.prose iframe[data-tree-census-embed="map"] {
+  height: clamp(480px, 75svh, 700px);
+}
+
 /* Article prose */
 .prose {
   line-height: 1.6;

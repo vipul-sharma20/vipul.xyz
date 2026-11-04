@@ -34,6 +34,21 @@ export default function PostContent({ html }: PostContentProps) {
     };
     window.addEventListener('message', resizeAnalytics);
 
+    // History restores can load the child before this listener is ready.
+    // Ask for its current height rather than waiting for another chart change.
+    const requestAnalyticsSize = () => {
+      for (const frame of analyticsFrames) {
+        frame.contentWindow?.postMessage(
+          { type: 'tree-census:request-resize' },
+          new URL(frame.src).origin,
+        );
+      }
+    };
+    window.addEventListener('pageshow', requestAnalyticsSize);
+    for (const frame of analyticsFrames) {
+      frame.addEventListener('load', requestAnalyticsSize);
+    }
+
     // The app defaults height notifications to the published blog. Local and
     // portal previews must name their own origin without editing the draft.
     if (window.location.origin !== 'https://vipul.xyz') {
@@ -47,6 +62,7 @@ export default function PostContent({ html }: PostContentProps) {
         }
       }
     }
+    requestAnalyticsSize();
 
     // Execute any script tags in the rendered HTML
     const scripts = root.querySelectorAll('script');
@@ -72,7 +88,13 @@ export default function PostContent({ html }: PostContentProps) {
       win.instgrm.Embeds.process();
     }
 
-    return () => window.removeEventListener('message', resizeAnalytics);
+    return () => {
+      window.removeEventListener('message', resizeAnalytics);
+      window.removeEventListener('pageshow', requestAnalyticsSize);
+      for (const frame of analyticsFrames) {
+        frame.removeEventListener('load', requestAnalyticsSize);
+      }
+    };
   }, [html]);
 
   return (

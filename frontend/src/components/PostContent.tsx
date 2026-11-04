@@ -13,6 +13,10 @@ export default function PostContent({ html }: PostContentProps) {
     const root = ref.current;
     if (!root) return;
 
+    const analyticsFrames = root.querySelectorAll<HTMLIFrameElement>(
+      'iframe[data-tree-census-embed="analytics"]',
+    );
+
     // The analytics page grows as charts and filters change. Only the matching
     // embedded window may resize its own frame, never another post element.
     const resizeAnalytics = (event: MessageEvent) => {
@@ -21,10 +25,7 @@ export default function PostContent({ html }: PostContentProps) {
         || !Number.isFinite(event.data.height)
         || event.data.height <= 0) return;
 
-      const frames = root.querySelectorAll<HTMLIFrameElement>(
-        'iframe[data-tree-census-embed="analytics"]',
-      );
-      for (const frame of frames) {
+      for (const frame of analyticsFrames) {
         if (event.source === frame.contentWindow
           && event.origin === new URL(frame.src).origin) {
           frame.style.height = `${Math.ceil(event.data.height)}px`;
@@ -32,6 +33,18 @@ export default function PostContent({ html }: PostContentProps) {
       }
     };
     window.addEventListener('message', resizeAnalytics);
+
+    // The app defaults height notifications to the published blog. Local and
+    // portal previews must name their own origin without editing the draft.
+    if (window.location.origin !== 'https://vipul.xyz') {
+      for (const frame of analyticsFrames) {
+        const src = new URL(frame.src);
+        if (src.searchParams.get('parentOrigin') !== window.location.origin) {
+          src.searchParams.set('parentOrigin', window.location.origin);
+          frame.src = src.href;
+        }
+      }
+    }
 
     // Execute any script tags in the rendered HTML
     const scripts = root.querySelectorAll('script');

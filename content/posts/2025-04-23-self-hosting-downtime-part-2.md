@@ -9,6 +9,7 @@ tags:
 - debugging-story
 title: Self-hosting Downtime (Part 2)
 toc: true
+author_profile: false
 ---
 
 > [!NOTE]
@@ -147,7 +148,7 @@ time investment. I can now experiment with my self-hosted setup without the
 constant fear of losing everything to a hardware failure.
 
 
-[part-1]: https://vipul.xyz/2025/04/05/self-hosting-downtime.html
+[part-1]: https://vipul.xyz/2025/04/05/self-hosting-downtime/
 [coolify]: https://coolify.io
 [backup-strategy]: https://www.backblaze.com/blog/the-3-2-1-backup-strategy/
 [restic]: https://restic.net/

@@ -10,6 +10,7 @@ tags:
 - debugging-story
 title: Self-hosting Downtime
 toc: false
+author_profile: false
 ---
 
 Just a few days ago (31st March) I [wrote about setting up backups][backup] for

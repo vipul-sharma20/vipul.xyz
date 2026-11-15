@@ -17,7 +17,7 @@ that it might be helpful to others.
 
 <div class="caption-wrapper">
     <p class="caption-borderless">
-    <i>Last updated: Novemner 15th, 2026</i>
+    <i>Last updated: November 15th, 2026</i>
     </p>
 </div>
 

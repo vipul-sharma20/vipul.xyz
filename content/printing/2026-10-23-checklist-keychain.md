@@ -4,7 +4,7 @@ excerpt: 3D printed a keychain-sized checklist
 permalink: /threedee/checklist-keychain
 tags:
 - 3dprinting
-thumbnail: https://images.vipul.xyz/uploads/3313be8be5db8d86.webp
+thumbnail: https://images.vipul.xyz/threedee/checklist-keychain/3313be8be5db8d86.webp
 title: Checklist Keychain
 ---
 
@@ -19,7 +19,7 @@ easily if you flip it around. For that I have put a thin transparent tape along
 the edges on one side.
 
 <figure style="text-align:center">
-  <img src="https://images.vipul.xyz/uploads/3313be8be5db8d86.webp" alt="White 3D printed checklist keychain held in a hand, with eight rows, a black slider beside each row and a tick mark at the end of each slider track. The first three rows read Task 1, Task 2 and Task 3 in handwriting." style="max-width:500px;" />
+  <img src="https://images.vipul.xyz/threedee/checklist-keychain/3313be8be5db8d86.webp" alt="White 3D printed checklist keychain held in a hand, with eight rows, a black slider beside each row and a tick mark at the end of each slider track. The first three rows read Task 1, Task 2 and Task 3 in handwriting." style="max-width:500px;" />
 </figure>
 
 [maker]: https://makerworld.com/en/@Tifferzzz

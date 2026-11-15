@@ -5,7 +5,7 @@ permalink: /threedee/minecraft-sword
 tags:
 - 3dprinting
 - 100daystooffload
-thumbnail: https://i.imgur.com/ArH1QUt.jpeg
+thumbnail: https://images.vipul.xyz/threedee/minecraft-sword/c959fdae1cbe9377.webp
 title: Minecraft Sword
 ---
 
@@ -13,7 +13,7 @@ This [Minecraft Sword][sword] was my first 3D print when I first set up my 3D
 printer more than 1.5 years ago.
 
 <div style="text-align: center">
-<img src="https://i.imgur.com/ArH1QUt.jpeg" alt="coldplay" style="width:800px;border:1px solid #000"/>
+<img src="https://images.vipul.xyz/threedee/minecraft-sword/c959fdae1cbe9377.webp" alt="coldplay" style="width:800px;border:1px solid #000"/>
 <p style="text-align:center;padding:5px;font-size:0.7em;margin-top:5px;margin-left:25px;margin-right:15px"><a href="https://minecraft.fandom.com/wiki/Sword">Minecraft sword</a> (PLA)</p>
 </div>
 

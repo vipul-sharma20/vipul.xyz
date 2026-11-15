@@ -4,7 +4,7 @@ excerpt: 3D printed cat bookmarks for my wife
 permalink: /threedee/cat-bookmarks
 tags:
 - 3dprinting
-thumbnail: https://images.vipul.xyz/uploads/d2ec4506a2c1f584.webp
+thumbnail: https://images.vipul.xyz/threedee/cat-bookmarks/d2ec4506a2c1f584.webp
 title: Cat Bookmarks
 ---
 
@@ -16,12 +16,12 @@ than the other one. The one on the right is all black and I painted its eyes
 white by hand.
 
 <figure style="text-align:center">
-  <img src="https://images.vipul.xyz/uploads/d2ec4506a2c1f584.webp" alt="Two cat bookmarks held in a hand. On the left, a short white bookmark with a black cat head and black paws. On the right, a taller all-black cat with painted white eyes." style="max-width:500px;" />
+  <img src="https://images.vipul.xyz/threedee/cat-bookmarks/d2ec4506a2c1f584.webp" alt="Two cat bookmarks held in a hand. On the left, a short white bookmark with a black cat head and black paws. On the right, a taller all-black cat with painted white eyes." style="max-width:500px;" />
   <figcaption>Left: black and white, one filament change. Right: all black, eyes painted</figcaption>
 </figure>
 
 <figure style="text-align:center">
-  <img src="https://images.vipul.xyz/uploads/805e96476c1f632c.webp" alt="Both cat bookmarks sticking out above the top edge of a paperback copy of The Murder of Roger Ackroyd by Agatha Christie, held in a hand." style="max-width:500px;" />
+  <img src="https://images.vipul.xyz/threedee/cat-bookmarks/805e96476c1f632c.webp" alt="Both cat bookmarks sticking out above the top edge of a paperback copy of The Murder of Roger Ackroyd by Agatha Christie, held in a hand." style="max-width:500px;" />
   <figcaption>Both of them in a copy of The Murder of Roger Ackroyd</figcaption>
 </figure>
 

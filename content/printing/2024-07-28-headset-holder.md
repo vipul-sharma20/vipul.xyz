@@ -5,14 +5,14 @@ permalink: /threedee/headset-holder
 tags:
 - 3dprinting
 - 100daystooffload
-thumbnail: https://i.imgur.com/96REko0.jpeg
+thumbnail: https://images.vipul.xyz/threedee/headset-holder/0e86133a54860e6c.webp
 title: Headset holder
 ---
 
 ### Finished print in use
 
 <figure style="text-align:center">
-  <img src="https://i.imgur.com/96REko0.jpeg" alt="headset-holder" style="max-width:500px;" />
+  <img src="https://images.vipul.xyz/threedee/headset-holder/0e86133a54860e6c.webp" alt="headset-holder" style="max-width:500px;" />
 </figure>
 
 ### The print
@@ -23,7 +23,7 @@ access to the original file or any way to know the source.
 {: .notice--warning}
 
 <figure style="text-align:center">
-  <img src="https://i.imgur.com/9OsnKwI.jpeg" alt="headset-holder" style="max-width:500px;" />
+  <img src="https://images.vipul.xyz/threedee/headset-holder/447f1a5126fcb8ef.webp" alt="headset-holder" style="max-width:500px;" />
   <figcaption>Complete with clamp and screw</figcaption>
 </figure>
 
@@ -31,7 +31,7 @@ access to the original file or any way to know the source.
 
 <div style="text-align: center; margin: 20px 0;">
   <video width="560" height="315" controls>
-    <source src="https://i.imgur.com/DKtfJ73.mp4" type="video/mp4">
+    <source src="https://images.vipul.xyz/threedee/headset-holder/69d6872f5f734fe4.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
   <p style="text-align:center;padding:5px;font-size:0.7em;margin-top:5px">Timelapse of the clamp print</p>
@@ -39,7 +39,7 @@ access to the original file or any way to know the source.
 
 <div style="text-align: center; margin: 20px 0;">
   <video width="560" height="315" controls>
-    <source src="https://i.imgur.com/UX7b0f4.mp4" type="video/mp4">
+    <source src="https://images.vipul.xyz/threedee/headset-holder/d14bd0a25c3505b9.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
   <p style="text-align:center;padding:5px;font-size:0.7em;margin-top:5px">Timelapse of the screw print</p>

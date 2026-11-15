@@ -5,12 +5,12 @@ permalink: /threedee/github-skyline-2022
 tags:
 - 3dprinting
 - 100daystooffload
-thumbnail: https://i.imgur.com/hw18Clj.jpeg
+thumbnail: https://images.vipul.xyz/threedee/github-skyline-2022/4f69337f7eb595f3.webp
 title: GitHub Skyline 2022
 ---
 
 <div style="text-align: center">
-<img src="https://i.imgur.com/hw18Clj.jpeg" alt="skyline" style="width:800px;border:1px solid #000"/>
+<img src="https://images.vipul.xyz/threedee/github-skyline-2022/4f69337f7eb595f3.webp" alt="skyline" style="width:800px;border:1px solid #000"/>
 <p style="text-align:center;padding:5px;font-size:0.7em;margin-top:5px;margin-left:25px;margin-right:15px">My GitHub skyline for the year 2022</p>
 </div>
 

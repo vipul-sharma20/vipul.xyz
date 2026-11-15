@@ -4,7 +4,7 @@ excerpt: 3D printed my logo for laptop sticker
 permalink: /threedee/logo-laptop-sticker
 tags:
 - 3dprinting
-thumbnail: /assets/images/printing/full/2025/09/logo-laptop-sticker.jpg
+thumbnail: https://images.vipul.xyz/threedee/logo-laptop-sticker/28dd4b63f40480af.webp
 title: Logo as laptop sticker
 ---
 
@@ -15,5 +15,5 @@ Frustrating part was to cutting out the thin, 3M double sided tape along the
 perimeter of the letters which were already very small to handle.
 
 <figure style="text-align:center">
-  <img src="/assets/images/printing/full/2025/09/logo-laptop-sticker.jpg" alt="logo-laptop-sticker" style="max-width:500px;" />
+  <img src="https://images.vipul.xyz/threedee/logo-laptop-sticker/28dd4b63f40480af.webp" alt="logo-laptop-sticker" style="max-width:500px;" />
 </figure>

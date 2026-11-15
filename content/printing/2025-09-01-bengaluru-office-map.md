@@ -5,12 +5,12 @@ permalink: /threedee/bengaluru-office
 tags:
 - 3dprinting
 - bengaluru
-thumbnail: /assets/images/printing/full/2025/09/20250901-145810.jpg
+thumbnail: https://images.vipul.xyz/threedee/bengaluru-office/3fecb9516c7c3b4b.webp
 title: Bengaluru Map
 ---
 
 <figure style="text-align:center">
-  <img src="/assets/images/printing/full/2025/09/20250901-145810.jpg" alt="bengaluru" style="max-width:500px;" />
+  <img src="https://images.vipul.xyz/threedee/bengaluru-office/3fecb9516c7c3b4b.webp" alt="bengaluru" style="max-width:500px;" />
 </figure>
 
 I 3D printed map area (roughly around or less than 1km<sup>2</sup>) around my
@@ -37,7 +37,7 @@ stringing.
 This took me 8 hours to print.
 
 <div style="text-align: center; margin: 20px 0;">
-  <img src="/assets/images/printing/full/2025/09/bengaluru-office-timelapse.gif" alt="" style="width:500px;border:1px solid #ccc"/>
+  <img src="https://images.vipul.xyz/threedee/bengaluru-office/023476d0acec0cea.gif" alt="" style="width:500px;border:1px solid #ccc"/>
   <p style="text-align:center;padding:5px;font-size:0.7em;margin-top:5px">Print timelapse</p>
 </div>
 

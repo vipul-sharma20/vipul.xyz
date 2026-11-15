@@ -7,6 +7,7 @@ permalink: /2026/10/footswitch
 tags:
   - productivity
   - footswitch
+  - hardware
   - scribbles
 ---
 

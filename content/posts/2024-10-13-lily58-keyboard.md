@@ -34,7 +34,7 @@ jack.
 
 <div style="text-align: center">
 <video controls>
-  <source src="/assets/videos/diode-solder.mp4" type="video/mp4">
+  <source src="https://images.vipul.xyz/posts/2024/lily58-keyboard/cc3a4cea0afef023.mp4" type="video/mp4">
 </video>
 <p style="text-align:center;padding:5px;font-size:0.7em;margin-top:5px;margin-left:25px;margin-right:15px">
     Video from 2021. Abandoned it after soldering one half of the keyboard when
@@ -65,7 +65,7 @@ keyboards using these. I could've reduced the cost by half here by using the
 default green solder mask. The black one costed me more.
 
 <figure style="text-align:center">
-  <img src="https://raw.githubusercontent.com/vipul-sharma20/keebs/refs/heads/main/lily58/PCB/pcb.png" alt="pcb" style="max-width:500px;" />
+  <img src="https://images.vipul.xyz/posts/2024/lily58-keyboard/45342a3c3464047a.webp" alt="pcb" style="max-width:500px;" />
   <figcaption>Render of the gerber</figcaption>
 </figure>
 
@@ -87,12 +87,12 @@ build, but it was easy to fix.
     58 of these 1N4148W diodes. They are super small and need to be soldered in
     the correct orientation.
     <br><br>
-    <img src="https://i.imgur.com/zFNHsR2.jpeg" alt="{{ include.alt }}" style="width:200px;border:1px solid #000"/>
+    <img src="https://images.vipul.xyz/posts/2024/lily58-keyboard/48ab2112590725ff.webp" alt="{{ include.alt }}" style="width:200px;border:1px solid #000"/>
     </p>
 </div>
 
 <figure style="text-align:center">
-  <img src="https://i.imgur.com/VCx6sVg.jpeg" alt="diodes" style="max-width:500px;" />
+  <img src="https://images.vipul.xyz/posts/2024/lily58-keyboard/69d849f1ac777fbb.webp" alt="diodes" style="max-width:500px;" />
   <figcaption>1N4148W diodes soldered</figcaption>
 </figure>
 
@@ -113,12 +113,12 @@ everything and start over on the correct side.
     <p class="caption">
     They kind of sit in place in the PCB holes so they are easy to solder.
     <br><br>
-    <img src="https://i.imgur.com/jBs0E3F.jpeg" alt="{{ include.alt }}" style="width:200px;border:1px solid #000"/>
+    <img src="https://images.vipul.xyz/posts/2024/lily58-keyboard/89bc9119bb9bb60b.webp" alt="{{ include.alt }}" style="width:200px;border:1px solid #000"/>
     </p>
 </div>
 
 <figure style="text-align:center">
-  <img src="https://i.imgur.com/opnYwvd.jpeg" alt="sockets" style="max-width:500px;" />
+  <img src="https://images.vipul.xyz/posts/2024/lily58-keyboard/4f9a584dfe692d2e.webp" alt="sockets" style="max-width:500px;" />
   <figcaption>Switch sockets</figcaption>
 </figure>
 
@@ -138,12 +138,12 @@ pins. In the end, I had to switch to a different board to continue.
     <p class="caption">
     There's an OLED module on top of Arduino Pro Micro in this image.
     <br><br>
-    <img src="https://i.imgur.com/ZwUNzk4.jpeg" alt="{{ include.alt }}" style="width:200px;border:1px solid #000"/>
+    <img src="https://images.vipul.xyz/posts/2024/lily58-keyboard/1fcd0a16919390ed.webp" alt="{{ include.alt }}" style="width:200px;border:1px solid #000"/>
     </p>
 </div>
 
 <figure style="text-align:center">
-  <img src="https://i.imgur.com/nvYL14Y.jpeg" alt="arduino" style="max-width:500px;" />
+  <img src="https://images.vipul.xyz/posts/2024/lily58-keyboard/ca950e78a07d5542.webp" alt="arduino" style="max-width:500px;" />
   <figcaption>Soldered Ardunio Pro Micro, TRRS Jack and Reset Switch</figcaption>
 </figure>
 
@@ -156,7 +156,7 @@ but I already had these with me.
 
 <div style="text-align: center">
 <video controls>
-  <source src="https://i.imgur.com/jtvo7nH.mp4" type="video/mp4">
+  <source src="https://images.vipul.xyz/posts/2024/lily58-keyboard/0671d921fa41f024.mp4" type="video/mp4">
 </video>
 <p style="text-align:center;padding:5px;font-size:0.7em;margin-top:5px;margin-left:25px;margin-right:15px">
 3D printed the plates. Credits to <a href="https://github.com/serverwentdown/lily58-3d">serverwentdown/lily58-3d</a> for open sourcing the designs.
@@ -164,12 +164,12 @@ but I already had these with me.
 </div>
 
 <figure style="text-align:center">
-  <img src="https://i.imgur.com/m44uNaY.jpeg" alt="plates" style="max-width:500px;" />
+  <img src="https://images.vipul.xyz/posts/2024/lily58-keyboard/f5fc6339f539bfb0.webp" alt="plates" style="max-width:500px;" />
   <figcaption>With the 3D printed plate</figcaption>
 </figure>
 
 <figure style="text-align:center">
-  <img src="https://i.imgur.com/BUiqlJ6.jpeg" alt="plates" style="max-width:500px;" />
+  <img src="https://images.vipul.xyz/posts/2024/lily58-keyboard/371b0cbef7b9a28e.webp" alt="plates" style="max-width:500px;" />
   <figcaption>With key switches</figcaption>
 </figure>
 
@@ -213,7 +213,7 @@ ortholinear profile keycaps I came across since there weren’t many options
 available anyway. They look clean and simple, which works for me.
 
 <figure style="text-align:center">
-  <img src="https://i.imgur.com/NWXOVjR.jpeg" alt="lily58" style="max-width:500px;" />
+  <img src="https://images.vipul.xyz/posts/2024/lily58-keyboard/5e1506e178127e44.webp" alt="lily58" style="max-width:500px;" />
   <figcaption>Left half with keycaps</figcaption>
 </figure>
 
@@ -226,7 +226,7 @@ low-profile designs on my 3D printer, and here’s a timelapse of the process.
 
 <div style="text-align: center">
 <video controls>
-  <source src="https://i.imgur.com/rO64wVa.mp4" type="video/mp4">
+  <source src="https://images.vipul.xyz/posts/2024/lily58-keyboard/dc2f0cb0ef46bf83.mp4" type="video/mp4">
 </video>
 <p style="text-align:center;padding:5px;font-size:0.7em;margin-top:5px;margin-left:25px;margin-right:15px">
 3D printed the case. Credits to <a href="https://capsuledeluxe.com/manta58/">Capsule Deluxe</a> for open sourcing the designs.
@@ -236,11 +236,11 @@ low-profile designs on my 3D printer, and here’s a timelapse of the process.
 ### 10. Final build
 
 <figure style="text-align:center">
-  <img src="https://i.imgur.com/tbCRgtI.jpeg" alt="lily58" style="max-width:500px;" />
+  <img src="https://images.vipul.xyz/posts/2024/lily58-keyboard/cf08fc58b7f618d9.webp" alt="lily58" style="max-width:500px;" />
   <figcaption>Lily58</figcaption>
 </figure>
 <figure style="text-align:center">
-  <img src="https://i.imgur.com/RpOocpm.jpeg" alt="lily58" style="max-width:500px;" />
+  <img src="https://images.vipul.xyz/posts/2024/lily58-keyboard/161f4fba6acee0b8.webp" alt="lily58" style="max-width:500px;" />
   <figcaption>Lily58</figcaption>
 </figure>
 
@@ -253,13 +253,13 @@ the build.
 
 | Component        | Cost (INR) | Cost (USD) | Image |
 |:------------------:|:------------:|:------------:|:-------:|
-| PCB              | ₹1000      | $12.00     |<img src="https://i.imgur.com/VCx6sVg.jpeg" alt="{{ include.alt }}" style="width:200px;border:1px solid #000"/>       |
-| Arduino ProMicro | ₹1000      | $12.00     |<img src="https://i.imgur.com/ZwUNzk4.jpeg" alt="{{ include.alt }}" style="width:200px;border:1px solid #000"/>      |
+| PCB              | ₹1000      | $12.00     |<img src="https://images.vipul.xyz/posts/2024/lily58-keyboard/69d849f1ac777fbb.webp" alt="{{ include.alt }}" style="width:200px;border:1px solid #000"/>       |
+| Arduino ProMicro | ₹1000      | $12.00     |<img src="https://images.vipul.xyz/posts/2024/lily58-keyboard/1fcd0a16919390ed.webp" alt="{{ include.alt }}" style="width:200px;border:1px solid #000"/>      |
 | OLED module      | ₹600       | $7.20      | see Arduino image (black screen)      |
-| Key Sockets      | ₹500       | $6.00      |<img src="https://i.imgur.com/jBs0E3F.jpeg" alt="{{ include.alt }}" style="width:200px;border:1px solid #000"/>       |
-| 1N4148W diodes   | ₹100       | $1.20      | <img src="https://i.imgur.com/zFNHsR2.jpeg" alt="{{ include.alt }}" style="width:200px;border:1px solid #000"/>      |
-| Key Switch       | ₹1900      | $22.80     | <img src="https://i.imgur.com/BUiqlJ6.jpeg" alt="{{ include.alt }}" style="width:200px;border:1px solid #000"/> |
-| Keycaps          | ₹2500      | $30.00     |<img src="https://i.imgur.com/NWXOVjR.jpeg" alt="{{ include.alt }}" style="width:200px;border:1px solid #000"/> |
+| Key Sockets      | ₹500       | $6.00      |<img src="https://images.vipul.xyz/posts/2024/lily58-keyboard/89bc9119bb9bb60b.webp" alt="{{ include.alt }}" style="width:200px;border:1px solid #000"/>       |
+| 1N4148W diodes   | ₹100       | $1.20      | <img src="https://images.vipul.xyz/posts/2024/lily58-keyboard/48ab2112590725ff.webp" alt="{{ include.alt }}" style="width:200px;border:1px solid #000"/>      |
+| Key Switch       | ₹1900      | $22.80     | <img src="https://images.vipul.xyz/posts/2024/lily58-keyboard/371b0cbef7b9a28e.webp" alt="{{ include.alt }}" style="width:200px;border:1px solid #000"/> |
+| Keycaps          | ₹2500      | $30.00     |<img src="https://images.vipul.xyz/posts/2024/lily58-keyboard/5e1506e178127e44.webp" alt="{{ include.alt }}" style="width:200px;border:1px solid #000"/> |
 | TRRS Jack        | ₹100       | $1.20      | see Arduino image |
 | TRRS Cable       | ₹300       | $3.60      | see connecting cable in the [final build](#10-final-build) |
 | Tact Switch      | ₹20        | $0.24      | see Arduino image (Reset Switch) |
